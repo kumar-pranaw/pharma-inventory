@@ -1,0 +1,19 @@
+<!-- Search Results -->
+      <div class="downhole-btn downhole-btn-right">
+	<button type="button" class="btn btn-sm btn-primary waves-effect waves-themed" data-toggle="modal" data-target=".search-window">SEARCH RESULTS</button>
+      </div>
+      <style>
+	.downhole-btn {
+	   display: block !important;
+	   position: fixed;
+	   text-align: center;
+	   z-index: 9;
+	}
+	.downhole-btn-right {
+	   right: -1px;
+	   transform: rotate(-90deg);
+	   transform-origin: bottom right;
+	   top: 35%;
+	}
+      </style>
+      <!-- END Search Results -->

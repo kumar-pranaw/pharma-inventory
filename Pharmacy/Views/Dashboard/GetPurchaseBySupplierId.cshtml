@@ -1,0 +1,25 @@
+﻿@model List<Pharmacy.ViewModels.ViewPurchases>
+@{
+    ViewBag.Title = "GetPurchaseBySupplierId";
+}
+
+<table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>#Invoice Id</th>
+            <th>Date Of Purchase</th>
+            <th>Total Amount of Purchase</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><a href="@Url.Action("GetInvoiceDetailsBySupplierId","Dashboard", new { invoiceId = item.Id, supplierId = item.SupplierId})">@item.InvoiceId</a></td>
+                <td>@item.DateOfPurchase</td>
+                <td>@item.PurchaseAmount</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

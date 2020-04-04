@@ -1,0 +1,203 @@
+﻿@model IEnumerable<Pharmacy.ViewModels.AddProductViewModel>
+@{
+    ViewBag.Title = "AddProductPurchase";
+}
+
+
+<h2>Purchase Product From The Supplier <b>"@ViewData["SupplierName"]"</b></h2>
+
+<ol class="breadcrumb page-breadcrumb">
+    <li class="breadcrumb-item"><a href="dashboard.html">My Dashboard</a></li>
+    <li class="breadcrumb-item">Supplier</li>
+    <li class="breadcrumb-item active">Make Purchase</li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+</ol>
+
+<div class="row" id="purchase-form">
+    <div class="col-xl-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="row">
+                        <table id="tblProducts" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Pack</th>
+                                    <th>HSN Number</th>
+                                    <th>Batch Number</th>
+                                    <th>Expiry</th>
+                                    <th>Quantity</th>
+                                    <th>S.P</th>
+                                    <th>C.P</th>
+                                    <th>GST %</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><input type="text" class="form-control" id="productName" /></td>
+                                    <td><input type="text" class="form-control" id="Pack" /></td>
+                                    <td><input type="text" class="form-control" id="HSNNumber" /></td>
+                                    <td><input type="text" class="form-control" id="BatchNumber" /></td>
+                                    <td><input type="text" class="form-control" id="ExpiryDate" /></td>
+                                    <td><input type="text" class="form-control" id="Quantity" /></td>
+                                    <td><input type="text" class="form-control" id="SP" /></td>
+                                    <td><input type="text" class="form-control" id="CP" /></td>
+                                    <td><input type="text" class="form-control" id="GST" /></td>
+                                    <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
+                                    <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <button id="btnSave" type="button" class="btn btn-primary btn-lg">Save</button>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $("#CP").on("change", function () {
+        var costPrice = $("#CP").val();
+        var quantity = $("#Quantity").val();
+        var totalAmount = costPrice * quantity;
+        $("#Amount").val(totalAmount);
+    });
+
+    $("#Quantity").on("change", function () {
+        var costPrice = $("#CP").val();
+        var quantity = $("#Quantity").val();
+        var totalAmount = costPrice * quantity;
+        $("#Amount").val(totalAmount);
+    });
+
+    $("body").on("click", "#btnAdd", function () {
+        //Reference the Name and Country TextBoxes.
+        var productName = $("#productName");
+        var Pack = $("#Pack");
+        var HSNNumber = $("#HSNNumber");
+        var BatchNumber = $("#BatchNumber");
+        var ExpiryDate = $("#ExpiryDate");
+        var Quantity = $("#Quantity");
+        var SP = $("#SP");
+        var CP = $("#CP");
+        var GST = $("#GST");
+        var Amount = $("#Amount");
+
+        //Get the reference of the Table's TBODY element.
+        var tBody = $("#tblProducts > TBODY")[0];
+
+        //Add Row.
+        var row = tBody.insertRow(-1);
+
+        //Add Name cell.
+        var cell = $(row.insertCell(-1));
+        cell.html(productName.val());
+        //Add Country cell.
+        cell = $(row.insertCell(-1));
+        cell.html(Pack.val());
+        //Add HSN cell.
+        cell = $(row.insertCell(-1));
+        cell.html(HSNNumber.val());
+        //Add BATCH cell.
+        cell = $(row.insertCell(-1));
+        cell.html(BatchNumber.val());
+        //Add Expiry cell.
+        cell = $(row.insertCell(-1));
+        cell.html(ExpiryDate.val());
+        //Add Quantity cell.
+        cell = $(row.insertCell(-1));
+        cell.html(Quantity.val());
+        //Add SP cell.
+        cell = $(row.insertCell(-1));
+        cell.html(SP.val());
+        //Add Cp cell.
+        cell = $(row.insertCell(-1));
+        cell.html(CP.val());
+        //Add GST cell.
+        cell = $(row.insertCell(-1));
+        cell.html(GST.val());
+        //Add amount cell.
+        cell = $(row.insertCell(-1));
+        cell.html(Amount.val());
+
+        //Add Button cell.
+        cell = $(row.insertCell(-1));
+        var btnRemove = $("<button />");
+        btnRemove.addClass("form-control")
+        btnRemove.attr("type", "button");
+        btnRemove.attr("onclick", "Remove(this);");
+        btnRemove.text("Remove");
+        cell.append(btnRemove);
+
+        //Clear the TextBoxes.
+        productName.val("");
+        Pack.val("");
+        HSNNumber.val("");
+        BatchNumber.val("");
+        ExpiryDate.val("");
+        Quantity.val("");
+        SP.val("");
+        CP.val("");
+        GST.val("");
+        Amount.val("");
+    });
+
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete: " + name)) {
+            //Get the reference of the Table.
+            var table = $("#tblProducts")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+    $("body").on("click", "#btnSave", function () {
+        //Loop through the Table rows and build a JSON array.
+        var products = new Array();
+        $("#tblProducts TBODY TR").each(function () {
+            var row = $(this);
+            var purchaseProducts = {};
+            purchaseProducts.productName = row.find("TD").eq(0).html();
+            purchaseProducts.pack = row.find("TD").eq(1).html();
+            purchaseProducts.HSNNumber = row.find("TD").eq(2).html();
+            purchaseProducts.BatchNumber = row.find("TD").eq(3).html();
+            purchaseProducts.ExpiryDate = row.find("TD").eq(4).html();
+            purchaseProducts.quantity = row.find("TD").eq(5).html();
+            purchaseProducts.sp = row.find("TD").eq(6).html();
+            purchaseProducts.cp = row.find("TD").eq(7).html();
+            purchaseProducts.gst = row.find("TD").eq(8).html();
+            purchaseProducts.amount = row.find("TD").eq(9).html();
+            products.push(purchaseProducts);
+
+        });
+        console.log(products);
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Dashboard/AddProductPurchase",
+            data: JSON.stringify(products),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                alert(r + " record(s) inserted.");
+                window.location.href = '/Dashboard/ViewSuppliers'
+            }
+        });
+    });
+
+</script>
+

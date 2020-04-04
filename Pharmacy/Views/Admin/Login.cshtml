@@ -1,0 +1,78 @@
+﻿@model Pharmacy.ViewModels.LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>
+        Neelkanth EnterPrises
+    </title>
+    <meta name="description" content="Login">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+    <!-- Call App Mode on ios devices -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- base css -->
+    <link rel="stylesheet" media="screen, print" href="~/Content/css/vendors.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="~/Content/css/app.bundle.css">
+    <link id="mytheme" rel="stylesheet" href="~/Content/css/themes/cust-theme-3.css">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/img/favicon/favicon-32x32.png">
+    <link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <!-- Optional: page related CSS-->
+    <link rel="stylesheet" media="screen, print" href="~/Content/css/page-login.css">
+</head>
+<body>
+    <div class="blankpage-form-field">
+        <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
+            <div class="page-logo-link press-scale-down d-flex align-items-center">
+                <div class="page-logo-text text-center">
+                    <strong>Neelkanth Enterprises</strong>
+                </div>
+            </div>
+        </div>
+        <div class="card p-4 rounded-plus border-top-left-radius-0 border-top-right-radius-0 bg-faded">
+            @using (Html.BeginForm("Login", "Admin", FormMethod.Post))
+            {
+            <p>@ViewBag.invalid</p>
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", id = "username", placeholder = "Email" })
+                <span class="help-block">
+                    Your email address
+                </span>
+            </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    @Html.TextBoxFor(m=> m.Password, new { @class = "form-control", id = "password", placeholder = "*******" })
+                    <span class="help-block">
+                        Your password
+                    </span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-outline-primary waves-effect waves-themed float-left">Secure Login</button>
+                    <div class="custom-control custom-checkbox float-right pt-2">
+                        <input type="checkbox" class="custom-control-input" id="rememberme">
+                        <label class="custom-control-label" for="rememberme">Remember me</label>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <video poster="img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
+        <!--<source src="media/video/oil.webm" type="video/webm">-->
+        <source src="media/video/oil.mp4" type="video/mp4">
+    </video>
+    <div class="position-absolute text-white pos-bottom pos-left ml-5 mb-4">
+        <img src="img/wit-logo.png">
+    </div>
+    <script src="~/Content/js/vendors.bundle.js"></script>
+    <script src="~/Content/js/app.bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+﻿@model List<Pharmacy.ViewModels.ListOfInvoice>
+@{
+    ViewBag.Title = "GetInvoiceDetailsBySupplierId";
+    var InvoiceId = TempData["InvoiceId"];
+    var TotalAmount = TempData["TotalAmount"];
+    var DateofPurchase = TempData["DateOfPurchase"];
+    var supplierName = TempData["SupplierName"];
+    var address = TempData["Address"];
+    var phoneNumber = TempData["Phonenumber"];
+    var Dlnumber = TempData["DlNumber"];
+    var GstIn = TempData["GSTIN"];
+}
+<style>
+    h4 {
+        margin-left: 400px;
+    }
+</style>
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h4><b>PROFORMA INVOICE</b></h4>
+                <div class="panel-toolbar">
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <h5>@supplierName</h5>
+                    <h5>@address</h5>
+                    <h5>@phoneNumber </h5>
+                    <h6>DL.NO: @Dlnumber</h6>
+                    <h6>GSTIN: @GstIn</h6>
+                    <div class="frame-wrap w-100">
+                        <div class="accordion" id="js_demo_accordion-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a href="javascript:void(0);" class="card-title collapsed" data-toggle="collapse" data-target="#js_demo_accordion-5a" aria-expanded="false">
+                                        <span>Invoice Id:  @InvoiceId | </span> <span> &nbsp; Date Of Purchase: @DateofPurchase | </span><span> &nbsp; Total Bill Amount: @TotalAmount</span>
+                                        <span class="ml-auto">
+                                            <span class="collapsed-reveal">
+                                                <i class="fal fa-minus-circle text-danger fs-xl" data-toggle="tooltip" data-placement="left" data-original-title="Collapse"></i>
+                                            </span>
+                                            <span class="collapsed-hidden">
+                                                <i class="fal fa-plus-circle text-success fs-xl" data-toggle="tooltip" data-placement="left" data-original-title="Collapse"></i>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div id="js_demo_accordion-5a" class="collapse" data-parent="#js_demo_accordion-5" style="">
+                                    <div class="card-body">
+                                        <div class="frame-wrap">
+                                            <table class="table table-striped m-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product Name</th>
+                                                        <th>HSN</th>
+                                                        <th>Pack</th>
+                                                        <th>Batch</th>
+                                                        <th>Expiry Date</th>
+                                                        <th>Quantity</th>
+                                                        <th>Selling Price</th>
+                                                        <th>GST %</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.ProductName</td>
+                                                            <td>@item.HSNNumber</td>
+                                                            <td>@item.Pack</td>
+                                                            <td>@item.Batch</td>
+                                                            <td>@item.ExpiryDate</td>
+                                                            <td>@item.Quantity</td>
+                                                            <td>@item.SellingPrice</td>
+                                                            <td>@item.GstPercent</td>
+                                                            <td>@item.TotalAmount</td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                                <tfoot>
+
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

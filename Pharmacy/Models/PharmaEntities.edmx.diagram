@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dec652f26b8b4144817f8edc1198c858" Name="Diagram1">
+        <EntityTypeShape EntityType="dbPharmaModel.Auth" Width="1.5" PointX="7.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.Customer" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.Payment_Mode" Width="1.5" PointX="9.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.Product" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.purchase" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.PurchaseInvoice" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.PurchaseLedger" Width="1.5" PointX="8.25" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.Sale" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.Supplier" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.YourTable" Width="1.5" PointX="5.75" PointY="10.875" IsExpanded="true" />
+        <AssociationConnector Association="dbPharmaModel.FK_Sales_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK_purchase_productid" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK_Sales_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK_purchase_PurchaseInvoice" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK_purchase_Supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK__PurchaseI__suppl__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK_PurchaseLedger_PurchaseInvoice" ManuallyRouted="false" />
+        <AssociationConnector Association="dbPharmaModel.FK_PurchaseLedger_Supplier" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

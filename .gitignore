@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Pharmacy/bin
+/packages
+/.vs/Pharmacy/config
+/Pharmacy/obj

@@ -1,0 +1,729 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="dbPharmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Auth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar(max)" />
+          <Property Name="Password" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar(max)" />
+          <Property Name="CustomerAddress" Type="nvarchar(max)" />
+          <Property Name="CustomerPhoneNumber" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Ledger">
+          <Property Name="Id" Type="nchar" MaxLength="10" />
+          <Property Name="DateOfSale" Type="date" />
+          <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="Particulars" Type="nvarchar" MaxLength="100" />
+          <Property Name="DrAmount" Type="bigint" />
+          <Property Name="CrAmount" Type="bigint" />
+          <Property Name="Balance" Type="bigint" />
+          <Property Name="SalesId" Type="int" />
+        </EntityType>-->
+        <EntityType Name="Payment_Mode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentMode" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar(max)" />
+          <Property Name="HSNNumber" Type="nvarchar(max)" />
+          <Property Name="BatchNumber" Type="nvarchar(max)" />
+          <Property Name="ExpiryDate" Type="nvarchar(max)" />
+          <Property Name="SellingPrice" Type="int" />
+          <Property Name="CostPrice" Type="int" />
+        </EntityType>
+        <EntityType Name="purchase">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="productId" Type="int" />
+          <Property Name="Pack" Type="nvarchar(max)" />
+          <Property Name="Quantity" Type="nvarchar(max)" />
+          <Property Name="price" Type="nvarchar(max)" />
+          <Property Name="GstPercent" Type="nvarchar(max)" />
+          <Property Name="SupplierId" Type="int" />
+          <Property Name="DateOfPurchase" Type="date" />
+          <Property Name="InvoiceId" Type="int" />
+        </EntityType>
+        <EntityType Name="PurchaseInvoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceId" Type="varchar" MaxLength="6" StoreGeneratedPattern="Computed" />
+          <Property Name="supplierId" Type="int" />
+          <Property Name="DateOfPurchase" Type="date" />
+          <Property Name="TotalPurchaseAmount" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="PurchaseLedger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierId" Type="int" />
+          <Property Name="BalanceAmount" Type="int" />
+          <Property Name="CreditAmount" Type="int" />
+          <Property Name="DebitAmunt" Type="int" />
+          <Property Name="Particulars" Type="nvarchar(max)" />
+          <Property Name="InvoiceId" Type="int" />
+          <Property Name="Date" Type="date" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="productid" Type="int" />
+          <Property Name="pack" Type="nvarchar(max)" />
+          <Property Name="quantity" Type="nvarchar(max)" />
+          <Property Name="price" Type="nvarchar(max)" />
+          <Property Name="rate" Type="nvarchar(max)" />
+          <Property Name="CGstPercent" Type="nvarchar(max)" />
+          <Property Name="IGSTPercent" Type="nvarchar(max)" />
+          <Property Name="SGSTPercent" Type="nvarchar(max)" />
+          <Property Name="CustomerId" Type="int" />
+          <Property Name="discountpercentage" Type="nvarchar(max)" />
+          <Property Name="totalamountbeforetax" Type="nvarchar(max)" />
+          <Property Name="totalamountaftertax" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierName" Type="nvarchar(max)" />
+          <Property Name="SupplierAddress" Type="nvarchar(max)" />
+          <Property Name="SupplierPhoneNo" Type="nvarchar(max)" />
+          <Property Name="SupplierEmail" Type="nvarchar(max)" />
+          <Property Name="SupplierGSTNumber" Type="nvarchar(max)" />
+          <Property Name="SupplierPanNumber" Type="nvarchar(max)" />
+          <Property Name="SupplierDLNumber" Type="nvarchar(max)" />
+          <Property Name="SupplierCINNumber" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="YourTable">
+          <Key>
+            <PropertyRef Name="CharID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CharID" Type="varchar" MaxLength="5" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__PurchaseI__suppl__5FB337D6">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PurchaseInvoice">
+              <PropertyRef Name="supplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchase_productid">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="purchase">
+              <PropertyRef Name="productId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchase_PurchaseInvoice">
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="purchase">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchase_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="purchase">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseLedger_PurchaseInvoice">
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseLedger">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseLedger_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PurchaseLedger">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="getLedgerByDateRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="date" Mode="In" />
+          <Parameter Name="endDate" Type="date" Mode="In" />
+          <Parameter Name="supplierId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="dbPharmaModelStoreContainer">
+          <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment_Mode" EntityType="Self.Payment_Mode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="purchase" EntityType="Self.purchase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseInvoice" EntityType="Self.PurchaseInvoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseLedger" EntityType="Self.PurchaseLedger" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YourTable" EntityType="Self.YourTable" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__PurchaseI__suppl__5FB337D6" Association="Self.FK__PurchaseI__suppl__5FB337D6">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchase_productid" Association="Self.FK_purchase_productid">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="purchase" EntitySet="purchase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchase_PurchaseInvoice" Association="Self.FK_purchase_PurchaseInvoice">
+            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
+            <End Role="purchase" EntitySet="purchase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchase_Supplier" Association="Self.FK_purchase_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="purchase" EntitySet="purchase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseLedger_PurchaseInvoice" Association="Self.FK_PurchaseLedger_PurchaseInvoice">
+            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
+            <End Role="PurchaseLedger" EntitySet="PurchaseLedger" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseLedger_Supplier" Association="Self.FK_PurchaseLedger_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="PurchaseLedger" EntitySet="PurchaseLedger" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Customer" Association="Self.FK_Sales_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Product" Association="Self.FK_Sales_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbPharmaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Auth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Customer" FromRole="Customer" ToRole="Sales" />
+        </EntityType>
+        <EntityType Name="Payment_Mode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="HSNNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BatchNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExpiryDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SellingPrice" Type="Int32" />
+          <Property Name="CostPrice" Type="Int32" />
+          <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_productid" FromRole="Product" ToRole="purchase" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Product" FromRole="Product" ToRole="Sales" />
+        </EntityType>
+        <EntityType Name="purchase">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productId" Type="Int32" />
+          <Property Name="Pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GstPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierId" Type="Int32" />
+          <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
+          <Property Name="InvoiceId" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_purchase_productid" FromRole="purchase" ToRole="Product" />
+          <NavigationProperty Name="PurchaseInvoice" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="purchase" ToRole="PurchaseInvoice" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_purchase_Supplier" FromRole="purchase" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="PurchaseInvoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceId" Type="String" MaxLength="6" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="supplierId" Type="Int32" />
+          <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
+          <Property Name="TotalPurchaseAmount" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="purchase" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK__PurchaseI__suppl__5FB337D6" FromRole="PurchaseInvoice" ToRole="Supplier" />
+          <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseLedger" />
+        </EntityType>
+        <EntityType Name="PurchaseLedger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierId" Type="Int32" />
+          <Property Name="BalanceAmount" Type="Int32" />
+          <Property Name="CreditAmount" Type="Int32" />
+          <Property Name="DebitAmunt" Type="Int32" />
+          <Property Name="Particulars" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="PurchaseInvoice" Relationship="Self.FK_PurchaseLedger_PurchaseInvoice" FromRole="PurchaseLedger" ToRole="PurchaseInvoice" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_PurchaseLedger_Supplier" FromRole="PurchaseLedger" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productid" Type="Int32" />
+          <Property Name="pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="rate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CGstPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IGSTPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SGSTPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="discountpercentage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="totalamountbeforetax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="totalamountaftertax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Sales_Customer" FromRole="Sales" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Sales_Product" FromRole="Sales" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierPhoneNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierGSTNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierPanNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierDLNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierCINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_Supplier" FromRole="Supplier" ToRole="purchase" />
+          <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK__PurchaseI__suppl__5FB337D6" FromRole="Supplier" ToRole="PurchaseInvoice" />
+          <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_Supplier" FromRole="Supplier" ToRole="PurchaseLedger" />
+        </EntityType>
+        <EntityType Name="YourTable">
+          <Key>
+            <PropertyRef Name="CharID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CharID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Association Name="FK_Sales_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchase_productid">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="purchase">
+              <PropertyRef Name="productId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchase_PurchaseInvoice">
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="purchase">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchase_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="purchase">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PurchaseI__suppl__5FB337D6">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PurchaseInvoice">
+              <PropertyRef Name="supplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseLedger_PurchaseInvoice">
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseLedger">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseLedger_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PurchaseLedger">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbPharmaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Auths" EntityType="Self.Auth" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Payment_Mode" EntityType="Self.Payment_Mode" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="purchases" EntityType="Self.purchase" />
+          <EntitySet Name="PurchaseInvoices" EntityType="Self.PurchaseInvoice" />
+          <EntitySet Name="PurchaseLedgers" EntityType="Self.PurchaseLedger" />
+          <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
+          <EntitySet Name="YourTables" EntityType="Self.YourTable" />
+          <AssociationSet Name="FK_Sales_Customer" Association="Self.FK_Sales_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchase_productid" Association="Self.FK_purchase_productid">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="purchase" EntitySet="purchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Product" Association="Self.FK_Sales_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchase_PurchaseInvoice" Association="Self.FK_purchase_PurchaseInvoice">
+            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
+            <End Role="purchase" EntitySet="purchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchase_Supplier" Association="Self.FK_purchase_Supplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="purchase" EntitySet="purchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PurchaseI__suppl__5FB337D6" Association="Self.FK__PurchaseI__suppl__5FB337D6">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseLedger_PurchaseInvoice" Association="Self.FK_PurchaseLedger_PurchaseInvoice">
+            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
+            <End Role="PurchaseLedger" EntitySet="PurchaseLedgers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseLedger_Supplier" Association="Self.FK_PurchaseLedger_Supplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="PurchaseLedger" EntitySet="PurchaseLedgers" />
+          </AssociationSet>
+          <FunctionImport Name="getLedgerByDateRange" ReturnType="Collection(dbPharmaModel.getLedgerByDateRange_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+            <Parameter Name="supplierId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="getLedgerByDateRange_Result">
+          <Property Type="DateTime" Name="Date" Nullable="true" />
+          <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Particulars" Nullable="true" />
+          <Property Type="Int32" Name="DebitAmunt" Nullable="true" />
+          <Property Type="Int32" Name="CreditAmount" Nullable="true" />
+          <Property Type="Int32" Name="BalanceAmount" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbPharmaModelStoreContainer" CdmEntityContainer="dbPharmaEntities">
+          <EntitySetMapping Name="Auths">
+            <EntityTypeMapping TypeName="dbPharmaModel.Auth">
+              <MappingFragment StoreEntitySet="Auth">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="dbPharmaModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payment_Mode">
+            <EntityTypeMapping TypeName="dbPharmaModel.Payment_Mode">
+              <MappingFragment StoreEntitySet="Payment_Mode">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="dbPharmaModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="HSNNumber" ColumnName="HSNNumber" />
+                <ScalarProperty Name="BatchNumber" ColumnName="BatchNumber" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="CostPrice" ColumnName="CostPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="purchases">
+            <EntityTypeMapping TypeName="dbPharmaModel.purchase">
+              <MappingFragment StoreEntitySet="purchase">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="Pack" ColumnName="Pack" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="GstPercent" ColumnName="GstPercent" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseInvoices">
+            <EntityTypeMapping TypeName="dbPharmaModel.PurchaseInvoice">
+              <MappingFragment StoreEntitySet="PurchaseInvoice">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="supplierId" ColumnName="supplierId" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseLedgers">
+            <EntityTypeMapping TypeName="dbPharmaModel.PurchaseLedger">
+              <MappingFragment StoreEntitySet="PurchaseLedger">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="DebitAmunt" ColumnName="DebitAmunt" />
+                <ScalarProperty Name="Particulars" ColumnName="Particulars" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="dbPharmaModel.Sale">
+              <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="productid" ColumnName="productid" />
+                <ScalarProperty Name="pack" ColumnName="pack" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="CGstPercent" ColumnName="CGstPercent" />
+                <ScalarProperty Name="IGSTPercent" ColumnName="IGSTPercent" />
+                <ScalarProperty Name="SGSTPercent" ColumnName="SGSTPercent" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="discountpercentage" ColumnName="discountpercentage" />
+                <ScalarProperty Name="totalamountbeforetax" ColumnName="totalamountbeforetax" />
+                <ScalarProperty Name="totalamountaftertax" ColumnName="totalamountaftertax" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="dbPharmaModel.Supplier">
+              <MappingFragment StoreEntitySet="Supplier">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="SupplierAddress" ColumnName="SupplierAddress" />
+                <ScalarProperty Name="SupplierPhoneNo" ColumnName="SupplierPhoneNo" />
+                <ScalarProperty Name="SupplierEmail" ColumnName="SupplierEmail" />
+                <ScalarProperty Name="SupplierGSTNumber" ColumnName="SupplierGSTNumber" />
+                <ScalarProperty Name="SupplierPanNumber" ColumnName="SupplierPanNumber" />
+                <ScalarProperty Name="SupplierDLNumber" ColumnName="SupplierDLNumber" />
+                <ScalarProperty Name="SupplierCINNumber" ColumnName="SupplierCINNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YourTables">
+            <EntityTypeMapping TypeName="dbPharmaModel.YourTable">
+              <MappingFragment StoreEntitySet="YourTable">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CharID" ColumnName="CharID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="getLedgerByDateRange" FunctionName="dbPharmaModel.Store.getLedgerByDateRange">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbPharmaModel.getLedgerByDateRange_Result">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Particulars" ColumnName="Particulars" />
+                <ScalarProperty Name="DebitAmunt" ColumnName="DebitAmunt" />
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

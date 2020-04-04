@@ -1,0 +1,93 @@
+﻿@model Pharmacy.ViewModels.SupplierViewModel
+@{
+    ViewBag.Title = "EditSupplier";
+}
+
+<style>
+    button.btn.btn-sm.btn-danger.waves-effect.waves-themed {
+        margin: 5px 0px 0px 30px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Add <span class="fw-300"><i>Supplier</i></span>
+                </h2>
+                <div class="panel-toolbar">
+                </div>
+            </div>
+            <div class="panel-container show">
+                @using (Html.BeginForm("AddSupplier", "Dashboard", FormMethod.Post))
+                {
+                    <div class="panel-content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Supplier Full Name</label>
+                                    @Html.TextBoxFor(m => m.SupplierName, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Supplier Full Address</label>
+                                    @Html.TextBoxFor(m => m.SupplierAddress, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Phone Number</label>
+                                    @Html.TextBoxFor(m => m.SupplierPanNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Email</label>
+                                    @Html.TextBoxFor(m => m.SupplierEmail, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">G.S.T Number</label>
+                                    @Html.TextBoxFor(m => m.SupplierGSTNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">P.A.N Number</label>
+                                    @Html.TextBoxFor(m => m.SupplierPanNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" fo r="example-select">D.L.N Number</label>
+                                    @Html.TextBoxFor(m => m.SupplierDLNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">C.I.N Number</label>
+                                    @Html.TextBoxFor(m => m.SupplierCINNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="">
+                                    <button type="submit" class="btn btn-sm btn-danger waves-effect waves-themed">Save Details</button>
+                                </div>
+                                <div class="panel-toolbar">
+                                    <button type="reset" class="btn btn-sm btn-danger waves-effect waves-themed">Reset Details</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
