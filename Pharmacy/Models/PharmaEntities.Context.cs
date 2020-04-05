@@ -37,6 +37,8 @@ namespace Pharmacy.Models
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<YourTable> YourTables { get; set; }
+        public virtual DbSet<SalesInvoice> SalesInvoices { get; set; }
+        public virtual DbSet<SalesLedger> SalesLedgers { get; set; }
     
         public virtual ObjectResult<getLedgerByDateRange_Result> getLedgerByDateRange(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, Nullable<int> supplierId)
         {

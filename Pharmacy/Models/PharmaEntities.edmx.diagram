@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="dec652f26b8b4144817f8edc1198c858" Name="Diagram1">
         <EntityTypeShape EntityType="dbPharmaModel.Auth" Width="1.5" PointX="7.75" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbPharmaModel.Customer" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbPharmaModel.Customer" Width="1.5" PointX="2.5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="dbPharmaModel.Payment_Mode" Width="1.5" PointX="9.75" PointY="1.875" IsExpanded="true" />
         <EntityTypeShape EntityType="dbPharmaModel.Product" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="dbPharmaModel.purchase" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
@@ -23,6 +23,11 @@
         <AssociationConnector Association="dbPharmaModel.FK__PurchaseI__suppl__5FB337D6" ManuallyRouted="false" />
         <AssociationConnector Association="dbPharmaModel.FK_PurchaseLedger_PurchaseInvoice" ManuallyRouted="false" />
         <AssociationConnector Association="dbPharmaModel.FK_PurchaseLedger_Supplier" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="dbPharmaModel.SalesInvoice" Width="1.5" PointX="5.25" PointY="14" />
+        <EntityTypeShape EntityType="dbPharmaModel.SalesLedger" Width="1.5" PointX="8.5" PointY="10.375" />
+        <AssociationConnector Association="dbPharmaModel.FK__SalesInvo__Custo__6FE99F9F" />
+        <AssociationConnector Association="dbPharmaModel.FK_SalesLedger_Customer" />
+        <AssociationConnector Association="dbPharmaModel.FK_SalesLedger_SalesInvoice" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

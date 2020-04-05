@@ -359,5 +359,10 @@ namespace Pharmacy.Controllers
         {
             return View();
         }
+
+        public ActionResult AddDistributor()
+        {
+            return View();
+        }
     }
 }

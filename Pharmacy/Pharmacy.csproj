@@ -177,6 +177,12 @@
     <Compile Include="Models\Sale.cs">
       <DependentUpon>PharmaEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SalesInvoice.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SalesLedger.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Supplier.cs">
       <DependentUpon>PharmaEntities.tt</DependentUpon>
     </Compile>
@@ -185,6 +191,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AddProductViewModel.cs" />
+    <Compile Include="ViewModels\DistributorViewModel.cs" />
     <Compile Include="ViewModels\InvoiceList.cs" />
     <Compile Include="ViewModels\ListOfInvoice.cs" />
     <Compile Include="ViewModels\ListProductViewModel.cs" />
