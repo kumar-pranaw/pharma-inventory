@@ -132,6 +132,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="ConvertToFigure.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -141,7 +142,19 @@
     <Compile Include="Models\Customer.cs">
       <DependentUpon>PharmaEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\getAllPurchases_Result.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getAllSales_Result.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\getLedgerByDateRange_Result.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getSalesLedgerByDateRange_Result.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ledger.cs">
       <DependentUpon>PharmaEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment_Mode.cs">
@@ -197,10 +210,13 @@
     <Compile Include="ViewModels\ListProductViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PaymentMode.cs" />
+    <Compile Include="ViewModels\ProductSaleViewModel.cs" />
+    <Compile Include="ViewModels\SalesLedgerViewModel.cs" />
     <Compile Include="ViewModels\SupplierLedgerViewModel.cs" />
     <Compile Include="ViewModels\SupplierProduct.cs" />
     <Compile Include="ViewModels\SupplierViewModel.cs" />
     <Compile Include="ViewModels\ViewPurchases.cs" />
+    <Compile Include="ViewModels\ViewSales.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.min.css" />
@@ -769,6 +785,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.printarea.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -801,6 +818,17 @@
     <Content Include="Views\Dashboard\GetInvoiceDetailsBySupplierId.cshtml" />
     <Content Include="Views\Dashboard\EditSupplier.cshtml" />
     <Content Include="Views\Dashboard\AddPaymentMethod.cshtml" />
+    <Content Include="Views\Dashboard\AddDistributor.cshtml" />
+    <Content Include="Views\Dashboard\ViewDistributors.cshtml" />
+    <Content Include="Views\Dashboard\AddSale.cshtml" />
+    <Content Include="Views\Dashboard\GetSaleByDistributorId.cshtml" />
+    <Content Include="Views\Dashboard\ViewLedgerByDistributorId.cshtml" />
+    <Content Include="Views\Dashboard\GetInvoiceDetailsByDistributorId.cshtml" />
+    <Content Include="Views\Dashboard\ManageDistributorLedger.cshtml" />
+    <Content Include="Views\Dashboard\ViewAllPurchases.cshtml" />
+    <Content Include="Views\Dashboard\ViewAllSales.cshtml" />
+    <Content Include="Views\Dashboard\ViewAllPaymentMethods.cshtml" />
+    <Content Include="Views\Dashboard\EditDistributor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

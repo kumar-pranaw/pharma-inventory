@@ -1,0 +1,197 @@
+﻿@model List<Pharmacy.ViewModels.ListOfInvoice>
+@{
+
+    Layout = null;
+    var distributorName =  TempData["DistributorName"];
+    var distributorPhone =  TempData["Phonenumber"];
+    var distributorAddress =  TempData["Address"];
+    var distributorDl =  TempData["DlNumber"];
+    var distributorGST =  TempData["GSTIN"];
+    var distributorResidenceNumber = TempData["ResidenceNumber"];
+    var distributorCin = TempData["CIN"];
+    var figureAmount = TempData["TotalConvertedAmount"];
+    var totalAmount = TempData["TotalAmount"];
+    var beforeGstAmount = TempData["AmountBeforeGst"];
+    var gstAmount = TempData["GstAmount"];
+    var invoiceId = TempData["InvoiceId"];
+    var dateOfPurchase = TempData["DateOfPurchase"];
+}
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Drughouse Bill</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <style>
+        button.btn.btn-sm.btn-danger.waves-effect.waves-themed {
+            margin: 20px 0px 34px 700px;
+            padding: 13px 16px 11px 23px;
+        }
+
+        body {
+            background: rgb(204,204,204);
+            -webkit-print-color-adjust: exact;
+        }
+
+        page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        }
+
+            page[size="A4"] {
+                width: 21cm;
+                height: 29.7cm;
+                font-size: 10px;
+            }
+
+        #invoice {
+            height: 100%;
+            float: left;
+        }
+
+        p {
+            margin: -30px 1px 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="print" type="button" class="btn btn-sm btn-danger waves-effect waves-themed">Print Invoice</button>
+    <page id="printarea" size="A4">
+        <section id="invoice">
+            <div class="container-fluid">
+                <center><h3><b>@distributorName</b> </h3> </center>
+                <table>
+                    <tr>
+                        <td>
+                            D.L. No.: @distributorDl<br>
+                            GST No.-: @distributorGST<br>
+                            CIN No.-: @distributorCin<br>
+                        </td>
+                        <td class="address" style="padding: 0px 0px 0px 71px; text-align:center">  @distributorAddress</td>
+                        <td class="phone" style="padding: 0px 0px 0px 71px; text-align:center">Phone(O): @distributorPhone (R): @distributorResidenceNumber</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="margin: 0px 0px 0px 75px;">
+                ======================== ========================< <b>GST INVOICE</b> >======================== ========================
+            </div>
+            <div class="container-fluid">
+                <table>
+                    <tr>
+                        <td>
+                            M/S Neelkanth Enterprises<br>
+                            SCO 622, FIRST FLOOR<br>
+                            CHANDIGARH (Punjab 160047 Dist: Chandigarh)<br>
+                        </td>
+                        <td class="address" style="padding: 0px 0px 0px 71px; text-align:left">
+                            D.L. No.: 7982-7983 <br />
+                            GST No. : 04ADSPS9111K1Z2 <br />
+                            P.S. No.: 0
+                            THROUGH: POST PARCEL
+                        </td>
+                        <td class="phone" style="padding: 0px 0px 0px 71px; text-align:left">
+                            INV NO.: @invoiceId <br />
+                            DATE: @dateOfPurchase <br />
+                            CASES: 0 <br />
+                            G.R. NO.:
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row ">
+                <!-- table -->
+                <div class="col-md-12 ">
+                    <div class="panel ">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-condensed" border="0">
+                                    <thead>
+                                        <tr>
+                                            <td><strong>PRODUCT NAME</strong></td>
+                                            <td><strong>RATE</strong></td>
+                                            <td><strong>EXP. DT</strong></td>
+                                            <td><strong>HSN CODE</strong></td>
+                                            <td><strong>BATCH</strong></td>
+                                            <td><strong>PACK</strong></td>
+                                            <td><strong>QTY</strong></td>
+                                            <td><strong>AMOUNT</strong></td>
+                                            <td><strong>DIST</strong></td>
+                                            <td><strong>GST</strong></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-left">@item.ProductName</td>
+                                                <td class="text-left">@item.Costprice</td>
+                                                <td class="text-left">@item.ExpiryDate</td>
+                                                <td class="text-left">@item.HSNNumber</td>
+                                                <td class="text-left">@item.Batch</td>
+                                                <td class="text-left">@item.Pack</td>
+                                                <td class="text-left">@item.Quantity</td>
+                                                <td class="text-left">@item.TotalAmount</td>
+                                                <td class="text-left">@item.Discount</td>
+                                                <td class="text-left">@item.GstPercent</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- table -->
+            </div>
+            </div>
+            <!-- footer -->
+            <div class="page-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            THANKING YOU FOR GOOD SUPPORT
+                        </div>
+                        <div class="col-md-6 text-right">
+                            Total  : @beforeGstAmount <br /> Discount :  <br /> GST 12% : @gstAmount<br /> Invoice Ammount: @totalAmount
+                        </div>
+                        <div class="col-md-12" style="border-bottom:dotted 2px #000">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-12 text-right">
+                            <h6>Payable Net Amount= @totalAmount/-</h6>
+                        </div>
+                        <div class="col-md-12">
+                            <p>@figureAmount <br /> AMOUNT DUE ON  : 23/02/2020 <br />Intrest 24% will be charged after Due Date. <br />Subject to @distributorAddress Jurisdiction</p>
+                        </div>
+                        <div class="col-md-12 text-right" style="text-align:center">
+                            <h4>For @distributorName</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </page>
+
+    <script src="~/Scripts/jquery.printarea.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#print").click(function () {
+                $("#print").hide();
+                $("#printarea").show();
+                window.print();
+            });
+        });
+    </script>
+</body>
+</html>

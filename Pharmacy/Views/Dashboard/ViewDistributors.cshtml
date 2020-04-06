@@ -1,0 +1,82 @@
+﻿@model List<Pharmacy.ViewModels.DistributorViewModel>
+@{
+    ViewBag.Title = "ViewDistributors";
+}
+<style>
+    span.text-truncate.text-truncate-xl {
+        width: 300px;
+    }
+</style>
+
+<ol class="breadcrumb page-breadcrumb">
+    <li class="breadcrumb-item"><a href="dashboard.html">My Dashboard</a></li>
+    <li class="breadcrumb-item active">Manage Clients</li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+</ol>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="border-faded bg-faded p-3 mb-g d-flex">
+            <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Filter contacts">
+            <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
+                <label class="btn btn-default active">
+                    <input type="radio" name="contactview" id="grid" checked="" value="grid"><i class="fas fa-table"></i>
+                </label>
+                <label class="btn btn-default">
+                    <input type="radio" name="contactview" id="table" value="table"><i class="fas fa-th-list"></i>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="js-contacts">
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-4">
+            <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="oliver kopyov">
+                <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
+                    <div class="d-flex flex-row align-items-center">
+                        <span class="status status-success mr-3">
+                            <span class="rounded-circle profile-image d-block " style="background-image:url('~/Content/img/demo/avatars/avatar-b.png'); background-size: cover;"></span>
+                        </span>
+                        <div class="info-card-text flex-1">
+                            <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
+                                @item.CustomerName
+                                <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="@Url.Action("ManageDistributorLedger","Dashboard", new { id = item.Id})">Manage Ledger</a>
+                                <a class="dropdown-item" href="@Url.Action("ViewLedgerByDistributorId","Dashboard", new { id = item.Id})">View Ledger</a>
+                                <a class="dropdown-item" href="@Url.Action("GetSaleByDistributorId","Dashboard", new { id = item.Id})">View Sale</a>
+                                <a class="dropdown-item" href="@Url.Action("AddSale","Dashboard", new { id = item.Id})">Make Sale</a>
+                                <a class="dropdown-item" href="@Url.Action("EditDistributor","Dashboard", new { id= item.Id})">Edit Distributor</a>
+                            </div>
+                            <span class="text-truncate text-truncate-xl">@item.GSTNumber | @item.DLnumber | @item.CINNumber</span>
+                        </div>
+                        <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
+                            <span class="collapsed-hidden">+</span>
+                            <span class="collapsed-reveal">-</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0 collapse show">
+                    <div class="p-3">
+                        <a href="tel:+12125551212" class="mt-1 d-block fs-sm fw-400 text-dark">
+                            O: @item.CustomerOfficePhoneNumber
+                        </a>
+                        <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
+                            Pan: @item.PanNumber
+                        </a>
+                        <a href="#" class="mt-1 d-block fs-sm fw-400 text-dark">
+                            <i class="fal fa-address-card mr-1"></i> @item.CustomerEmail
+                        </a>
+                        <address class="fs-sm fw-400 mt-4 text-muted">
+                            <i class="fas fa-map-pin mr-2"></i> @item.CustomerAddress
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+

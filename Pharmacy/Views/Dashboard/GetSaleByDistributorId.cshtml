@@ -1,6 +1,6 @@
-﻿@model List<Pharmacy.ViewModels.ViewPurchases>
+﻿@model List<Pharmacy.ViewModels.ViewSales>
 @{
-    ViewBag.Title = "GetPurchaseBySupplierId";
+    ViewBag.Title = "GetSaleByDistributorId";
 }
 
 <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -8,14 +8,14 @@
         <tr>
             <th>#Invoice Id</th>
             <th>Date Of Purchase</th>
-            <th>Total Amount of Sales</th>
+            <th>Total Amount of Purchase</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td><a href="@Url.Action("GetInvoiceDetailsBySupplierId","Dashboard", new { invoiceId = item.Id, supplierId = item.SupplierId})">@item.InvoiceId</a></td>
+                <td><a href="@Url.Action("GetInvoiceDetailsByDistributorId","Dashboard", new { invoiceId = item.Id, customerId = item.CustomerId})">@item.InvoiceId</a></td>
                 <td>@item.DateOfPurchase</td>
                 <td>@item.PurchaseAmount</td>
             </tr>

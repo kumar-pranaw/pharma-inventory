@@ -27,19 +27,22 @@
           <Property Name="GSTNumber" Type="nvarchar(max)" />
           <Property Name="TINNumber" Type="nvarchar(max)" />
           <Property Name="PanNumber" Type="nvarchar(max)" />
+          <Property Name="CINNumber" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="Ledger">
-          <Property Name="Id" Type="nchar" MaxLength="10" />
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DateOfSale" Type="date" />
-          <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="InvoiceId" Type="int" />
           <Property Name="Particulars" Type="nvarchar" MaxLength="100" />
           <Property Name="DrAmount" Type="bigint" />
           <Property Name="CrAmount" Type="bigint" />
           <Property Name="Balance" Type="bigint" />
-          <Property Name="SalesId" Type="int" />
-        </EntityType>-->
+          <Property Name="CustomerId" Type="int" />
+        </EntityType>
         <EntityType Name="Payment_Mode">
           <Key>
             <PropertyRef Name="Id" />
@@ -66,9 +69,9 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="productId" Type="int" />
           <Property Name="Pack" Type="nvarchar(max)" />
-          <Property Name="Quantity" Type="nvarchar(max)" />
-          <Property Name="price" Type="nvarchar(max)" />
-          <Property Name="GstPercent" Type="nvarchar(max)" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="price" Type="int" />
+          <Property Name="GstPercent" Type="int" />
           <Property Name="SupplierId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
           <Property Name="InvoiceId" Type="int" />
@@ -103,14 +106,15 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="productid" Type="int" />
           <Property Name="pack" Type="nvarchar(max)" />
-          <Property Name="quantity" Type="nvarchar(max)" />
-          <Property Name="price" Type="nvarchar(max)" />
-          <Property Name="rate" Type="nvarchar(max)" />
-          <Property Name="CGstPercent" Type="nvarchar(max)" />
-          <Property Name="IGSTPercent" Type="nvarchar(max)" />
-          <Property Name="SGSTPercent" Type="nvarchar(max)" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="price" Type="int" />
+          <Property Name="rate" Type="int" />
+          <Property Name="CGstPercent" Type="int" />
+          <Property Name="IGSTPercent" Type="int" />
+          <Property Name="SGSTPercent" Type="int" />
           <Property Name="CustomerId" Type="int" />
           <Property Name="discountpercentage" Type="nvarchar(max)" />
+          <Property Name="InvoiceId" Type="int" />
         </EntityType>
         <EntityType Name="SalesInvoice">
           <Key>
@@ -180,6 +184,30 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Ledger_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ledger">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ledger_SalesInvoice">
+          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
+          <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ledger">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_purchase_productid">
           <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
@@ -264,6 +292,18 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Sales_SalesInvoice">
+          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SalesLedger_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
@@ -288,14 +328,22 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="getAllPurchases" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getAllSales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getLedgerByDateRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="startDate" Type="date" Mode="In" />
           <Parameter Name="endDate" Type="date" Mode="In" />
           <Parameter Name="supplierId" Type="int" Mode="In" />
         </Function>
+        <Function Name="getSalesLedgerByDateRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="date" Mode="In" />
+          <Parameter Name="endDate" Type="date" Mode="In" />
+          <Parameter Name="customerId" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="dbPharmaModelStoreContainer">
           <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ledger" EntityType="Self.Ledger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment_Mode" EntityType="Self.Payment_Mode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="purchase" EntityType="Self.purchase" Schema="dbo" store:Type="Tables" />
@@ -313,6 +361,14 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <AssociationSet Name="FK__SalesInvo__Custo__6FE99F9F" Association="Self.FK__SalesInvo__Custo__6FE99F9F">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="SalesInvoice" EntitySet="SalesInvoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ledger_Customer" Association="Self.FK_Ledger_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Ledger" EntitySet="Ledger" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ledger_SalesInvoice" Association="Self.FK_Ledger_SalesInvoice">
+            <End Role="SalesInvoice" EntitySet="SalesInvoice" />
+            <End Role="Ledger" EntitySet="Ledger" />
           </AssociationSet>
           <AssociationSet Name="FK_purchase_productid" Association="Self.FK_purchase_productid">
             <End Role="Product" EntitySet="Product" />
@@ -340,6 +396,10 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           </AssociationSet>
           <AssociationSet Name="FK_Sales_Product" Association="Self.FK_Sales_Product">
             <End Role="Product" EntitySet="Product" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_SalesInvoice" Association="Self.FK_Sales_SalesInvoice">
+            <End Role="SalesInvoice" EntitySet="SalesInvoice" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
           <AssociationSet Name="FK_SalesLedger_Customer" Association="Self.FK_SalesLedger_Customer">
@@ -371,16 +431,33 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CustomerAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Customer" FromRole="Customer" ToRole="Sales" />
           <Property Name="CustomerOfficePhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CustomerResidencePhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DLnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="GSTNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PanNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SalesInvoices" Relationship="dbPharmaModel.FK__SalesInvo__Custo__6FE99F9F" FromRole="Customer" ToRole="SalesInvoice" />
-          <NavigationProperty Name="SalesLedgers" Relationship="dbPharmaModel.FK_SalesLedger_Customer" FromRole="Customer" ToRole="SalesLedger" />
+          <Property Name="CINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SalesInvoices" Relationship="Self.FK__SalesInvo__Custo__6FE99F9F" FromRole="Customer" ToRole="SalesInvoice" />
+          <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_Customer" FromRole="Customer" ToRole="Ledger" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Customer" FromRole="Customer" ToRole="Sales" />
+          <NavigationProperty Name="SalesLedgers" Relationship="Self.FK_SalesLedger_Customer" FromRole="Customer" ToRole="SalesLedger" />
+        </EntityType>
+        <EntityType Name="Ledger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateOfSale" Type="DateTime" Precision="0" />
+          <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="Particulars" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DrAmount" Type="Int64" />
+          <Property Name="CrAmount" Type="Int64" />
+          <Property Name="Balance" Type="Int64" />
+          <Property Name="CustomerId" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Ledger_Customer" FromRole="Ledger" ToRole="Customer" />
+          <NavigationProperty Name="SalesInvoice" Relationship="Self.FK_Ledger_SalesInvoice" FromRole="Ledger" ToRole="SalesInvoice" />
         </EntityType>
         <EntityType Name="Payment_Mode">
           <Key>
@@ -410,9 +487,9 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="productId" Type="Int32" />
           <Property Name="Pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="price" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GstPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="price" Type="Int32" />
+          <Property Name="GstPercent" Type="Int32" />
           <Property Name="SupplierId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
           <Property Name="InvoiceId" Type="Int32" />
@@ -455,18 +532,47 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="productid" Type="Int32" />
           <Property Name="pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="quantity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="price" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="rate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CGstPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IGSTPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SGSTPercent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="price" Type="Int32" />
+          <Property Name="rate" Type="Int32" />
+          <Property Name="CGstPercent" Type="Int32" />
+          <Property Name="IGSTPercent" Type="Int32" />
+          <Property Name="SGSTPercent" Type="Int32" />
           <Property Name="CustomerId" Type="Int32" />
           <Property Name="discountpercentage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="totalamountbeforetax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="totalamountaftertax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceId" Type="Int32" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_Sales_Customer" FromRole="Sales" ToRole="Customer" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Sales_Product" FromRole="Sales" ToRole="Product" />
+          <NavigationProperty Name="SalesInvoice" Relationship="Self.FK_Sales_SalesInvoice" FromRole="Sales" ToRole="SalesInvoice" />
+        </EntityType>
+        <EntityType Name="SalesInvoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceId" Type="String" MaxLength="8" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
+          <Property Name="TotalPurchaseAmount" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__SalesInvo__Custo__6FE99F9F" FromRole="SalesInvoice" ToRole="Customer" />
+          <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_SalesInvoice" FromRole="SalesInvoice" ToRole="Ledger" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_SalesInvoice" FromRole="SalesInvoice" ToRole="Sales" />
+          <NavigationProperty Name="SalesLedgers" Relationship="Self.FK_SalesLedger_SalesInvoice" FromRole="SalesInvoice" ToRole="SalesLedger" />
+        </EntityType>
+        <EntityType Name="SalesLedger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="BalanceAmount" Type="Int32" />
+          <Property Name="CreditAmount" Type="Int32" />
+          <Property Name="DebitAmount" Type="Int32" />
+          <Property Name="Particulars" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_SalesLedger_Customer" FromRole="SalesLedger" ToRole="Customer" />
+          <NavigationProperty Name="SalesInvoice" Relationship="Self.FK_SalesLedger_SalesInvoice" FromRole="SalesLedger" ToRole="SalesInvoice" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -492,6 +598,30 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CharID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Association Name="FK__SalesInvo__Custo__6FE99F9F">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SalesInvoice">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ledger_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ledger">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Sales_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
@@ -501,6 +631,30 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
             </Principal>
             <Dependent Role="Sales">
               <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLedger_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SalesLedger">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ledger_SalesInvoice">
+          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
+          <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ledger">
+              <PropertyRef Name="InvoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -588,20 +742,63 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Sales_SalesInvoice">
+          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesLedger_SalesInvoice">
+          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
+          <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesInvoice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SalesLedger">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="dbPharmaEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Auths" EntityType="Self.Auth" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Ledgers" EntityType="Self.Ledger" />
           <EntitySet Name="Payment_Mode" EntityType="Self.Payment_Mode" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="purchases" EntityType="Self.purchase" />
           <EntitySet Name="PurchaseInvoices" EntityType="Self.PurchaseInvoice" />
           <EntitySet Name="PurchaseLedgers" EntityType="Self.PurchaseLedger" />
           <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="SalesInvoices" EntityType="Self.SalesInvoice" />
+          <EntitySet Name="SalesLedgers" EntityType="Self.SalesLedger" />
           <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
           <EntitySet Name="YourTables" EntityType="Self.YourTable" />
+          <AssociationSet Name="FK__SalesInvo__Custo__6FE99F9F" Association="Self.FK__SalesInvo__Custo__6FE99F9F">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ledger_Customer" Association="Self.FK_Ledger_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Ledger" EntitySet="Ledgers" />
+          </AssociationSet>
           <AssociationSet Name="FK_Sales_Customer" Association="Self.FK_Sales_Customer">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLedger_Customer" Association="Self.FK_SalesLedger_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="SalesLedger" EntitySet="SalesLedgers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ledger_SalesInvoice" Association="Self.FK_Ledger_SalesInvoice">
+            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
+            <End Role="Ledger" EntitySet="Ledgers" />
           </AssociationSet>
           <AssociationSet Name="FK_purchase_productid" Association="Self.FK_purchase_productid">
             <End Role="Product" EntitySet="Products" />
@@ -631,27 +828,29 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="PurchaseLedger" EntitySet="PurchaseLedgers" />
           </AssociationSet>
+          <AssociationSet Name="FK_Sales_SalesInvoice" Association="Self.FK_Sales_SalesInvoice">
+            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesLedger_SalesInvoice" Association="Self.FK_SalesLedger_SalesInvoice">
+            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
+            <End Role="SalesLedger" EntitySet="SalesLedgers" />
+          </AssociationSet>
           <FunctionImport Name="getLedgerByDateRange" ReturnType="Collection(dbPharmaModel.getLedgerByDateRange_Result)">
             <Parameter Name="startDate" Mode="In" Type="DateTime" />
             <Parameter Name="endDate" Mode="In" Type="DateTime" />
             <Parameter Name="supplierId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="SalesInvoices" EntityType="dbPharmaModel.SalesInvoice" />
-          <EntitySet Name="SalesLedgers" EntityType="dbPharmaModel.SalesLedger" />
-          <AssociationSet Name="FK__SalesInvo__Custo__6FE99F9F" Association="dbPharmaModel.FK__SalesInvo__Custo__6FE99F9F">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalesLedger_Customer" Association="dbPharmaModel.FK_SalesLedger_Customer">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="SalesLedger" EntitySet="SalesLedgers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalesLedger_SalesInvoice" Association="dbPharmaModel.FK_SalesLedger_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-            <End Role="SalesLedger" EntitySet="SalesLedgers" />
-          </AssociationSet>
+          <FunctionImport Name="getSalesLedgerByDateRange" ReturnType="Collection(dbPharmaModel.getSalesLedgerByDateRange_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+            <Parameter Name="customerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getAllPurchases" ReturnType="Collection(dbPharmaModel.getAllPurchases_Result)" />
+          <FunctionImport Name="getAllSales" ReturnType="Collection(dbPharmaModel.getAllSales_Result)" />
         </EntityContainer>
         <ComplexType Name="getLedgerByDateRange_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="DateTime" Name="Date" Nullable="true" />
           <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="6" />
           <Property Type="String" Name="Particulars" Nullable="true" />
@@ -659,69 +858,34 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <Property Type="Int32" Name="CreditAmount" Nullable="true" />
           <Property Type="Int32" Name="BalanceAmount" Nullable="true" />
         </ComplexType>
-        <EntityType Name="SalesInvoice">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InvoiceId" Type="String" MaxLength="8" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="CustomerId" Type="Int32" />
-          <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
-          <Property Name="TotalPurchaseAmount" Type="Decimal" Precision="18" Scale="0" />
-          <NavigationProperty Name="Customer" Relationship="dbPharmaModel.FK__SalesInvo__Custo__6FE99F9F" FromRole="SalesInvoice" ToRole="Customer" />
-          <NavigationProperty Name="SalesLedgers" Relationship="dbPharmaModel.FK_SalesLedger_SalesInvoice" FromRole="SalesInvoice" ToRole="SalesLedger" />
-        </EntityType>
-        <EntityType Name="SalesLedger">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" />
-          <Property Name="BalanceAmount" Type="Int32" />
-          <Property Name="CreditAmount" Type="Int32" />
-          <Property Name="DebitAmount" Type="Int32" />
-          <Property Name="Particulars" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="InvoiceId" Type="Int32" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Customer" Relationship="dbPharmaModel.FK_SalesLedger_Customer" FromRole="SalesLedger" ToRole="Customer" />
-          <NavigationProperty Name="SalesInvoice" Relationship="dbPharmaModel.FK_SalesLedger_SalesInvoice" FromRole="SalesLedger" ToRole="SalesInvoice" />
-        </EntityType>
-        <Association Name="FK__SalesInvo__Custo__6FE99F9F">
-          <End Type="dbPharmaModel.Customer" Role="Customer" Multiplicity="0..1" />
-          <End Type="dbPharmaModel.SalesInvoice" Role="SalesInvoice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="SalesInvoice">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalesLedger_Customer">
-          <End Type="dbPharmaModel.Customer" Role="Customer" Multiplicity="0..1" />
-          <End Type="dbPharmaModel.SalesLedger" Role="SalesLedger" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="SalesLedger">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalesLedger_SalesInvoice">
-          <End Type="dbPharmaModel.SalesInvoice" Role="SalesInvoice" Multiplicity="0..1" />
-          <End Type="dbPharmaModel.SalesLedger" Role="SalesLedger" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SalesLedger">
-              <PropertyRef Name="InvoiceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <ComplexType Name="getSalesLedgerByDateRange_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="Date" Nullable="true" />
+          <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Particulars" Nullable="true" />
+          <Property Type="Int32" Name="DebitAmount" Nullable="true" />
+          <Property Type="Int32" Name="CreditAmount" Nullable="true" />
+          <Property Type="Int32" Name="BalanceAmount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getAllPurchases_Result">
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="String" Name="BatchNumber" Nullable="true" />
+          <Property Type="String" Name="ExpiryDate" Nullable="true" />
+          <Property Type="Int32" Name="SellingPrice" Nullable="true" />
+          <Property Type="DateTime" Name="DateOfPurchase" Nullable="true" />
+          <Property Type="Int32" Name="CostPrice" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getAllSales_Result">
+          <Property Type="String" Name="CustomerName" Nullable="true" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="String" Name="BatchNumber" Nullable="true" />
+          <Property Type="String" Name="ExpiryDate" Nullable="true" />
+          <Property Type="Int32" Name="SellingPrice" Nullable="true" />
+          <Property Type="Int32" Name="CostPrice" Nullable="true" />
+          <Property Type="DateTime" Name="DateOfPurchase" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -741,15 +905,31 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="dbPharmaModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
-                <ScalarProperty Name="TINNumber" ColumnName="TINNumber" />
-                <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
-                <ScalarProperty Name="DLnumber" ColumnName="DLnumber" />
-                <ScalarProperty Name="CustomerResidencePhoneNumber" ColumnName="CustomerResidencePhoneNumber" />
-                <ScalarProperty Name="CustomerOfficePhoneNumber" ColumnName="CustomerOfficePhoneNumber" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
+                <ScalarProperty Name="CustomerOfficePhoneNumber" ColumnName="CustomerOfficePhoneNumber" />
+                <ScalarProperty Name="CustomerResidencePhoneNumber" ColumnName="CustomerResidencePhoneNumber" />
+                <ScalarProperty Name="DLnumber" ColumnName="DLnumber" />
+                <ScalarProperty Name="GSTNumber" ColumnName="GSTNumber" />
+                <ScalarProperty Name="TINNumber" ColumnName="TINNumber" />
+                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+                <ScalarProperty Name="CINNumber" ColumnName="CINNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ledgers">
+            <EntityTypeMapping TypeName="dbPharmaModel.Ledger">
+              <MappingFragment StoreEntitySet="Ledger">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DateOfSale" ColumnName="DateOfSale" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Particulars" ColumnName="Particulars" />
+                <ScalarProperty Name="DrAmount" ColumnName="DrAmount" />
+                <ScalarProperty Name="CrAmount" ColumnName="CrAmount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -828,7 +1008,33 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
                 <ScalarProperty Name="SGSTPercent" ColumnName="SGSTPercent" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="discountpercentage" ColumnName="discountpercentage" />
-                </MappingFragment>
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesInvoices">
+            <EntityTypeMapping TypeName="dbPharmaModel.SalesInvoice">
+              <MappingFragment StoreEntitySet="SalesInvoice">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesLedgers">
+            <EntityTypeMapping TypeName="dbPharmaModel.SalesLedger">
+              <MappingFragment StoreEntitySet="SalesLedger">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="DebitAmount" ColumnName="DebitAmount" />
+                <ScalarProperty Name="Particulars" ColumnName="Particulars" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Suppliers">
@@ -857,6 +1063,7 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
           <FunctionImportMapping FunctionImportName="getLedgerByDateRange" FunctionName="dbPharmaModel.Store.getLedgerByDateRange">
             <ResultMapping>
               <ComplexTypeMapping TypeName="dbPharmaModel.getLedgerByDateRange_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="Particulars" ColumnName="Particulars" />
@@ -866,31 +1073,46 @@ warning 6013: The table/view 'dbPharma.dbo.Ledger' does not have a primary key d
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="SalesInvoices">
-            <EntityTypeMapping TypeName="dbPharmaModel.SalesInvoice">
-              <MappingFragment StoreEntitySet="SalesInvoice">
-                <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
-                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SalesLedgers">
-            <EntityTypeMapping TypeName="dbPharmaModel.SalesLedger">
-              <MappingFragment StoreEntitySet="SalesLedger">
+          <FunctionImportMapping FunctionImportName="getSalesLedgerByDateRange" FunctionName="dbPharmaModel.Store.getSalesLedgerByDateRange">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbPharmaModel.getSalesLedgerByDateRange_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="Particulars" ColumnName="Particulars" />
                 <ScalarProperty Name="DebitAmount" ColumnName="DebitAmount" />
                 <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
                 <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getAllPurchases" FunctionName="dbPharmaModel.Store.getAllPurchases">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbPharmaModel.getAllPurchases_Result">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="BatchNumber" ColumnName="BatchNumber" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="CostPrice" ColumnName="CostPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getAllSales" FunctionName="dbPharmaModel.Store.getAllSales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbPharmaModel.getAllSales_Result">
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="BatchNumber" ColumnName="BatchNumber" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="CostPrice" ColumnName="CostPrice" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

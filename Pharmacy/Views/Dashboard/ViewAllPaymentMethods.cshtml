@@ -1,0 +1,24 @@
+﻿@model List<Pharmacy.Models.Payment_Mode>
+@{
+    ViewBag.Title = "ViewAllPaymentMethods";
+}
+
+
+<table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>#Sl. No</th>
+            <th>Payment Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.PaymentMode</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

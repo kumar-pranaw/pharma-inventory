@@ -12,23 +12,18 @@ namespace Pharmacy.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Sale
+    public partial class Ledger
     {
-        public int id { get; set; }
-        public Nullable<int> productid { get; set; }
-        public string pack { get; set; }
-        public Nullable<int> quantity { get; set; }
-        public Nullable<int> price { get; set; }
-        public Nullable<int> rate { get; set; }
-        public Nullable<int> CGstPercent { get; set; }
-        public Nullable<int> IGSTPercent { get; set; }
-        public Nullable<int> SGSTPercent { get; set; }
-        public Nullable<int> CustomerId { get; set; }
-        public string discountpercentage { get; set; }
+        public int Id { get; set; }
+        public Nullable<System.DateTime> DateOfSale { get; set; }
         public Nullable<int> InvoiceId { get; set; }
+        public string Particulars { get; set; }
+        public Nullable<long> DrAmount { get; set; }
+        public Nullable<long> CrAmount { get; set; }
+        public Nullable<long> Balance { get; set; }
+        public Nullable<int> CustomerId { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual Product Product { get; set; }
         public virtual SalesInvoice SalesInvoice { get; set; }
     }
 }

@@ -17,26 +17,30 @@ namespace Pharmacy.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
-            this.Sales = new HashSet<Sale>();
             this.SalesInvoices = new HashSet<SalesInvoice>();
+            this.Ledgers = new HashSet<Ledger>();
+            this.Sales = new HashSet<Sale>();
             this.SalesLedgers = new HashSet<SalesLedger>();
         }
     
         public int id { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
-        public string CustomerPhoneNumber { get; set; }
         public string CustomerOfficePhoneNumber { get; set; }
         public string CustomerResidencePhoneNumber { get; set; }
         public string DLnumber { get; set; }
         public string GSTNumber { get; set; }
         public string TINNumber { get; set; }
         public string PanNumber { get; set; }
+        public string CINNumber { get; set; }
+        public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesInvoice> SalesInvoices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ledger> Ledgers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesLedger> SalesLedgers { get; set; }
     }

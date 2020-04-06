@@ -6,10 +6,10 @@ namespace Pharmacy.ViewModels
     {
         public int Id { get; set; }
         public DateTime? DateOfPurchase { get; set; }
-        public string Quantity { get; set; }
-        public string TotalAmount { get; set; }
+        public int? Quantity { get; set; }
+        public int? TotalAmount { get; set; }
         public string ProductName { get; set; }
-        public string GstPercent { get; set; }
+        public int? GstPercent { get; set; }
         public int? SellingPrice { get; set; }
         public int? Costprice { get; set; }
         public string ProductPrice { get; set; }
@@ -17,6 +17,7 @@ namespace Pharmacy.ViewModels
         public string InvoiceId { get; set; }
         public string ExpiryDate { get; set; }
         public string Pack { get; set; }
+        public string Discount { get; set; }
         public string Batch { get; set; }
     }
 }

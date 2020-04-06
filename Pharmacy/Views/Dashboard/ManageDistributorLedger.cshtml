@@ -1,0 +1,67 @@
+﻿@model Pharmacy.ViewModels.SalesLedgerViewModel
+@{
+    ViewBag.Title = "ManageDistributorLedger";
+}
+<h2>Manage <b>@ViewData["CustomerName"]'s</b> Ledger</h2>
+<br />
+<style>
+    button.btn.btn-sm.btn-danger.waves-effect.waves-themed {
+        margin: 5px 0px 0px 30px;
+    }
+
+    .row.buttons-save {
+        margin: 2px 11px 38px -19px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Manage <span class="fw-300"><i>Supplier Ledger</i></span>
+                </h2>
+                <div class="panel-toolbar">
+                </div>
+            </div>
+            <div class="panel-container show">
+                @using (Html.BeginForm("ManageDistributorLedger", "Dashboard", FormMethod.Post))
+                {
+                    <div class="panel-content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Invoice Number</label>
+                                    @Html.DropDownListFor(m => m.InvoiceId, ViewBag.listInvoice as SelectList, "Select Invoice", new { @class = "form-control", id = "itemDropDown" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Payment Mode</label>
+                                    @Html.DropDownListFor(m => m.PaymentModeType, ViewBag.paymentMode as SelectList, "Select Payment Mode", new { @class = "form-control", id = "itemDropDown" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-md-2">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="example-select">Cr. Amount</label>
+                                    @Html.TextBoxFor(m => m.CreditAmount, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0", id = "example-input-square" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row buttons-save">
+                        <div class="">
+                            <button type="submit" class="btn btn-sm btn-danger waves-effect waves-themed">Save Details</button>
+                        </div>
+                        <div class="panel-toolbar">
+                            <button type="reset" class="btn btn-sm btn-danger waves-effect waves-themed">Reset Details</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

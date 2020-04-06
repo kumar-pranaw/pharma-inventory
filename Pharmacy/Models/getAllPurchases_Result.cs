@@ -11,14 +11,14 @@ namespace Pharmacy.Models
 {
     using System;
     
-    public partial class getLedgerByDateRange_Result
+    public partial class getAllPurchases_Result
     {
-        public int ID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public string InvoiceId { get; set; }
-        public string Particulars { get; set; }
-        public Nullable<int> DebitAmunt { get; set; }
-        public Nullable<int> CreditAmount { get; set; }
-        public Nullable<int> BalanceAmount { get; set; }
+        public string ProductName { get; set; }
+        public string BatchNumber { get; set; }
+        public string ExpiryDate { get; set; }
+        public Nullable<int> SellingPrice { get; set; }
+        public Nullable<System.DateTime> DateOfPurchase { get; set; }
+        public Nullable<int> CostPrice { get; set; }
+        public Nullable<int> Quantity { get; set; }
     }
 }

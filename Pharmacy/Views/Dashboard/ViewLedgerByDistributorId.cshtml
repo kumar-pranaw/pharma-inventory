@@ -1,7 +1,7 @@
-﻿@model List<Pharmacy.Models.getLedgerByDateRange_Result>
+﻿@model List<Pharmacy.Models.getSalesLedgerByDateRange_Result>
 @{
-    ViewBag.Title = "ViewLedgerBySupplierId";
-    int sId = Convert.ToInt32(TempData["supplierId"]);
+    ViewBag.Title = "ViewLedgerByDistributorId";
+    int sId = Convert.ToInt32(TempData["distributorId"]);
 }
 
 <style>
@@ -11,7 +11,7 @@
 </style>
 
 
-@using (Html.BeginForm("ViewLedgerBySupplierId", "Dashboard", FormMethod.Get))
+@using (Html.BeginForm("ViewLedgerByDistributorId", "Dashboard", FormMethod.Get))
 {
     <div class="row">
         <div class="col-md-2">
@@ -51,9 +51,9 @@
         {
             <tr>
                 <td>@item.Date.Value.ToShortDateString() </td>
-                <td><a href="@Url.Action("GetInvoiceDetailsBySupplierId", "Dashboard", new { invoiceId = item.ID, supplierId = sId })">@item.InvoiceId</a></td>
+                <td><a href="@Url.Action("GetInvoiceDetailsByDistributorId", "Dashboard", new { invoiceId = item.Id, customerId = sId })">@item.InvoiceId</a></td>
                 <td>@item.Particulars</td>
-                <td>@item.DebitAmunt</td>
+                <td>@item.DebitAmount</td>
                 <td>@item.CreditAmount</td>
                 <td>@item.BalanceAmount</td>
             </tr>

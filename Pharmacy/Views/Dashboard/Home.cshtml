@@ -1,7 +1,115 @@
 ﻿
 @{
     ViewBag.Title = "Home";
+   var totalSupplier =  TempData["totalSupplier"];
+   var totalCustomer = TempData["totalCustomer"];
+   var totalSales =  TempData["totalSales"];
+   var totalPurchases =  TempData["totalPurchases"];
+}
+    <style>
+body{
+    background: #f2f2f2;
+    font-family: 'Poppins', sans-serif;
 }
 
-<h2>Home</h2>
+h3{
+    font-family: 'Poppins', sans-serif;
+}
 
+.social-box .box{
+    background: #FFF;
+    border-radius: 10px;
+    padding: 40px 10px;
+    margin: 20px 0px;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+}
+
+.social-box .box:hover{
+   box-shadow: 0 0 6px #4183D7;
+}
+
+.social-box .box .box-text{
+    margin:20px 0px;
+    font-size: 15px;
+    line-height: 30px;
+}
+
+.social-box .box .box-btn a{
+    text-decoration: none;
+    color: #4183D7;
+    font-size: 16px;
+}
+
+.fa{
+     color:#4183D7;
+}
+    </style>
+
+<div class="social-box">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-4 col-xs-12 text-center">
+                <div class="box">
+                    <i class="fa fa-user-circle-o fa-3x" aria-hidden="true"></i>
+                    <div class="box-title">
+                        <h3>Total Suppliers</h3>
+                    </div>
+                    <div class="box-text">
+                        <span>You have total @totalSupplier suppliers in your inventory</span>
+                    </div>
+                    <div class="box-btn">
+                        <a href="@Url.Action("ViewSuppliers", "Dashboard")">See All</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-12  text-center">
+                <div class="box">
+                    <i class="fa fa-user-circle-o fa-3x" aria-hidden="true"></i>
+                    <div class="box-title">
+                        <h3>Total Distributors</h3>
+                    </div>
+                    <div class="box-text">
+                        <span>You have total @totalCustomer distributors in your inventory</span>
+                    </div>
+                    <div class="box-btn">
+                        <a href="@Url.Action("ViewDistributors","Dashboard")">See All</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-12 text-center">
+                <div class="box">
+                    <i class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
+                    <div class="box-title">
+                        <h3>Total Purchase</h3>
+                    </div>
+                    <div class="box-text">
+                        <span>You have made @totalPurchases purchases till now</span>
+                    </div>
+                    <div class="box-btn">
+                        <a href="@Url.Action("ViewAllPurchases","Dashboard")">View All</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-xs-12 text-center">
+                <div class="box">
+                    <i class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
+                    <div class="box-title">
+                        <h3>Total Sales</h3>
+                    </div>
+                    <div class="box-text">
+                        <span>You have made @totalSales sales till now</span>
+                    </div>
+                    <div class="box-btn">
+                        <a href="@Url.Action("ViewAllSales","Dashboard")">View All</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

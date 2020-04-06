@@ -1,4 +1,4 @@
-﻿@model Pharmacy.ViewModels.SupplierViewModel
+﻿@model Pharmacy.Models.Supplier
 @{
     ViewBag.Title = "EditSupplier";
 }
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="panel-container show">
-                @using (Html.BeginForm("AddSupplier", "Dashboard", FormMethod.Post))
+                @using (Html.BeginForm("EditSupplier", "Dashboard", FormMethod.Post))
                 {
                     <div class="panel-content">
                         <div class="row">
