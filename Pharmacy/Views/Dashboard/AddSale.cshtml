@@ -13,10 +13,19 @@
 </ol>
 
 <div class="row" id="purchase-form">
+   
     <div class="col-xl-12">
         <div id="panel-4" class="panel">
             <div class="panel-container show">
                 <div class="panel-content">
+                    <h6 style="color:red">Notes*</h6>
+                    <ol type="bullet">
+                        <li style="color:skyblue">Discount % for all row should be same if enetered it can be null but if entered in any row then it should be same for all rows if needed. </li>
+                        <li style="color:skyblue">GST % should be same for all rows.</li>
+                        <li style="color:skyblue">Pack should be in the format of multiplication for example:  10x10.</li>
+                        <li style="color:skyblue">Each row should select different product.</li>
+                        <li style="color:skyblue">Product once entered cannnot be modified.</li>
+                    </ol>
                     <div class="row">
                         <table id="tblProducts" class="table">
                             <thead>
@@ -27,8 +36,10 @@
                                     <th>Batch Number</th>
                                     <th>Expiry</th>
                                     <th>Quantity</th>
-                                    <th>S.P</th>
+                                    <th>M.R.P</th>
+                                    <th>Rate</th>
                                     <th>GST %</th>
+                                    <th>Discount</th>
                                     <th>Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -45,8 +56,10 @@
                                     <td><input type="text" disabled="disabled" class="form-control" id="BatchNumber" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="ExpiryDate" /></td>
                                     <td><input type="text" class="form-control" id="Quantity" /></td>
+                                    <td><input type="text" disabled="disabled" class="form-control" id="MRP" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="SP" /></td>
                                     <td><input type="text" class="form-control" id="GST" /></td>
+                                    <td><input type="text" class="form-control" id="Discount" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
                                     <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
                                 </tr>
@@ -81,13 +94,15 @@
                     $("#HSNNumber").val('');
                     $("#BatchNumber").val('');
                     $("#ExpiryDate").val('');
+                    $('#MRP').val('');
                     $("#SP").val('');
                 } else {
                     console.log(result);
                     $("#HSNNumber").val(result.HSNNumber);
                     $("#BatchNumber").val(result.BatchNumber);
                     $("#ExpiryDate").val(result.ExpiryDate);
-                    $("#SP").val(result.SP);
+                    $('#MRP').val(result.MRP);
+                    $("#SP").val(result.SellingPrice);
                 }
 
             },
@@ -98,7 +113,7 @@
     $("#SP").on("change", function () {
         var costPrice = $("#SP").val();
         var quantity = $("#Quantity").val();
-        var totalAmount = costPrice * quantity;
+        var totalAmount = (costPrice * quantity).toFixed(2);
         $("#Amount").val(totalAmount);
     });
 
@@ -116,8 +131,10 @@
         var BatchNumber = $("#BatchNumber");
         var ExpiryDate = $("#ExpiryDate");
         var Quantity = $("#Quantity");
+        var Mrp = $("#MRP");
         var SP = $("#SP");
         var GST = $("#GST");
+        var Discount = $("#Discount");
         var Amount = $("#Amount");
         var productName = $("#itemDropDown option:selected");
        
@@ -146,6 +163,9 @@
         //Add Quantity cell.
         cell = $(row.insertCell(-1));
         cell.html(Quantity.val());
+        //Add Mrp Cell.
+        cell = $(row.insertCell(-1));
+        cell.html(Mrp.val());
         //Add SP cell.
         cell = $(row.insertCell(-1));
         cell.html(SP.val());
@@ -153,6 +173,11 @@
         //Add GST cell.
         cell = $(row.insertCell(-1));
         cell.html(GST.val());
+
+        //Add Discount cell.
+        cell = $(row.insertCell(-1));
+        cell.html(Discount.val());
+
         //Add amount cell.
         cell = $(row.insertCell(-1));
         cell.html(Amount.val());
@@ -172,8 +197,10 @@
         BatchNumber.val("");
         ExpiryDate.val("");
         Quantity.val("");
+        Mrp.val("");
         SP.val("");
         GST.val("");
+        Discount.val("");
         Amount.val("");
     });
 
@@ -191,6 +218,7 @@
     };
 
     $("body").on("click", "#btnSave", function () {
+        debugger;
         //Loop through the Table rows and build a JSON array.
         var products = new Array();
         $("#tblProducts TBODY TR").each(function () {
@@ -201,12 +229,13 @@
             purchaseProducts.HSNNumber = row.find("TD").eq(2).html();
             purchaseProducts.BatchNumber = row.find("TD").eq(3).html();
             purchaseProducts.ExpiryDate = row.find("TD").eq(4).html();
-            purchaseProducts.quantity = row.find("TD").eq(5).html();
-            purchaseProducts.sp = row.find("TD").eq(6).html();
-            purchaseProducts.gst = row.find("TD").eq(7).html();
-            purchaseProducts.amount = row.find("TD").eq(8).html();
+            purchaseProducts.Quantity = row.find("TD").eq(5).html();
+            purchaseProducts.MRP = row.find("TD").eq(6).html();
+            purchaseProducts.SP = row.find("TD").eq(7).html();
+            purchaseProducts.gst = row.find("TD").eq(8).html();
+            purchaseProducts.Discount = row.find("TD").eq(9).html();
+            purchaseProducts.Amount = row.find("TD").eq(10).html();
             products.push(purchaseProducts);
-
         });
         console.log(products);
         //Send the JSON array to Controller using AJAX.

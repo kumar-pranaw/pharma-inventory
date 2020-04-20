@@ -16,9 +16,9 @@ namespace Pharmacy.Models
         public string ProductName { get; set; }
         public string BatchNumber { get; set; }
         public string ExpiryDate { get; set; }
-        public Nullable<int> SellingPrice { get; set; }
+        public Nullable<double> SellingPrice { get; set; }
         public Nullable<System.DateTime> DateOfPurchase { get; set; }
-        public Nullable<int> CostPrice { get; set; }
+        public Nullable<double> Rate { get; set; }
         public Nullable<int> Quantity { get; set; }
     }
 }

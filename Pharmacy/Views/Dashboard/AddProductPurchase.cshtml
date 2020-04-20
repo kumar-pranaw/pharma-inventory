@@ -3,7 +3,29 @@
     ViewBag.Title = "AddProductPurchase";
 }
 
-
+    <style>
+        input#productName {
+            width: 100px;
+        }
+        input#Pack {
+            width: 70px;
+        }
+        input#HSNNumber {
+            width: 65px;
+        }
+        input#BatchNumber {
+            width: 65px;
+        }
+        input#ExpiryDate {
+            width: 65px;
+        }
+        input#Quantity {
+            width: 50px;
+        }
+        input#GST {
+            width: 50px;
+        }
+    </style>
 <h2>Purchase Product From The Supplier <b>"@ViewData["SupplierName"]"</b></h2>
 
 <ol class="breadcrumb page-breadcrumb">
@@ -18,6 +40,12 @@
         <div id="panel-4" class="panel">
             <div class="panel-container show">
                 <div class="panel-content">
+                    <h6 style="color:red">Notes*</h6>
+                    <ol type="bullet">
+                        <li style="color:skyblue">GST % should be same for all rows.</li>
+                        <li style="color:skyblue">Pack should be in the format of multiplication for example:  10x10.</li>
+                        <li style="color:skyblue">Product once entered cannnot be modified.</li>
+                    </ol>
                     <div class="row">
                         <table id="tblProducts" class="table">
                             <thead>
@@ -28,9 +56,10 @@
                                     <th>Batch Number</th>
                                     <th>Expiry</th>
                                     <th>Quantity</th>
-                                    <th>S.P</th>
-                                    <th>C.P</th>
+                                    <th>M.R.P</th>
+                                    <th>Rate</th>
                                     <th>GST %</th>
+                                    <th>Selling Price</th>
                                     <th>Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -39,15 +68,16 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td><input type="text" class="form-control" id="productName" /></td>
+                                    <td class="product"><input type="text" class="form-control" id="productName" /></td>
                                     <td><input type="text" class="form-control" id="Pack" /></td>
                                     <td><input type="text" class="form-control" id="HSNNumber" /></td>
                                     <td><input type="text" class="form-control" id="BatchNumber" /></td>
                                     <td><input type="text" class="form-control" id="ExpiryDate" /></td>
                                     <td><input type="text" class="form-control" id="Quantity" /></td>
-                                    <td><input type="text" class="form-control" id="SP" /></td>
-                                    <td><input type="text" class="form-control" id="CP" /></td>
+                                    <td><input type="text" class="form-control" id="MRP" /></td>
+                                    <td><input type="text" class="form-control" id="Rate" /></td>
                                     <td><input type="text" class="form-control" id="GST" /></td>
+                                    <td><input type="text" class="form-control" id="SP" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
                                     <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
                                 </tr>
@@ -66,17 +96,52 @@
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script type="text/javascript">
-    $("#CP").on("change", function () {
-        var costPrice = $("#CP").val();
+    $("#Rate").on("change", function () {
+        var rate = $("#Rate").val();
         var quantity = $("#Quantity").val();
-        var totalAmount = costPrice * quantity;
+        var totalAmount = rate * quantity;
+
         $("#Amount").val(totalAmount);
     });
 
+    $("#GST").on("change", function () {
+        var mrp = $("#MRP").val();
+        var gst = $("#GST").val();
+
+        var percentageValue = getGstValue(gst);
+        var taxlessPrice = (mrp / percentageValue).toFixed(2);
+
+        var twentyPercentDiscountOnTaxlessPrice = (0.2 * taxlessPrice).toFixed(2);
+        var finalPriceAfterfirstPercentage = (taxlessPrice - twentyPercentDiscountOnTaxlessPrice).toFixed(2);
+
+        var tenPercentDiscount = (0.1 * finalPriceAfterfirstPercentage).toFixed(2);
+        var sellingPriceAmount = (finalPriceAfterfirstPercentage - tenPercentDiscount).toFixed(2);
+
+        $("#SP").val(sellingPriceAmount);
+    });
+
+    $("#MRP").on("change", function () {
+        debugger;
+        var mrp = $("#MRP").val();
+        var gst = $("#GST").val();
+
+        var percentageValue = getGstValue(gst);
+
+        var taxlessPrice = (mrp / percentageValue).toFixed(2);
+
+        var twentyPercentDiscountOnTaxlessPrice = (0.2 * taxlessPrice).toFixed(2);
+        var finalPriceAfterfirstPercentage = (taxlessPrice - twentyPercentDiscountOnTaxlessPrice).toFixed(2);
+
+        var tenPercentDiscount = (0.1 * finalPriceAfterfirstPercentage).toFixed(2);
+        var sellingPriceAmount = (finalPriceAfterfirstPercentage - tenPercentDiscount).toFixed(2);
+
+        $("#SP").val(sellingPriceAmount);
+    });
+
     $("#Quantity").on("change", function () {
-        var costPrice = $("#CP").val();
+        var rate = $("#Rate").val();
         var quantity = $("#Quantity").val();
-        var totalAmount = costPrice * quantity;
+        var totalAmount = rate * quantity;
         $("#Amount").val(totalAmount);
     });
 
@@ -88,8 +153,9 @@
         var BatchNumber = $("#BatchNumber");
         var ExpiryDate = $("#ExpiryDate");
         var Quantity = $("#Quantity");
+        var MRP = $("#MRP");
+        var Rate = $("#Rate");
         var SP = $("#SP");
-        var CP = $("#CP");
         var GST = $("#GST");
         var Amount = $("#Amount");
 
@@ -117,12 +183,15 @@
         //Add Quantity cell.
         cell = $(row.insertCell(-1));
         cell.html(Quantity.val());
-        //Add SP cell.
+        //Add MRP cell.
+        cell = $(row.insertCell(-1));
+        cell.html(MRP.val());
+        //Add Rate cell.
+        cell = $(row.insertCell(-1));
+        cell.html(Rate.val());
+         //Add Selling Price cell.
         cell = $(row.insertCell(-1));
         cell.html(SP.val());
-        //Add Cp cell.
-        cell = $(row.insertCell(-1));
-        cell.html(CP.val());
         //Add GST cell.
         cell = $(row.insertCell(-1));
         cell.html(GST.val());
@@ -146,8 +215,9 @@
         BatchNumber.val("");
         ExpiryDate.val("");
         Quantity.val("");
+        MRP.val("");
+        Rate.val("");
         SP.val("");
-        CP.val("");
         GST.val("");
         Amount.val("");
     });
@@ -177,10 +247,11 @@
             purchaseProducts.BatchNumber = row.find("TD").eq(3).html();
             purchaseProducts.ExpiryDate = row.find("TD").eq(4).html();
             purchaseProducts.quantity = row.find("TD").eq(5).html();
-            purchaseProducts.sp = row.find("TD").eq(6).html();
-            purchaseProducts.cp = row.find("TD").eq(7).html();
-            purchaseProducts.gst = row.find("TD").eq(8).html();
-            purchaseProducts.amount = row.find("TD").eq(9).html();
+            purchaseProducts.MRP = row.find("TD").eq(6).html();
+            purchaseProducts.Rate = row.find("TD").eq(7).html();
+            purchaseProducts.SellingPrice = row.find("TD").eq(8).html();
+            purchaseProducts.gst = row.find("TD").eq(9).html();
+            purchaseProducts.amount = row.find("TD").eq(10).html();
             products.push(purchaseProducts);
 
         });
@@ -198,6 +269,57 @@
             }
         });
     });
+
+    function getGstValue(value) {
+        debugger;
+        switch (value) {
+            case "12":
+                return 1.12;
+                break;
+            case "13":
+                return 1.13;
+                break;
+            case "14":
+                return 1.14;
+                break;
+            case "15":
+                return 1.15;
+                break;
+            case "16":
+                return 1.16;
+                break;
+            case "17":
+                return 1.17;
+                break;
+            case "18":
+                return 1.18;
+                break;
+            case "19":
+                return 1.19;
+                break;
+            case "20":
+                return 1.20;
+                break;
+            case "21":
+                return 1.21;
+                break;
+            case "22":
+                return 1.22;
+                break;
+            case "23":
+                return 1.23;
+                break;
+            case "24":
+                return 1.24;
+                break;
+            case "25":
+                return 1.25;
+                break;
+            default:
+                return 1.12;
+        }
+    }
+   
 
 </script>
 

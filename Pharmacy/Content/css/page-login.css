@@ -424,7 +424,7 @@ html body {
     transition: 1s opacity; }
   @media screen and (max-device-width: 800px) {
     html body html {
-      background: url("../img/clouds.png") #FFF no-repeat center center fixed; }
+      background: url("~/Content/img/bg.gif") #FFF no-repeat center center fixed; }
     html body #bgvid {
       display: none; } }
 

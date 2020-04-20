@@ -327,6 +327,7 @@
     <Content Include="Content\img\backgrounds\oil-gas-dark.jpg" />
     <Content Include="Content\img\backgrounds\oil-gas-dark2.jpg" />
     <Content Include="Content\img\backgrounds\oil.jpg" />
+    <Content Include="Content\img\bg.gif" />
     <Content Include="Content\img\bitbucket-logo.png" />
     <Content Include="Content\img\card-backgrounds\cover-2-lg-1.png" />
     <Content Include="Content\img\card-backgrounds\cover-2-lg-2.png" />

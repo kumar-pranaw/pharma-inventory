@@ -79,15 +79,15 @@ namespace Pharmacy.Controllers
         [HttpPost]
         public JsonResult AddProductPurchase(List<AddProductViewModel> products)
         {
-            long sumOfAmounts = 0;
+            double? sumOfAmounts = 0;
             int supplierId = Convert.ToInt32(TempData["ID"]);
             if (products.Count > 1)
             {
-                sumOfAmounts = products.Select(m => m.Amount).Sum();
+                sumOfAmounts = products.Select(m => Math.Round(m.Amount,3)).Sum();
             }
             else
             {
-                sumOfAmounts = products.Select(m => m.Amount).FirstOrDefault();
+                sumOfAmounts = products.Select(m => Math.Round(m.Amount,3)).FirstOrDefault();
             }
 
             var gstNumber = products.Select(m => m.GST).FirstOrDefault();
@@ -98,7 +98,7 @@ namespace Pharmacy.Controllers
             {
                 DateOfPurchase = DateTime.Now,
                 supplierId = supplierId,
-                TotalPurchaseAmount = Convert.ToDecimal(sumofFinalAmounts),
+                TotalPurchaseAmount = sumofFinalAmounts,
             };
 
             BaseClass.dbEntities.PurchaseInvoices.Add(invoice);
@@ -107,7 +107,7 @@ namespace Pharmacy.Controllers
 
             var getInvoice = BaseClass.dbEntities.PurchaseInvoices.Where(m => m.ID == invoiceId && m.supplierId == supplierId).FirstOrDefault();
             var getLedgerBySupplier = BaseClass.dbEntities.PurchaseLedgers.Where(m => m.SupplierId == supplierId).ToList();
-            if (getLedgerBySupplier.Count == 0)
+            if (getLedgerBySupplier.Count() == 0)
             {
                 PurchaseLedger ledger = new PurchaseLedger
                 {
@@ -150,8 +150,9 @@ namespace Pharmacy.Controllers
                         BatchNumber = item.BatchNumber,
                         ExpiryDate = item.ExpiryDate,
                         HSNNumber = item.HSNNumber,
-                        CostPrice = item.CP,
-                        SellingPrice = item.SP
+                        MRP = item.MRP,
+                        Rate = item.Rate,
+                        SellingPrice = item.SellingPrice
                     };
                     BaseClass.dbEntities.Products.Add(product1);
                     BaseClass.dbEntities.SaveChanges();
@@ -188,9 +189,9 @@ namespace Pharmacy.Controllers
                                     ProductName = listProduct.ProductName,
                                     HSNNumber = listProduct.HSNNumber,
                                     BatchNumber = listProduct.BatchNumber,
-                                    CostPrice = listProduct.CostPrice,
+                                    SellingPrice = listProduct.MRP,
                                     ExpiryDate = listProduct.ExpiryDate,
-                                    SellingPrice = listProduct.SellingPrice
+                                    CostPrice = listProduct.Rate
                                 });
 
             return View(listProducts);
@@ -328,7 +329,8 @@ namespace Pharmacy.Controllers
                                                       {
                                                           ProductName = product.ProductName,
                                                           GstPercent = purchase.GstPercent,
-                                                          Costprice = product.CostPrice,
+                                                          MRP = product.MRP,
+                                                          Rate = product.Rate,
                                                           SellingPrice = product.SellingPrice,
                                                           ExpiryDate = product.ExpiryDate,
                                                           HSNNumber = product.HSNNumber,
@@ -482,7 +484,12 @@ namespace Pharmacy.Controllers
         [HttpPost]
         public JsonResult AddSale(List<ProductSaleViewModel> productSale)
         {
-            int? sumOfAmounts = 0;
+            double? sumOfAmounts = 0;
+            double? originalAmount = 0;
+            double? discountedAmount = 0;
+            double? amountAfterDiscount = 0;
+
+
             int distributorId = Convert.ToInt32(TempData["ID"]);
             if (productSale.Count > 1)
             {
@@ -493,15 +500,33 @@ namespace Pharmacy.Controllers
                 sumOfAmounts = productSale.Select(m => m.Amount).FirstOrDefault();
             }
 
+            // Finding Gst Based on Given GST Percent
             var gstNumber = productSale.Select(m => m.GST).FirstOrDefault();
             var gstAmounts = (gstNumber / 100f) * sumOfAmounts;
-            var sumofFinalAmounts = gstAmounts + sumOfAmounts;
+            gstAmounts = Math.Round(Convert.ToDouble(gstAmounts), 2);
+
+
+            originalAmount = Math.Round(Convert.ToDouble(gstAmounts + sumOfAmounts), 2);
+
+            // Discount Percentage
+            if (productSale!=null)
+            {
+                var discount = productSale.Find(x => x.Discount!=0);
+                if(discount!= null)
+                {
+                    var discountPer  = (discount.Discount/100f);
+                    amountAfterDiscount = Math.Round(Convert.ToDouble(originalAmount - (discountPer * originalAmount)), 2);
+                    discountedAmount = Math.Round(Convert.ToDouble(originalAmount - amountAfterDiscount), 2);
+                }
+            }
 
             SalesInvoice invoice = new SalesInvoice
             {
                 DateOfPurchase = DateTime.Now,
                 CustomerId = distributorId,
-                TotalPurchaseAmount = Convert.ToDecimal(sumofFinalAmounts),
+                TotalPurchaseAmount = originalAmount,
+                TotalDiscount = amountAfterDiscount,
+                DiscountedAmount = discountedAmount
             };
 
             BaseClass.dbEntities.SalesInvoices.Add(invoice);
@@ -510,15 +535,15 @@ namespace Pharmacy.Controllers
 
             var getInvoice = BaseClass.dbEntities.SalesInvoices.Where(m => m.ID == invoiceId && m.CustomerId == distributorId).FirstOrDefault();
             var getLedgerBySupplier = BaseClass.dbEntities.SalesLedgers.Where(m => m.CustomerId == distributorId).ToList();
-            if (getLedgerBySupplier.Count == 0)
+            if (getLedgerBySupplier.Count() == 0)
             {
                 SalesLedger ledger = new SalesLedger
                 {
                     Date = DateTime.Now,
                     CustomerId = distributorId,
                     CreditAmount = 0,
-                    DebitAmount = Convert.ToInt32(sumofFinalAmounts),
-                    BalanceAmount = Convert.ToInt32(sumofFinalAmounts),
+                    DebitAmount = amountAfterDiscount == 0 ? originalAmount : amountAfterDiscount,
+                    BalanceAmount = amountAfterDiscount == 0 ? originalAmount : amountAfterDiscount,
                     InvoiceId = invoiceId,
                     Particulars = "To Sales Invoice Number " + getInvoice.InvoiceId
                 };
@@ -534,8 +559,8 @@ namespace Pharmacy.Controllers
                     Date = DateTime.Now,
                     CustomerId = distributorId,
                     CreditAmount = 0,
-                    DebitAmount = Convert.ToInt32(sumofFinalAmounts),
-                    BalanceAmount = getLastInvoiceAmount.BalanceAmount + Convert.ToInt32(sumofFinalAmounts),
+                    DebitAmount = amountAfterDiscount == 0 ? originalAmount : amountAfterDiscount,
+                    BalanceAmount = getLastInvoiceAmount.BalanceAmount + amountAfterDiscount == 0 ? originalAmount : amountAfterDiscount,
                     InvoiceId = invoiceId,
                     Particulars = "To Sales Invoice Number " + getInvoice.InvoiceId
                 };
@@ -550,10 +575,11 @@ namespace Pharmacy.Controllers
                     Sale sale = new Sale
                     {
                         InvoiceId = invoiceId,
-                        price = item.Amount,
+                        price = Math.Round(Convert.ToDouble(item.Amount), 2),
                         pack = item.Pack,
                         quantity = item.Quantity,
                         CGstPercent = item.GST,
+                        discountpercentage =Convert.ToInt32(item.Discount),
                         CustomerId = distributorId,
                         productid = item.id,
                     };
@@ -577,9 +603,10 @@ namespace Pharmacy.Controllers
                        select new AddProductViewModel
                        {
                            HSNNumber = aa.HSNNumber,
-                           SP = aa.SellingPrice,
+                           SellingPrice = aa.SellingPrice,
                            ExpiryDate = aa.ExpiryDate,
-                           BatchNumber = aa.BatchNumber
+                           BatchNumber = aa.BatchNumber,
+                           MRP = aa.MRP
                        }).SingleOrDefault();
 
             return Json(getData, JsonRequestBehavior.AllowGet);
@@ -619,12 +646,12 @@ namespace Pharmacy.Controllers
 
         public ActionResult GetInvoiceDetailsByDistributorId(int? invoiceId, int? customerId)
         {
-            int? sumOfAmounts = 0;
+            double? sumOfAmounts = 0;
             var getInvoiceDetails = BaseClass.dbEntities.SalesInvoices.Where(m => m.ID == invoiceId).SingleOrDefault();
             var customerDetails = BaseClass.dbEntities.Customers.Where(m => m.id == customerId).SingleOrDefault();
             var purchaseDetails = BaseClass.dbEntities.Sales.Where(m => m.CustomerId == customerId && m.InvoiceId == invoiceId).ToList();
 
-            if (purchaseDetails.Count > 1)
+            if (purchaseDetails.Count() > 1)
             {
                 sumOfAmounts = purchaseDetails.Select(m => m.price).Sum();
             }
@@ -635,6 +662,7 @@ namespace Pharmacy.Controllers
 
             var convertAmount = ConvertToFigure.ConvertAmount(Convert.ToDouble(getInvoiceDetails.TotalPurchaseAmount));
             var gstAmounts = (12 / 100f) * sumOfAmounts;
+            gstAmounts = Math.Round(Convert.ToDouble(gstAmounts), 2);
 
             TempData["DistributorName"] = customerDetails.CustomerName;
             TempData["Phonenumber"] = customerDetails.CustomerOfficePhoneNumber;
@@ -653,6 +681,8 @@ namespace Pharmacy.Controllers
             TempData["AmountBeforeGst"] = sumOfAmounts;
             TempData["TotalAmount"] = getInvoiceDetails.TotalPurchaseAmount;
             TempData["GstAmount"] = gstAmounts;
+            TempData["discount"] = getInvoiceDetails.DiscountedAmount;
+            TempData["discountedAmount"] = getInvoiceDetails.TotalDiscount;
 
             var getInvoiceByDistributorId = (from invoice in BaseClass.dbEntities.SalesInvoices
                                              join sales in BaseClass.dbEntities.Sales on invoice.ID equals sales.InvoiceId
@@ -662,7 +692,8 @@ namespace Pharmacy.Controllers
                                              {
                                                  ProductName = product.ProductName,
                                                  GstPercent = sales.CGstPercent,
-                                                 Costprice = product.CostPrice,
+                                                 MRP = product.MRP,
+                                                 Rate = product.SellingPrice,
                                                  SellingPrice = product.SellingPrice,
                                                  ExpiryDate = product.ExpiryDate,
                                                  HSNNumber = product.HSNNumber,

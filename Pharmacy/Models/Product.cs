@@ -26,8 +26,9 @@ namespace Pharmacy.Models
         public string HSNNumber { get; set; }
         public string BatchNumber { get; set; }
         public string ExpiryDate { get; set; }
-        public Nullable<int> SellingPrice { get; set; }
-        public Nullable<int> CostPrice { get; set; }
+        public Nullable<double> MRP { get; set; }
+        public Nullable<double> Rate { get; set; }
+        public Nullable<double> SellingPrice { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<purchase> purchases { get; set; }

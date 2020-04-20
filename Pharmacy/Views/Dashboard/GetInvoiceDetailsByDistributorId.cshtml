@@ -15,6 +15,8 @@
     var gstAmount = TempData["GstAmount"];
     var invoiceId = TempData["InvoiceId"];
     var dateOfPurchase = TempData["DateOfPurchase"];
+    var discount = TempData["discount"];
+    var discountedAmount = Convert.ToDouble(TempData["discountedAmount"]);
 }
 
 <!DOCTYPE HTML>
@@ -118,32 +120,35 @@
                                     <thead>
                                         <tr>
                                             <td><strong>PRODUCT NAME</strong></td>
-                                            <td><strong>RATE</strong></td>
-                                            <td><strong>EXP. DT</strong></td>
-                                            <td><strong>HSN CODE</strong></td>
-                                            <td><strong>BATCH</strong></td>
                                             <td><strong>PACK</strong></td>
                                             <td><strong>QTY</strong></td>
-                                            <td><strong>AMOUNT</strong></td>
-                                            <td><strong>DIST</strong></td>
-                                            <td><strong>GST</strong></td>
+                                            <td><strong>BATCH</strong></td>
+                                            <td><strong>EXP. DT</strong></td>
+                                            <td><strong>HSN CODE</strong></td>
+                                            <td><strong>MRP</strong></td>
+                                            <td><strong>RATE</strong></td>
+                                            <td><strong>DISCOUNT (%)</strong></td>
+                                            <td><strong>GST (%)</strong></td>
+                                            <td><strong>Amount</strong></td>
+                                            <td></td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                            <tr>
-                                                <td class="text-left">@item.ProductName</td>
-                                                <td class="text-left">@item.Costprice</td>
-                                                <td class="text-left">@item.ExpiryDate</td>
-                                                <td class="text-left">@item.HSNNumber</td>
-                                                <td class="text-left">@item.Batch</td>
-                                                <td class="text-left">@item.Pack</td>
-                                                <td class="text-left">@item.Quantity</td>
-                                                <td class="text-left">@item.TotalAmount</td>
-                                                <td class="text-left">@item.Discount</td>
-                                                <td class="text-left">@item.GstPercent</td>
-                                            </tr>
+                                        <tr>
+                                            <td class="text-left">@item.ProductName</td>
+                                            <td class="text-left">@item.Pack</td>
+                                            <td class="text-left">@item.Quantity</td>
+                                            <td class="text-left">@item.Batch</td>
+                                            <td class="text-left">@item.ExpiryDate</td>
+                                            <td class="text-left">@item.HSNNumber</td>
+                                            <td class="text-left">@item.MRP</td>
+                                            <td class="text-left">@item.Rate</td>
+                                            <td class="text-left">@item.Discount</td>
+                                            <td class="text-left">@item.GstPercent</td>
+                                            <td class="text-left">@item.TotalAmount</td>
+                                        </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -163,16 +168,16 @@
                             THANKING YOU FOR GOOD SUPPORT
                         </div>
                         <div class="col-md-6 text-right">
-                            Total  : @beforeGstAmount <br /> Discount :  <br /> GST 12% : @gstAmount<br /> Invoice Ammount: @totalAmount
+                            Total  : @beforeGstAmount <br />  GST 12% : @gstAmount<br />Discount : @discount  <br /> Invoice Amount: @(discountedAmount == 0 ? totalAmount: discountedAmount)
                         </div>
                         <div class="col-md-12" style="border-bottom:dotted 2px #000">
                             &nbsp;
                         </div>
                         <div class="col-md-12 text-right">
-                            <h6>Payable Net Amount= @totalAmount/-</h6>
+                            <h6>Payable Net Amount=  @(discountedAmount == 0 ? totalAmount: discountedAmount)/-</h6>
                         </div>
                         <div class="col-md-12">
-                            <p>@figureAmount <br /> AMOUNT DUE ON  : 23/02/2020 <br />Intrest 24% will be charged after Due Date. <br />Subject to @distributorAddress Jurisdiction</p>
+                            <p>@figureAmount <br /> AMOUNT DUE ON  : @dateOfPurchase <br />Intrest 24% will be charged after Due Date. <br />Subject to @distributorAddress Jurisdiction</p>
                         </div>
                         <div class="col-md-12 text-right" style="text-align:center">
                             <h4>For @distributorName</h4>

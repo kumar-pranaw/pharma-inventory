@@ -9,9 +9,9 @@ namespace Pharmacy.ViewModels
     {
         public int Id { get; set; }
         public int? SupplierId { get; set; }
-        public int? BalanceAmount { get; set; }
-        public int? CreditAmount { get; set; }
-        public int? DebitAmunt { get; set; }
+        public double? BalanceAmount { get; set; }
+        public double? CreditAmount { get; set; }
+        public double? DebitAmunt { get; set; }
         public string Particulars { get; set; }
         public string InvoiceId { get; set; }
         public int Invoice { get; set; }

@@ -58,6 +58,8 @@
                                                         <th>Batch</th>
                                                         <th>Expiry Date</th>
                                                         <th>Quantity</th>
+                                                        <th>M.R.P</th>
+                                                        <th>Rate</th>
                                                         <th>Selling Price</th>
                                                         <th>GST %</th>
                                                         <th>Amount</th>
@@ -66,17 +68,19 @@
                                                 <tbody>
                                                     @foreach (var item in Model)
                                                     {
-                                                        <tr>
-                                                            <td>@item.ProductName</td>
-                                                            <td>@item.HSNNumber</td>
-                                                            <td>@item.Pack</td>
-                                                            <td>@item.Batch</td>
-                                                            <td>@item.ExpiryDate</td>
-                                                            <td>@item.Quantity</td>
-                                                            <td>@item.SellingPrice</td>
-                                                            <td>@item.GstPercent</td>
-                                                            <td>@item.TotalAmount</td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td>@item.ProductName</td>
+                                                        <td>@item.HSNNumber</td>
+                                                        <td>@item.Pack</td>
+                                                        <td>@item.Batch</td>
+                                                        <td>@item.ExpiryDate</td>
+                                                        <td>@item.Quantity</td>
+                                                        <td>@item.MRP</td>
+                                                        <td>@item.Rate</td>
+                                                        <td>@item.SellingPrice</td>
+                                                        <td>@item.GstPercent</td>
+                                                        <td>@item.TotalAmount</td>
+                                                    </tr>
                                                     }
 
                                                 </tbody>

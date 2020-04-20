@@ -18,13 +18,13 @@ namespace Pharmacy.Models
         public Nullable<int> productid { get; set; }
         public string pack { get; set; }
         public Nullable<int> quantity { get; set; }
-        public Nullable<int> price { get; set; }
-        public Nullable<int> rate { get; set; }
+        public Nullable<double> price { get; set; }
+        public Nullable<double> rate { get; set; }
         public Nullable<int> CGstPercent { get; set; }
         public Nullable<int> IGSTPercent { get; set; }
         public Nullable<int> SGSTPercent { get; set; }
         public Nullable<int> CustomerId { get; set; }
-        public string discountpercentage { get; set; }
+        public Nullable<int> discountpercentage { get; set; }
         public Nullable<int> InvoiceId { get; set; }
     
         public virtual Customer Customer { get; set; }

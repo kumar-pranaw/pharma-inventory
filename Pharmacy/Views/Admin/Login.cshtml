@@ -28,7 +28,7 @@
     <!-- Optional: page related CSS-->
     <link rel="stylesheet" media="screen, print" href="~/Content/css/page-login.css">
 </head>
-<body>
+<body style="background:url(https://gifimage.net/wp-content/uploads/2017/11/gif-background-html-2.gif)">
     <div class="blankpage-form-field">
         <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
             <div class="page-logo-link press-scale-down d-flex align-items-center">
@@ -50,7 +50,7 @@
             </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Password</label>
-                    @Html.TextBoxFor(m=> m.Password, new { @class = "form-control", id = "password", placeholder = "*******" })
+                    @Html.PasswordFor(m=> m.Password, new { @class = "form-control", id = "password", placeholder = "*******" })
                     <span class="help-block">
                         Your password
                     </span>
@@ -65,10 +65,6 @@
             }
         </div>
     </div>
-    <video poster="img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>
-        <!--<source src="media/video/oil.webm" type="video/webm">-->
-        <source src="media/video/oil.mp4" type="video/mp4">
-    </video>
     <div class="position-absolute text-white pos-bottom pos-left ml-5 mb-4">
         <img src="img/wit-logo.png">
     </div>

@@ -12,9 +12,11 @@ namespace Pharmacy.ViewModels
         public string BatchNumber { get; set; }
         public string ExpiryDate { get; set; }
         public int Quantity { get; set; }
-        public int? SP { get; set; }
+        public float Discount { get; set; }
+        public double? SP { get; set; }
+        public int? MRP { get; set; }
         public int GST { get; set; }
-        public int? Amount { get; set; }
+        public double? Amount { get; set; }
         public string Pack { get; set; }
     }
 }

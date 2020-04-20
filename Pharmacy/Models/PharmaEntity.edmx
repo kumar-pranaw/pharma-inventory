@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="dbPharmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="dbPharmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Auth">
           <Key>
             <PropertyRef Name="Id" />
@@ -59,9 +59,9 @@
           <Property Name="HSNNumber" Type="nvarchar(max)" />
           <Property Name="BatchNumber" Type="nvarchar(max)" />
           <Property Name="ExpiryDate" Type="nvarchar(max)" />
-          <Property Name="MRP" Type="float" />
-          <Property Name="Rate" Type="float" />
-          <Property Name="SellingPrice" Type="float" />
+          <Property Name="MRP" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Rate" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="SellingPrice" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="purchase">
           <Key>
@@ -71,7 +71,7 @@
           <Property Name="productId" Type="int" />
           <Property Name="Pack" Type="nvarchar(max)" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="price" Type="float" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="0" />
           <Property Name="GstPercent" Type="int" />
           <Property Name="SupplierId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
@@ -85,7 +85,7 @@
           <Property Name="InvoiceId" Type="varchar" MaxLength="6" StoreGeneratedPattern="Computed" />
           <Property Name="supplierId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
-          <Property Name="TotalPurchaseAmount" Type="float" />
+          <Property Name="TotalPurchaseAmount" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="PurchaseLedger">
           <Key>
@@ -93,9 +93,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SupplierId" Type="int" />
-          <Property Name="BalanceAmount" Type="float" />
-          <Property Name="CreditAmount" Type="float" />
-          <Property Name="DebitAmunt" Type="float" />
+          <Property Name="BalanceAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CreditAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="DebitAmunt" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Particulars" Type="nvarchar(max)" />
           <Property Name="InvoiceId" Type="int" />
           <Property Name="Date" Type="date" />
@@ -108,8 +108,8 @@
           <Property Name="productid" Type="int" />
           <Property Name="pack" Type="nvarchar(max)" />
           <Property Name="quantity" Type="int" />
-          <Property Name="price" Type="float" />
-          <Property Name="rate" Type="float" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="rate" Type="decimal" Precision="18" Scale="0" />
           <Property Name="CGstPercent" Type="int" />
           <Property Name="IGSTPercent" Type="int" />
           <Property Name="SGSTPercent" Type="int" />
@@ -125,9 +125,7 @@
           <Property Name="InvoiceId" Type="varchar" MaxLength="8" StoreGeneratedPattern="Computed" />
           <Property Name="CustomerId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
-          <Property Name="TotalPurchaseAmount" Type="float" />
-          <Property Name="TotalDiscount" Type="float" />
-          <Property Name="DiscountedAmount" Type="float" />
+          <Property Name="TotalPurchaseAmount" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="SalesLedger">
           <Key>
@@ -135,9 +133,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerId" Type="int" />
-          <Property Name="BalanceAmount" Type="float" />
-          <Property Name="CreditAmount" Type="float" />
-          <Property Name="DebitAmount" Type="float" />
+          <Property Name="BalanceAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CreditAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="DebitAmount" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Particulars" Type="nvarchar(max)" />
           <Property Name="InvoiceId" Type="int" />
           <Property Name="Date" Type="date" />
@@ -414,7 +412,8 @@
             <End Role="SalesLedger" EntitySet="SalesLedger" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbPharmaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -478,9 +477,9 @@
           <Property Name="HSNNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BatchNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ExpiryDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MRP" Type="Double" />
-          <Property Name="Rate" Type="Double" />
-          <Property Name="SellingPrice" Type="Double" />
+          <Property Name="MRP" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="SellingPrice" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_productid" FromRole="Product" ToRole="purchase" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Product" FromRole="Product" ToRole="Sales" />
         </EntityType>
@@ -492,7 +491,7 @@
           <Property Name="productId" Type="Int32" />
           <Property Name="Pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="price" Type="Double" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="GstPercent" Type="Int32" />
           <Property Name="SupplierId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
@@ -509,7 +508,7 @@
           <Property Name="InvoiceId" Type="String" MaxLength="6" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="supplierId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
-          <Property Name="TotalPurchaseAmount" Type="Double" />
+          <Property Name="TotalPurchaseAmount" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="purchase" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK__PurchaseI__suppl__5FB337D6" FromRole="PurchaseInvoice" ToRole="Supplier" />
           <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseLedger" />
@@ -520,9 +519,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SupplierId" Type="Int32" />
-          <Property Name="BalanceAmount" Type="Double" />
-          <Property Name="CreditAmount" Type="Double" />
-          <Property Name="DebitAmunt" Type="Double" />
+          <Property Name="BalanceAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CreditAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="DebitAmunt" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="Particulars" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="InvoiceId" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
@@ -537,8 +536,8 @@
           <Property Name="productid" Type="Int32" />
           <Property Name="pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="quantity" Type="Int32" />
-          <Property Name="price" Type="Double" />
-          <Property Name="rate" Type="Double" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="rate" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="CGstPercent" Type="Int32" />
           <Property Name="IGSTPercent" Type="Int32" />
           <Property Name="SGSTPercent" Type="Int32" />
@@ -557,13 +556,11 @@
           <Property Name="InvoiceId" Type="String" MaxLength="8" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CustomerId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
-          <Property Name="TotalPurchaseAmount" Type="Double" />
+          <Property Name="TotalPurchaseAmount" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Customer" Relationship="Self.FK__SalesInvo__Custo__6FE99F9F" FromRole="SalesInvoice" ToRole="Customer" />
           <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_SalesInvoice" FromRole="SalesInvoice" ToRole="Ledger" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_SalesInvoice" FromRole="SalesInvoice" ToRole="Sales" />
           <NavigationProperty Name="SalesLedgers" Relationship="Self.FK_SalesLedger_SalesInvoice" FromRole="SalesInvoice" ToRole="SalesLedger" />
-          <Property Name="TotalDiscount" Type="Double" />
-          <Property Name="DiscountedAmount" Type="Double" />
         </EntityType>
         <EntityType Name="SalesLedger">
           <Key>
@@ -571,9 +568,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerId" Type="Int32" />
-          <Property Name="BalanceAmount" Type="Double" />
-          <Property Name="CreditAmount" Type="Double" />
-          <Property Name="DebitAmount" Type="Double" />
+          <Property Name="BalanceAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CreditAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="DebitAmount" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="Particulars" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="InvoiceId" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
@@ -859,9 +856,9 @@
           <Property Type="String" Name="ProductName" Nullable="true" />
           <Property Type="String" Name="BatchNumber" Nullable="true" />
           <Property Type="String" Name="ExpiryDate" Nullable="true" />
-          <Property Type="Double" Name="SellingPrice" Nullable="true" />
+          <Property Type="Decimal" Name="SellingPrice" Nullable="true" Precision="18" Scale="0" />
           <Property Type="DateTime" Name="DateOfPurchase" Nullable="true" />
-          <Property Type="Double" Name="Rate" Nullable="true" />
+          <Property Type="Decimal" Name="Rate" Nullable="true" Precision="18" Scale="0" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
         </ComplexType>
         <ComplexType Name="getAllSales_Result">
@@ -869,8 +866,8 @@
           <Property Type="String" Name="ProductName" Nullable="true" />
           <Property Type="String" Name="BatchNumber" Nullable="true" />
           <Property Type="String" Name="ExpiryDate" Nullable="true" />
-          <Property Type="Double" Name="SellingPrice" Nullable="true" />
-          <Property Type="Double" Name="Rate" Nullable="true" />
+          <Property Type="Decimal" Name="SellingPrice" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="Rate" Nullable="true" Precision="18" Scale="0" />
           <Property Type="DateTime" Name="DateOfPurchase" Nullable="true" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
         </ComplexType>
@@ -879,18 +876,18 @@
           <Property Type="DateTime" Name="Date" Nullable="true" />
           <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="6" />
           <Property Type="String" Name="Particulars" Nullable="true" />
-          <Property Type="Double" Name="DebitAmunt" Nullable="true" />
-          <Property Type="Double" Name="CreditAmount" Nullable="true" />
-          <Property Type="Double" Name="BalanceAmount" Nullable="true" />
+          <Property Type="Decimal" Name="DebitAmunt" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CreditAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="BalanceAmount" Nullable="true" Precision="18" Scale="0" />
         </ComplexType>
         <ComplexType Name="getSalesLedgerByDateRange_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="DateTime" Name="Date" Nullable="true" />
           <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="Particulars" Nullable="true" />
-          <Property Type="Double" Name="DebitAmount" Nullable="true" />
-          <Property Type="Double" Name="CreditAmount" Nullable="true" />
-          <Property Type="Double" Name="BalanceAmount" Nullable="true" />
+          <Property Type="Decimal" Name="DebitAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CreditAmount" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="BalanceAmount" Nullable="true" Precision="18" Scale="0" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1022,8 +1019,6 @@
           <EntitySetMapping Name="SalesInvoices">
             <EntityTypeMapping TypeName="dbPharmaModel.SalesInvoice">
               <MappingFragment StoreEntitySet="SalesInvoice">
-                <ScalarProperty Name="DiscountedAmount" ColumnName="DiscountedAmount" />
-                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />

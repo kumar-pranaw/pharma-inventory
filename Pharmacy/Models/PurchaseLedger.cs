@@ -16,9 +16,9 @@ namespace Pharmacy.Models
     {
         public int Id { get; set; }
         public Nullable<int> SupplierId { get; set; }
-        public Nullable<int> BalanceAmount { get; set; }
-        public Nullable<int> CreditAmount { get; set; }
-        public Nullable<int> DebitAmunt { get; set; }
+        public Nullable<double> BalanceAmount { get; set; }
+        public Nullable<double> CreditAmount { get; set; }
+        public Nullable<double> DebitAmunt { get; set; }
         public string Particulars { get; set; }
         public Nullable<int> InvoiceId { get; set; }
         public Nullable<System.DateTime> Date { get; set; }

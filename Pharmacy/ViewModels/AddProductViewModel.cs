@@ -8,10 +8,12 @@
         public string BatchNumber { get; set; }
         public string ExpiryDate { get; set; }
         public int Quantity { get; set; }
-        public int CP { get; set; }
-        public int? SP { get; set; }
+        public double? MRP { get; set; }
+        public float? Rate { get; set; }
+        public int? CostPrice { get; set; }
         public int GST { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
         public string Pack { get; set; }
+        public double? SellingPrice { get; set; }
     }
 }

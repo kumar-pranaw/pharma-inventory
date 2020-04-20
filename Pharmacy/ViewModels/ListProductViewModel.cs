@@ -7,7 +7,7 @@
         public string HSNNumber { get; set; }
         public string BatchNumber { get; set; }
         public string ExpiryDate { get; set; }
-        public int? SellingPrice { get; set; }
-        public int? CostPrice { get; set; }
+        public double? SellingPrice { get; set; }
+        public double? CostPrice { get; set; }
     }
 }
