@@ -22,10 +22,10 @@ namespace Pharmacy.Models
         }
     
         public int ID { get; set; }
-        public string InvoiceId { get; set; }
         public Nullable<int> supplierId { get; set; }
         public Nullable<System.DateTime> DateOfPurchase { get; set; }
         public Nullable<double> TotalPurchaseAmount { get; set; }
+        public string InvoiceId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<purchase> purchases { get; set; }

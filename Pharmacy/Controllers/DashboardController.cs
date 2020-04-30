@@ -3,6 +3,7 @@ using Pharmacy.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -77,7 +78,7 @@ namespace Pharmacy.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddProductPurchase(List<AddProductViewModel> products)
+        public JsonResult AddProductPurchase(string invoiceNumber, string invoiceDate, List<AddProductViewModel> products)
         {
             double? sumOfAmounts = 0;
             int supplierId = Convert.ToInt32(TempData["ID"]);
@@ -94,9 +95,15 @@ namespace Pharmacy.Controllers
             var gstAmounts = (gstNumber / 100f) * sumOfAmounts;
             var sumofFinalAmounts = gstAmounts + sumOfAmounts;
 
+            string s = invoiceDate.Substring(3, 2) + "/" + invoiceDate.Substring(0, 2) + "/" + invoiceDate.Substring(6, 4);
+
+            DateTime purchasedDate = DateTime.ParseExact(s, "dd/MM/yyyy",
+                                                CultureInfo.InvariantCulture);
+
             PurchaseInvoice invoice = new PurchaseInvoice
             {
-                DateOfPurchase = DateTime.Now,
+                DateOfPurchase = purchasedDate,
+                InvoiceId = invoiceNumber,
                 supplierId = supplierId,
                 TotalPurchaseAmount = sumofFinalAmounts,
             };

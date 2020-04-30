@@ -82,10 +82,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InvoiceId" Type="varchar" MaxLength="6" StoreGeneratedPattern="Computed" />
           <Property Name="supplierId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
           <Property Name="TotalPurchaseAmount" Type="float" />
+          <Property Name="InvoiceId " Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PurchaseLedger">
           <Key>
@@ -506,13 +506,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InvoiceId" Type="String" MaxLength="6" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="supplierId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
           <Property Name="TotalPurchaseAmount" Type="Double" />
           <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="purchase" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK__PurchaseI__suppl__5FB337D6" FromRole="PurchaseInvoice" ToRole="Supplier" />
           <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseLedger" />
+          <Property Name="InvoiceId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PurchaseLedger">
           <Key>
@@ -979,8 +979,8 @@
           <EntitySetMapping Name="PurchaseInvoices">
             <EntityTypeMapping TypeName="dbPharmaModel.PurchaseInvoice">
               <MappingFragment StoreEntitySet="PurchaseInvoice">
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId " />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="supplierId" ColumnName="supplierId" />
                 <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
                 <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />

@@ -3,29 +3,38 @@
     ViewBag.Title = "AddProductPurchase";
 }
 
-    <style>
-        input#productName {
-            width: 100px;
-        }
-        input#Pack {
-            width: 70px;
-        }
-        input#HSNNumber {
-            width: 65px;
-        }
-        input#BatchNumber {
-            width: 65px;
-        }
-        input#ExpiryDate {
-            width: 65px;
-        }
-        input#Quantity {
-            width: 50px;
-        }
-        input#GST {
-            width: 50px;
-        }
-    </style>
+<style>
+    input#productName {
+        width: 100px;
+    }
+
+    input#Pack {
+        width: 70px;
+    }
+
+    input#HSNNumber {
+        width: 65px;
+    }
+
+    input#BatchNumber {
+        width: 65px;
+    }
+
+    input#ExpiryDate {
+        width: 65px;
+    }
+
+    input#Quantity {
+        width: 50px;
+    }
+
+    input#GST {
+        width: 50px;
+    }
+    table.invoice {
+        margin: 14px 0px 24px 40px;
+    }
+</style>
 <h2>Purchase Product From The Supplier <b>"@ViewData["SupplierName"]"</b></h2>
 
 <ol class="breadcrumb page-breadcrumb">
@@ -46,20 +55,33 @@
                         <li style="color:skyblue">Pack should be in the format of multiplication for example:  10x10.</li>
                         <li style="color:skyblue">Product once entered cannnot be modified.</li>
                     </ol>
+                    <div class="row invoice-det">
+                        <table class="invoice">
+                            <tr>
+                                <td> 
+                                    <input id="InvoiceId" name="invoiceId" required type="text" class="form-control" placeholder="Invoice Id" />
+                                </td>
+                                <td class="dateOfInvoice">
+                                    <input id="InvoiceDate" type="text" name="InvoiceDate" required class="form-control datepicker" placeholder="Date" />
+                                </td>
+                            </tr>
+                        </table>
+                       
+                    </div>
                     <div class="row">
                         <table id="tblProducts" class="table">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
+                                    <th>Product</th>
                                     <th>Pack</th>
-                                    <th>HSN Number</th>
-                                    <th>Batch Number</th>
+                                    <th>HSN</th>
+                                    <th>Batch</th>
                                     <th>Expiry</th>
-                                    <th>Quantity</th>
+                                    <th>Qty.</th>
                                     <th>M.R.P</th>
                                     <th>Rate</th>
-                                    <th>GST %</th>
                                     <th>Selling Price</th>
+                                    <th>GST %</th>
                                     <th>Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -76,8 +98,8 @@
                                     <td><input type="text" class="form-control" id="Quantity" /></td>
                                     <td><input type="text" class="form-control" id="MRP" /></td>
                                     <td><input type="text" class="form-control" id="Rate" /></td>
-                                    <td><input type="text" class="form-control" id="GST" /></td>
                                     <td><input type="text" class="form-control" id="SP" /></td>
+                                    <td><input type="text" class="form-control" id="GST" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
                                     <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
                                 </tr>
@@ -189,7 +211,7 @@
         //Add Rate cell.
         cell = $(row.insertCell(-1));
         cell.html(Rate.val());
-         //Add Selling Price cell.
+        //Add Selling Price cell.
         cell = $(row.insertCell(-1));
         cell.html(SP.val());
         //Add GST cell.
@@ -255,13 +277,27 @@
             products.push(purchaseProducts);
 
         });
-        console.log(products);
+
+        var InvoiceDate = $("#InvoiceDate").val();
+        var InvoiceId = $("#InvoiceId").val();
+
+        var obj = {
+            "products": products,
+            "invoiceNumber": InvoiceId,
+            "invoiceDate": InvoiceDate
+        }
+      
+
+        console.log(InvoiceDate, InvoiceId)
         //Send the JSON array to Controller using AJAX.
         $.ajax({
             type: "POST",
             url: "/Dashboard/AddProductPurchase",
-            data: JSON.stringify(products),
-            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(obj),
+           // cache: false,
+            //traditional: true,
+            //processData: true,
+            contentType: "application/json",
             dataType: "json",
             success: function (r) {
                 alert(r + " record(s) inserted.");
@@ -319,7 +355,7 @@
                 return 1.12;
         }
     }
-   
+
 
 </script>
 
