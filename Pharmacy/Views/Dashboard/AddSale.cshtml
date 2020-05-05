@@ -3,42 +3,37 @@
     ViewBag.Title = "AddSale";
 }
 
-<h2>Purchase Product From The Supplier <b>"@ViewData["DistributorName"]"</b></h2>
-
-<ol class="breadcrumb page-breadcrumb">
-    <li class="breadcrumb-item"><a href="dashboard.html">My Dashboard</a></li>
-    <li class="breadcrumb-item">Supplier</li>
-    <li class="breadcrumb-item active">Make Purchase</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
-</ol>
+<style>
+    button#btnSave {
+        width: 200px;
+        margin: 20px 0px 0px 600px;
+    }
+    select#itemDropDown {
+        width: 250px;
+    }
+</style>
 
 <div class="row" id="purchase-form">
-   
     <div class="col-xl-12">
         <div id="panel-4" class="panel">
+            <button id="btnSave" type="button" class="btn btn-primary">Save</button>
             <div class="panel-container show">
                 <div class="panel-content">
-                    <h6 style="color:red">Notes*</h6>
-                    <ol type="bullet">
-                        <li style="color:skyblue">Discount % for all row should be same if enetered it can be null but if entered in any row then it should be same for all rows if needed. </li>
-                        <li style="color:skyblue">GST % should be same for all rows.</li>
-                        <li style="color:skyblue">Pack should be in the format of multiplication for example:  10x10.</li>
-                        <li style="color:skyblue">Each row should select different product.</li>
-                        <li style="color:skyblue">Product once entered cannnot be modified.</li>
-                    </ol>
                     <div class="row">
                         <table id="tblProducts" class="table">
                             <thead>
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Pack</th>
-                                    <th>HSN Number</th>
-                                    <th>Batch Number</th>
+                                    <th>HSN</th>
+                                    <th>Batch</th>
                                     <th>Expiry</th>
                                     <th>Quantity</th>
                                     <th>M.R.P</th>
                                     <th>Rate</th>
-                                    <th>GST %</th>
+                                    <th>CGST</th>
+                                    <th>UTGST</th>
+                                    <th>IGST</th>
                                     <th>Discount</th>
                                     <th>Amount</th>
                                     <th>Action</th>
@@ -57,8 +52,10 @@
                                     <td><input type="text" disabled="disabled" class="form-control" id="ExpiryDate" /></td>
                                     <td><input type="text" class="form-control" id="Quantity" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="MRP" /></td>
-                                    <td><input type="text" disabled="disabled" class="form-control" id="SP" /></td>
-                                    <td><input type="text" class="form-control" id="GST" /></td>
+                                    <td><input type="text" class="form-control" id="SP" /></td>
+                                    <td><input type="text" class="form-control" placeholder="%" id="CGST" /></td>
+                                    <td><input type="text" class="form-control" placeholder="%" id="UTGST" /></td>
+                                    <td><input type="text" class="form-control" placeholder="%" id="IGST" /></td>
                                     <td><input type="text" class="form-control" id="Discount" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
                                     <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
@@ -71,10 +68,6 @@
         </div>
     </div>
 </div>
-<div>
-    <button id="btnSave" type="button" class="btn btn-primary btn-lg">Save</button>
-</div>
-
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script type="text/javascript">

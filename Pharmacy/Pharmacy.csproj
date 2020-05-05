@@ -151,6 +151,12 @@
     <Compile Include="Models\getLedgerByDateRange_Result.cs">
       <DependentUpon>PharmaEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\getPurcaseByDateRangeAndSupplierId_Result.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getSalesByDateRangeAndSupplierId_Result.cs">
+      <DependentUpon>PharmaEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\getSalesLedgerByDateRange_Result.cs">
       <DependentUpon>PharmaEntities.tt</DependentUpon>
     </Compile>

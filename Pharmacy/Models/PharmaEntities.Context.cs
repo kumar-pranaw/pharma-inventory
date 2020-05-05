@@ -68,6 +68,40 @@ namespace Pharmacy.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getLedgerByDateRange_Result>("getLedgerByDateRange", startDateParameter, endDateParameter, supplierIdParameter);
         }
     
+        public virtual ObjectResult<getPurcaseByDateRangeAndSupplierId_Result> getPurcaseByDateRangeAndSupplierId(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, Nullable<int> supplierId)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("startDate", startDate) :
+                new ObjectParameter("startDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("endDate", endDate) :
+                new ObjectParameter("endDate", typeof(System.DateTime));
+    
+            var supplierIdParameter = supplierId.HasValue ?
+                new ObjectParameter("supplierId", supplierId) :
+                new ObjectParameter("supplierId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getPurcaseByDateRangeAndSupplierId_Result>("getPurcaseByDateRangeAndSupplierId", startDateParameter, endDateParameter, supplierIdParameter);
+        }
+    
+        public virtual ObjectResult<getSalesByDateRangeAndSupplierId_Result> getSalesByDateRangeAndSupplierId(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, Nullable<int> customerId)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("startDate", startDate) :
+                new ObjectParameter("startDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("endDate", endDate) :
+                new ObjectParameter("endDate", typeof(System.DateTime));
+    
+            var customerIdParameter = customerId.HasValue ?
+                new ObjectParameter("customerId", customerId) :
+                new ObjectParameter("customerId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getSalesByDateRangeAndSupplierId_Result>("getSalesByDateRangeAndSupplierId", startDateParameter, endDateParameter, customerIdParameter);
+        }
+    
         public virtual ObjectResult<getSalesLedgerByDateRange_Result> getSalesLedgerByDateRange(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, Nullable<int> customerId)
         {
             var startDateParameter = startDate.HasValue ?

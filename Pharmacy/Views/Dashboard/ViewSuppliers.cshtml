@@ -3,41 +3,23 @@
     ViewBag.Title = "ViewSuppliers";
 }
     <style>
+        div#c_1 {
+            width: 362px;
+        }
         span.text-truncate.text-truncate-xl {
             width: 300px;
         }
+        div#js-contacts {
+            margin: 70px 0px 0px 115px;
+        }
     </style>
-
-    <ol class="breadcrumb page-breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.html">My Dashboard</a></li>
-        <li class="breadcrumb-item active">Manage Clients</li>
-        <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
-    </ol>
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="border-faded bg-faded p-3 mb-g d-flex">
-                <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Filter contacts">
-                <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
-                    <label class="btn btn-default active">
-                        <input type="radio" name="contactview" id="grid" checked="" value="grid"><i class="fas fa-table"></i>
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="contactview" id="table" value="table"><i class="fas fa-th-list"></i>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row" id="js-contacts">
         @foreach (var item in Model)
         {
-            <div class="col-xl-4">
+            <div class="col-xl-6">
                 <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="oliver kopyov">
                     <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                         <div class="d-flex flex-row align-items-center">
-                            <span class="status status-success mr-3">
-                                <span class="rounded-circle profile-image d-block " style="background-image:url('~/Content/img/demo/avatars/avatar-b.png'); background-size: cover;"></span>
-                            </span>
                             <div class="info-card-text flex-1">
                                 <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                     @item.SupplierName
@@ -49,8 +31,9 @@
                                     <a class="dropdown-item" href="@Url.Action("GetPurchaseBySupplierId","Dashboard", new { id = item.id})">View Purchase</a>
                                     <a class="dropdown-item" href="@Url.Action("AddProductPurchase","Dashboard", new { id = item.id})">Make Purchase</a>
                                     <a class="dropdown-item" href="@Url.Action("EditSupplier","Dashboard", new { id= item.id})">Edit Supplier</a>
+                                    <a class="dropdown-item" href="@Url.Action("DeleteSupplier","Dashboard", new { id= item.id})">Delete Supplier</a>
                                 </div>
-                                <span class="text-truncate text-truncate-xl">@item.SupplierGSTNumber | @item.SupplierDLNumber | @item.SupplierCINNumber</span>
+                                <span class="text-truncate text-truncate-xl">@item.SupplierGSTNumber <br /> @item.SupplierDLNumber <br /> @item.SupplierCINNumber</span>
                             </div>
                             <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
                                 <span class="collapsed-hidden">+</span>
@@ -78,5 +61,15 @@
             </div>
 
         }
+
+        @if (Model.Count <= 0)
+        {
+            <div class="container">
+                <h2>
+                    No Suppliers Added Yet. Please Add Suppliers To Make Purchase
+                </h2>
+            </div>
+        }
+
     </div>
 

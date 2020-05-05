@@ -29,6 +29,9 @@ namespace Pharmacy.Models
         public Nullable<double> MRP { get; set; }
         public Nullable<double> Rate { get; set; }
         public Nullable<double> SellingPrice { get; set; }
+        public Nullable<int> CGST { get; set; }
+        public Nullable<int> UTGST { get; set; }
+        public Nullable<int> IGST { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<purchase> purchases { get; set; }

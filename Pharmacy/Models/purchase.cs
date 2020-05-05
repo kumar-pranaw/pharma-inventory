@@ -19,10 +19,12 @@ namespace Pharmacy.Models
         public string Pack { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<double> price { get; set; }
-        public Nullable<int> GstPercent { get; set; }
+        public Nullable<int> CGST { get; set; }
         public Nullable<int> SupplierId { get; set; }
         public Nullable<System.DateTime> DateOfPurchase { get; set; }
         public Nullable<int> InvoiceId { get; set; }
+        public Nullable<int> IGST { get; set; }
+        public Nullable<int> UTGST { get; set; }
     
         public virtual Product Product { get; set; }
         public virtual PurchaseInvoice PurchaseInvoice { get; set; }

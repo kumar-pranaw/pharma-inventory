@@ -5,7 +5,11 @@
 
 <style>
     input#productName {
-        width: 100px;
+        width: 200px;
+    }
+
+    div#panel-4 {
+        margin: 130px 0px 0px 0px;
     }
 
     input#Pack {
@@ -13,11 +17,11 @@
     }
 
     input#HSNNumber {
-        width: 65px;
+        width: 80px;
     }
 
     input#BatchNumber {
-        width: 65px;
+        width: 80px;
     }
 
     input#ExpiryDate {
@@ -25,95 +29,88 @@
     }
 
     input#Quantity {
-        width: 50px;
+        width: 70px;
+    }
+
+    input#MRP {
+        width: 80px;
     }
 
     input#GST {
         width: 50px;
     }
+
     table.invoice {
         margin: 14px 0px 24px 40px;
     }
+    button#btnSave {
+        width: 200px;
+        margin: 20px 0px 0px 600px;
+    }
 </style>
-<h2>Purchase Product From The Supplier <b>"@ViewData["SupplierName"]"</b></h2>
+<div class="col-xl-12">
+    <div id="panel-4" class="panel">
+        <button id="btnSave" type="button" class="btn btn-primary">Save</button>	
+        <div class="panel-container show">
+            <div class="panel-content">
+                <div class="row invoice-det">
+                    <table class="invoice">
+                        <tr>
+                            <td>
+                                <input id="InvoiceId" name="invoiceId" required type="text" class="form-control" placeholder="Invoice Id" />
+                            </td>
+                            <td class="dateOfInvoice">
+                                <input id="InvoiceDate" type="text" name="InvoiceDate" required class="form-control datepicker" placeholder="Date" />
+                            </td>
+                        </tr>
+                    </table>
 
-<ol class="breadcrumb page-breadcrumb">
-    <li class="breadcrumb-item"><a href="dashboard.html">My Dashboard</a></li>
-    <li class="breadcrumb-item">Supplier</li>
-    <li class="breadcrumb-item active">Make Purchase</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
-</ol>
-
-<div class="row" id="purchase-form">
-    <div class="col-xl-12">
-        <div id="panel-4" class="panel">
-            <div class="panel-container show">
-                <div class="panel-content">
-                    <h6 style="color:red">Notes*</h6>
-                    <ol type="bullet">
-                        <li style="color:skyblue">GST % should be same for all rows.</li>
-                        <li style="color:skyblue">Pack should be in the format of multiplication for example:  10x10.</li>
-                        <li style="color:skyblue">Product once entered cannnot be modified.</li>
-                    </ol>
-                    <div class="row invoice-det">
-                        <table class="invoice">
+                </div>
+                <div class="row">
+                    <table id="tblProducts" class="table">
+                        <thead>
                             <tr>
-                                <td> 
-                                    <input id="InvoiceId" name="invoiceId" required type="text" class="form-control" placeholder="Invoice Id" />
-                                </td>
-                                <td class="dateOfInvoice">
-                                    <input id="InvoiceDate" type="text" name="InvoiceDate" required class="form-control datepicker" placeholder="Date" />
-                                </td>
+                                <th>Product</th>
+                                <th>Pack</th>
+                                <th>HSN</th>
+                                <th>Batch</th>
+                                <th>Expiry</th>
+                                <th>Qty.</th>
+                                <th>M.R.P</th>
+                                <th>Rate</th>
+                                <th>CGST</th>
+                                <th>UTGST</th>
+                                <th>IGST</th>
+                                <th>Amount</th>
+                                <th>Action</th>
                             </tr>
-                        </table>
-                       
-                    </div>
-                    <div class="row">
-                        <table id="tblProducts" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Pack</th>
-                                    <th>HSN</th>
-                                    <th>Batch</th>
-                                    <th>Expiry</th>
-                                    <th>Qty.</th>
-                                    <th>M.R.P</th>
-                                    <th>Rate</th>
-                                    <th>Selling Price</th>
-                                    <th>GST %</th>
-                                    <th>Amount</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td class="product"><input type="text" class="form-control" id="productName" /></td>
-                                    <td><input type="text" class="form-control" id="Pack" /></td>
-                                    <td><input type="text" class="form-control" id="HSNNumber" /></td>
-                                    <td><input type="text" class="form-control" id="BatchNumber" /></td>
-                                    <td><input type="text" class="form-control" id="ExpiryDate" /></td>
-                                    <td><input type="text" class="form-control" id="Quantity" /></td>
-                                    <td><input type="text" class="form-control" id="MRP" /></td>
-                                    <td><input type="text" class="form-control" id="Rate" /></td>
-                                    <td><input type="text" class="form-control" id="SP" /></td>
-                                    <td><input type="text" class="form-control" id="GST" /></td>
-                                    <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
-                                    <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="product"><input type="text" placeholder="Enter Product Name" class="form-control" id="productName" /></td>
+                                <td><input type="text" class="form-control" placeholder="10x10" id="Pack" /></td>
+                                <td><input type="text" class="form-control" id="HSNNumber" /></td>
+                                <td><input type="text" class="form-control" id="BatchNumber" /></td>
+                                <td><input type="text" class="form-control" id="ExpiryDate" /></td>
+                                <td><input type="text" class="form-control" id="Quantity" /></td>
+                                <td><input type="text" class="form-control" id="MRP" /></td>
+                                <td><input type="text" class="form-control" id="Rate" /></td>
+                                <td><input type="text" class="form-control" placeholder="%" id="CGST" /></td>
+                                <td><input type="text" class="form-control" placeholder="%" id="UTGST" /></td>
+                                <td><input type="text" class="form-control" placeholder="%" id="IGST" /></td>
+                                <td><input type="text" disabled="disabled" class="form-control" id="Amount" /></td>
+                                <td><button type="button" class="form-control btn btn-sm btn-danger" id="btnAdd" value="Add" />Add</td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div>
-    <button id="btnSave" type="button" class="btn btn-primary btn-lg">Save</button>
-</div>
+
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
@@ -168,6 +165,7 @@
     });
 
     $("body").on("click", "#btnAdd", function () {
+        debugger;
         //Reference the Name and Country TextBoxes.
         var productName = $("#productName");
         var Pack = $("#Pack");
@@ -177,9 +175,68 @@
         var Quantity = $("#Quantity");
         var MRP = $("#MRP");
         var Rate = $("#Rate");
-        var SP = $("#SP");
-        var GST = $("#GST");
+        var CGST = $("#CGST");
+        var UTGST = $("#UTGST");
+        var IGST = $("#IGST");
         var Amount = $("#Amount");
+
+        // Check the validation in form-fields
+        if (productName[0].value == "") {
+            alert("Product name is mandatory");
+            $("#productName").css("border", "1px solid red");
+            $("#productName").focus();
+            return false;
+        }
+        if (Pack[0].value == "") {
+            alert("Pack is mandatory")
+            $("#Pack").css("border", "1px solid red");
+            $("#Pack").focus();
+            return false;
+        }
+        if (HSNNumber[0].value == "") {
+            alert("HSN Number is mandatory")
+            $("#HSNNumber").css("border", "1px solid red");
+            $("#HSNNumber").focus();
+            return false;
+        }
+        if (BatchNumber[0].value == "") {
+            alert("Batch Number is mandatory");
+            $("#BatchNumber").css("border", "1px solid red");
+            $("#BatchNumber").focus();
+            return false;
+        }
+        if (ExpiryDate[0].value == "") {
+            alert("Expiry Date is mandatory");
+            $("#ExpiryDate").css("border", "1px solid red");
+            $("#ExpiryDate").focus();
+            return false;
+        }
+        if (Quantity[0].value == "") {
+            alert("Quantity is mandatory");
+            $("#Quantity").css("border", "1px solid red");
+            $("#Quantity").focus();
+            return false;
+        }
+        if (MRP[0].value == "") {
+            alert("MRP is mandatory");
+            $("#MRP").css("border", "1px solid red");
+            $("#MRP").focus();
+            return false;
+        }
+        if (Rate[0].value == "") {
+            alert("Rate is mandatory");
+            $("#Rate").css("border", "1px solid red");
+            $("#Rate").focus();
+            return false;
+        }
+        if (Amount[0].value == "") {
+            alert("Amount is mandatory");
+            $("#Amount").css("border", "1px solid red");
+            $("#Amount").focus();
+            return false;
+        }
+
+
 
         //Get the reference of the Table's TBODY element.
         var tBody = $("#tblProducts > TBODY")[0];
@@ -211,12 +268,15 @@
         //Add Rate cell.
         cell = $(row.insertCell(-1));
         cell.html(Rate.val());
-        //Add Selling Price cell.
+        //Add CGST cell.
         cell = $(row.insertCell(-1));
-        cell.html(SP.val());
-        //Add GST cell.
+        cell.html(CGST.val());
+        //Add UTGST cell.
         cell = $(row.insertCell(-1));
-        cell.html(GST.val());
+        cell.html(UTGST.val());
+        //Add IGST cell.
+        cell = $(row.insertCell(-1));
+        cell.html(IGST.val());
         //Add amount cell.
         cell = $(row.insertCell(-1));
         cell.html(Amount.val());
@@ -239,8 +299,9 @@
         Quantity.val("");
         MRP.val("");
         Rate.val("");
-        SP.val("");
-        GST.val("");
+        CGST.val("");
+        UTGST.val("");
+        IGST.val("");
         Amount.val("");
     });
 
@@ -259,6 +320,25 @@
 
     $("body").on("click", "#btnSave", function () {
         //Loop through the Table rows and build a JSON array.
+        var InvoiceDate = $("#InvoiceDate").val();
+        var InvoiceId = $("#InvoiceId").val();
+
+
+        if (InvoiceId == "") {
+            alert("Invoice Id is mandatory");
+            $("#InvoiceId").css("border", "1px solid red");
+            $("#InvoiceId").focus();
+            return false;
+        }
+
+        if (InvoiceDate == "") {
+            alert("Invoice Date is mandatory");
+            $("#InvoiceDate").css("border", "1px solid red");
+            $("#InvoiceDate").focus();
+            return false;
+        }
+       
+
         var products = new Array();
         $("#tblProducts TBODY TR").each(function () {
             var row = $(this);
@@ -271,22 +351,22 @@
             purchaseProducts.quantity = row.find("TD").eq(5).html();
             purchaseProducts.MRP = row.find("TD").eq(6).html();
             purchaseProducts.Rate = row.find("TD").eq(7).html();
-            purchaseProducts.SellingPrice = row.find("TD").eq(8).html();
-            purchaseProducts.gst = row.find("TD").eq(9).html();
-            purchaseProducts.amount = row.find("TD").eq(10).html();
+            purchaseProducts.CGST = row.find("TD").eq(8).html();
+            purchaseProducts.UTGST = row.find("TD").eq(9).html();
+            purchaseProducts.IGST = row.find("TD").eq(10).html();
+            purchaseProducts.amount = row.find("TD").eq(11).html();
             products.push(purchaseProducts);
 
         });
 
-        var InvoiceDate = $("#InvoiceDate").val();
-        var InvoiceId = $("#InvoiceId").val();
+       
 
         var obj = {
             "products": products,
             "invoiceNumber": InvoiceId,
             "invoiceDate": InvoiceDate
         }
-      
+
 
         console.log(InvoiceDate, InvoiceId)
         //Send the JSON array to Controller using AJAX.
@@ -294,9 +374,6 @@
             type: "POST",
             url: "/Dashboard/AddProductPurchase",
             data: JSON.stringify(obj),
-           // cache: false,
-            //traditional: true,
-            //processData: true,
             contentType: "application/json",
             dataType: "json",
             success: function (r) {

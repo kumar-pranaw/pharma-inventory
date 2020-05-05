@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="dbPharmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="dbPharmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Auth">
           <Key>
             <PropertyRef Name="Id" />
@@ -62,6 +62,9 @@
           <Property Name="MRP" Type="float" />
           <Property Name="Rate" Type="float" />
           <Property Name="SellingPrice" Type="float" />
+          <Property Name="CGST" Type="int" />
+          <Property Name="UTGST" Type="int" />
+          <Property Name="IGST" Type="int" />
         </EntityType>
         <EntityType Name="purchase">
           <Key>
@@ -72,10 +75,12 @@
           <Property Name="Pack" Type="nvarchar(max)" />
           <Property Name="Quantity" Type="int" />
           <Property Name="price" Type="float" />
-          <Property Name="GstPercent" Type="int" />
+          <Property Name="CGST" Type="int" />
           <Property Name="SupplierId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
           <Property Name="InvoiceId" Type="int" />
+          <Property Name="IGST" Type="int" />
+          <Property Name="UTGST" Type="int" />
         </EntityType>
         <EntityType Name="PurchaseInvoice">
           <Key>
@@ -85,7 +90,7 @@
           <Property Name="supplierId" Type="int" />
           <Property Name="DateOfPurchase" Type="date" />
           <Property Name="TotalPurchaseAmount" Type="float" />
-          <Property Name="InvoiceId " Type="varchar" MaxLength="100" />
+          <Property Name="InvoiceId" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PurchaseLedger">
           <Key>
@@ -110,9 +115,9 @@
           <Property Name="quantity" Type="int" />
           <Property Name="price" Type="float" />
           <Property Name="rate" Type="float" />
-          <Property Name="CGstPercent" Type="int" />
-          <Property Name="IGSTPercent" Type="int" />
-          <Property Name="SGSTPercent" Type="int" />
+          <Property Name="CGST" Type="int" />
+          <Property Name="IGST" Type="int" />
+          <Property Name="SGST" Type="int" />
           <Property Name="CustomerId" Type="int" />
           <Property Name="discountpercentage" Type="int" />
           <Property Name="InvoiceId" Type="int" />
@@ -163,18 +168,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CharID" Type="varchar" MaxLength="5" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
-        <Association Name="FK__PurchaseI__suppl__5FB337D6">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
-          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Supplier">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="PurchaseInvoice">
-              <PropertyRef Name="supplierId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__SalesInvo__Custo__6FE99F9F">
           <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
@@ -212,7 +205,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_purchase_productid">
-          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -224,7 +219,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_purchase_PurchaseInvoice">
-          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PurchaseInvoice">
@@ -236,7 +233,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_purchase_Supplier">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Supplier">
@@ -248,7 +247,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PurchaseLedger_PurchaseInvoice">
-          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PurchaseInvoice">
@@ -338,6 +339,16 @@
           <Parameter Name="endDate" Type="date" Mode="In" />
           <Parameter Name="supplierId" Type="int" Mode="In" />
         </Function>
+        <Function Name="getPurcaseByDateRangeAndSupplierId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="date" Mode="In" />
+          <Parameter Name="endDate" Type="date" Mode="In" />
+          <Parameter Name="supplierId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getSalesByDateRangeAndSupplierId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="date" Mode="In" />
+          <Parameter Name="endDate" Type="date" Mode="In" />
+          <Parameter Name="customerId" Type="int" Mode="In" />
+        </Function>
         <Function Name="getSalesLedgerByDateRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="startDate" Type="date" Mode="In" />
           <Parameter Name="endDate" Type="date" Mode="In" />
@@ -357,10 +368,6 @@
           <EntitySet Name="SalesLedger" EntityType="Self.SalesLedger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YourTable" EntityType="Self.YourTable" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__PurchaseI__suppl__5FB337D6" Association="Self.FK__PurchaseI__suppl__5FB337D6">
-            <End Role="Supplier" EntitySet="Supplier" />
-            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-          </AssociationSet>
           <AssociationSet Name="FK__SalesInvo__Custo__6FE99F9F" Association="Self.FK__SalesInvo__Custo__6FE99F9F">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="SalesInvoice" EntitySet="SalesInvoice" />
@@ -414,7 +421,8 @@
             <End Role="SalesLedger" EntitySet="SalesLedger" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbPharmaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -481,6 +489,9 @@
           <Property Name="MRP" Type="Double" />
           <Property Name="Rate" Type="Double" />
           <Property Name="SellingPrice" Type="Double" />
+          <Property Name="CGST" Type="Int32" />
+          <Property Name="UTGST" Type="Int32" />
+          <Property Name="IGST" Type="Int32" />
           <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_productid" FromRole="Product" ToRole="purchase" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Product" FromRole="Product" ToRole="Sales" />
         </EntityType>
@@ -493,10 +504,12 @@
           <Property Name="Pack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="price" Type="Double" />
-          <Property Name="GstPercent" Type="Int32" />
+          <Property Name="CGST" Type="Int32" />
           <Property Name="SupplierId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
           <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="IGST" Type="Int32" />
+          <Property Name="UTGST" Type="Int32" />
           <NavigationProperty Name="Product" Relationship="Self.FK_purchase_productid" FromRole="purchase" ToRole="Product" />
           <NavigationProperty Name="PurchaseInvoice" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="purchase" ToRole="PurchaseInvoice" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_purchase_Supplier" FromRole="purchase" ToRole="Supplier" />
@@ -509,10 +522,9 @@
           <Property Name="supplierId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
           <Property Name="TotalPurchaseAmount" Type="Double" />
-          <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="purchase" />
-          <NavigationProperty Name="Supplier" Relationship="Self.FK__PurchaseI__suppl__5FB337D6" FromRole="PurchaseInvoice" ToRole="Supplier" />
-          <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseLedger" />
           <Property Name="InvoiceId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="purchase" />
+          <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseLedger" />
         </EntityType>
         <EntityType Name="PurchaseLedger">
           <Key>
@@ -539,9 +551,9 @@
           <Property Name="quantity" Type="Int32" />
           <Property Name="price" Type="Double" />
           <Property Name="rate" Type="Double" />
-          <Property Name="CGstPercent" Type="Int32" />
-          <Property Name="IGSTPercent" Type="Int32" />
-          <Property Name="SGSTPercent" Type="Int32" />
+          <Property Name="CGST" Type="Int32" />
+          <Property Name="IGST" Type="Int32" />
+          <Property Name="SGST" Type="Int32" />
           <Property Name="CustomerId" Type="Int32" />
           <Property Name="discountpercentage" Type="Int32" />
           <Property Name="InvoiceId" Type="Int32" />
@@ -558,12 +570,12 @@
           <Property Name="CustomerId" Type="Int32" />
           <Property Name="DateOfPurchase" Type="DateTime" Precision="0" />
           <Property Name="TotalPurchaseAmount" Type="Double" />
+          <Property Name="TotalDiscount" Type="Double" />
+          <Property Name="DiscountedAmount" Type="Double" />
           <NavigationProperty Name="Customer" Relationship="Self.FK__SalesInvo__Custo__6FE99F9F" FromRole="SalesInvoice" ToRole="Customer" />
           <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_SalesInvoice" FromRole="SalesInvoice" ToRole="Ledger" />
           <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_SalesInvoice" FromRole="SalesInvoice" ToRole="Sales" />
           <NavigationProperty Name="SalesLedgers" Relationship="Self.FK_SalesLedger_SalesInvoice" FromRole="SalesInvoice" ToRole="SalesLedger" />
-          <Property Name="TotalDiscount" Type="Double" />
-          <Property Name="DiscountedAmount" Type="Double" />
         </EntityType>
         <EntityType Name="SalesLedger">
           <Key>
@@ -594,7 +606,6 @@
           <Property Name="SupplierDLNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SupplierCINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="purchases" Relationship="Self.FK_purchase_Supplier" FromRole="Supplier" ToRole="purchase" />
-          <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK__PurchaseI__suppl__5FB337D6" FromRole="Supplier" ToRole="PurchaseInvoice" />
           <NavigationProperty Name="PurchaseLedgers" Relationship="Self.FK_PurchaseLedger_Supplier" FromRole="Supplier" ToRole="PurchaseLedger" />
         </EntityType>
         <EntityType Name="YourTable">
@@ -665,7 +676,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_purchase_productid">
-          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -689,7 +702,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_purchase_PurchaseInvoice">
-          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PurchaseInvoice">
@@ -701,7 +716,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_purchase_Supplier">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="purchase" Type="Self.purchase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Supplier">
@@ -712,20 +729,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PurchaseI__suppl__5FB337D6">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
-          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Supplier">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="PurchaseInvoice">
-              <PropertyRef Name="supplierId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseLedger_PurchaseInvoice">
-          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1" />
+          <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PurchaseInvoice">
@@ -822,10 +829,6 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="purchase" EntitySet="purchases" />
           </AssociationSet>
-          <AssociationSet Name="FK__PurchaseI__suppl__5FB337D6" Association="Self.FK__PurchaseI__suppl__5FB337D6">
-            <End Role="Supplier" EntitySet="Suppliers" />
-            <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
-          </AssociationSet>
           <AssociationSet Name="FK_PurchaseLedger_PurchaseInvoice" Association="Self.FK_PurchaseLedger_PurchaseInvoice">
             <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
             <End Role="PurchaseLedger" EntitySet="PurchaseLedgers" />
@@ -848,6 +851,16 @@
             <Parameter Name="startDate" Mode="In" Type="DateTime" />
             <Parameter Name="endDate" Mode="In" Type="DateTime" />
             <Parameter Name="supplierId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getPurcaseByDateRangeAndSupplierId" ReturnType="Collection(dbPharmaModel.getPurcaseByDateRangeAndSupplierId_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+            <Parameter Name="supplierId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getSalesByDateRangeAndSupplierId" ReturnType="Collection(dbPharmaModel.getSalesByDateRangeAndSupplierId_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+            <Parameter Name="customerId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="getSalesLedgerByDateRange" ReturnType="Collection(dbPharmaModel.getSalesLedgerByDateRange_Result)">
             <Parameter Name="startDate" Mode="In" Type="DateTime" />
@@ -877,11 +890,26 @@
         <ComplexType Name="getLedgerByDateRange_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="DateTime" Name="Date" Nullable="true" />
-          <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Particulars" Nullable="true" />
           <Property Type="Double" Name="DebitAmunt" Nullable="true" />
           <Property Type="Double" Name="CreditAmount" Nullable="true" />
           <Property Type="Double" Name="BalanceAmount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getPurcaseByDateRangeAndSupplierId_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="DateOfPurchase" Nullable="true" />
+          <Property Type="Double" Name="TotalPurchaseAmount" Nullable="true" />
+          <Property Type="Int32" Name="SupplierId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getSalesByDateRangeAndSupplierId_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="InvoiceId" Nullable="true" MaxLength="8" />
+          <Property Type="DateTime" Name="DateOfPurchase" Nullable="true" />
+          <Property Type="Double" Name="TotalPurchaseAmount" Nullable="true" />
+          <Property Type="Double" Name="TotalDiscount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerId" Nullable="true" />
         </ComplexType>
         <ComplexType Name="getSalesLedgerByDateRange_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -958,6 +986,9 @@
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="CGST" ColumnName="CGST" />
+                <ScalarProperty Name="UTGST" ColumnName="UTGST" />
+                <ScalarProperty Name="IGST" ColumnName="IGST" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -969,21 +1000,23 @@
                 <ScalarProperty Name="Pack" ColumnName="Pack" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="GstPercent" ColumnName="GstPercent" />
+                <ScalarProperty Name="CGST" ColumnName="CGST" />
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
                 <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="IGST" ColumnName="IGST" />
+                <ScalarProperty Name="UTGST" ColumnName="UTGST" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PurchaseInvoices">
             <EntityTypeMapping TypeName="dbPharmaModel.PurchaseInvoice">
               <MappingFragment StoreEntitySet="PurchaseInvoice">
-                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId " />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="supplierId" ColumnName="supplierId" />
                 <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
                 <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1010,9 +1043,9 @@
                 <ScalarProperty Name="quantity" ColumnName="quantity" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="rate" ColumnName="rate" />
-                <ScalarProperty Name="CGstPercent" ColumnName="CGstPercent" />
-                <ScalarProperty Name="IGSTPercent" ColumnName="IGSTPercent" />
-                <ScalarProperty Name="SGSTPercent" ColumnName="SGSTPercent" />
+                <ScalarProperty Name="CGST" ColumnName="CGST" />
+                <ScalarProperty Name="IGST" ColumnName="IGST" />
+                <ScalarProperty Name="SGST" ColumnName="SGST" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="discountpercentage" ColumnName="discountpercentage" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
@@ -1022,13 +1055,13 @@
           <EntitySetMapping Name="SalesInvoices">
             <EntityTypeMapping TypeName="dbPharmaModel.SalesInvoice">
               <MappingFragment StoreEntitySet="SalesInvoice">
-                <ScalarProperty Name="DiscountedAmount" ColumnName="DiscountedAmount" />
-                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
                 <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
+                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
+                <ScalarProperty Name="DiscountedAmount" ColumnName="DiscountedAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1106,6 +1139,29 @@
                 <ScalarProperty Name="DebitAmunt" ColumnName="DebitAmunt" />
                 <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
                 <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getPurcaseByDateRangeAndSupplierId" FunctionName="dbPharmaModel.Store.getPurcaseByDateRangeAndSupplierId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbPharmaModel.getPurcaseByDateRangeAndSupplierId_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getSalesByDateRangeAndSupplierId" FunctionName="dbPharmaModel.Store.getSalesByDateRangeAndSupplierId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbPharmaModel.getSalesByDateRangeAndSupplierId_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="TotalPurchaseAmount" ColumnName="TotalPurchaseAmount" />
+                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

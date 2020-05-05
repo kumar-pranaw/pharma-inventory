@@ -51,6 +51,45 @@ namespace Pharmacy.Controllers
             return RedirectToAction("ViewSuppliers");
         }
 
+        public ActionResult EditSupplier(int? id)
+        {
+            var getSupplier = BaseClass.dbEntities.Suppliers.Where(m => m.id == id).FirstOrDefault();
+            return View(getSupplier);
+        }
+
+        [HttpPost]
+        public ActionResult EditSupplier(int? id, Supplier supplier)
+        {
+            var getDetails = BaseClass.dbEntities.Suppliers.Where(m => m.id == id).SingleOrDefault();
+            if (getDetails != null)
+            {
+                getDetails.SupplierName = supplier.SupplierName;
+                getDetails.SupplierPanNumber = supplier.SupplierPanNumber;
+                getDetails.SupplierPhoneNo = supplier.SupplierPhoneNo;
+                getDetails.SupplierGSTNumber = supplier.SupplierGSTNumber;
+                getDetails.SupplierEmail = supplier.SupplierEmail;
+                getDetails.SupplierCINNumber = supplier.SupplierCINNumber;
+                getDetails.SupplierDLNumber = supplier.SupplierDLNumber;
+                getDetails.SupplierAddress = supplier.SupplierAddress;
+
+                BaseClass.dbEntities.Entry(getDetails).State = EntityState.Modified;
+                BaseClass.dbEntities.SaveChanges();
+            }
+
+            return RedirectToAction("ViewSuppliers");
+        }
+
+        public ActionResult DeleteSupplier(int? id)
+        {
+            var getSupplier = BaseClass.dbEntities.Suppliers.Find(id);
+            if (getSupplier != null)
+            {
+                BaseClass.dbEntities.Suppliers.Remove(getSupplier);
+                BaseClass.dbEntities.SaveChanges();
+            }
+            return RedirectToAction("ViewSuppliers");
+        }
+
         public ActionResult ViewSuppliers()
         {
             var suppliersList = (from supplierlist in BaseClass.dbEntities.Suppliers
@@ -81,19 +120,46 @@ namespace Pharmacy.Controllers
         public JsonResult AddProductPurchase(string invoiceNumber, string invoiceDate, List<AddProductViewModel> products)
         {
             double? sumOfAmounts = 0;
+            double? allgstAmounts = 0;
+
+            double? totalIgstAmounts = 0;
+            double? totalCgstAmounts = 0;
+            double? totalUtgstAmounts = 0;
+
             int supplierId = Convert.ToInt32(TempData["ID"]);
             if (products.Count > 1)
             {
-                sumOfAmounts = products.Select(m => Math.Round(m.Amount,3)).Sum();
+                sumOfAmounts = products.Select(m => Math.Round(m.Amount, 3)).Sum();
             }
             else
             {
-                sumOfAmounts = products.Select(m => Math.Round(m.Amount,3)).FirstOrDefault();
+                sumOfAmounts = products.Select(m => Math.Round(m.Amount, 3)).FirstOrDefault();
             }
 
-            var gstNumber = products.Select(m => m.GST).FirstOrDefault();
-            var gstAmounts = (gstNumber / 100f) * sumOfAmounts;
-            var sumofFinalAmounts = gstAmounts + sumOfAmounts;
+
+
+            foreach (var item in products)
+            {
+                if (item.CGST != 0)
+                {
+                    allgstAmounts = (item.CGST / 100f) * item.Amount;
+                    totalCgstAmounts = allgstAmounts + totalCgstAmounts;
+                }
+                if (item.UTGST != 0)
+                {
+                    allgstAmounts = (item.UTGST / 100f) * item.Amount;
+                    totalUtgstAmounts = allgstAmounts + totalUtgstAmounts;
+                }
+                if (item.IGST != 0)
+                {
+                    allgstAmounts = (item.IGST / 100f) * item.Amount;
+                    totalIgstAmounts = allgstAmounts + totalIgstAmounts;
+                }
+
+            }
+
+            var sumOfAllGstAmounts = totalCgstAmounts + totalIgstAmounts + totalUtgstAmounts;
+            var sumofFinalAmounts = sumOfAllGstAmounts + sumOfAmounts;
 
             string s = invoiceDate.Substring(3, 2) + "/" + invoiceDate.Substring(0, 2) + "/" + invoiceDate.Substring(6, 4);
 
@@ -159,7 +225,10 @@ namespace Pharmacy.Controllers
                         HSNNumber = item.HSNNumber,
                         MRP = item.MRP,
                         Rate = item.Rate,
-                        SellingPrice = item.SellingPrice
+                        SellingPrice = item.SellingPrice,
+                        CGST = item.CGST,
+                        IGST = item.IGST,
+                        UTGST = item.UTGST
                     };
                     BaseClass.dbEntities.Products.Add(product1);
                     BaseClass.dbEntities.SaveChanges();
@@ -171,7 +240,9 @@ namespace Pharmacy.Controllers
                         price = item.Amount,
                         Pack = item.Pack,
                         Quantity = item.Quantity,
-                        GstPercent = item.GST,
+                        CGST = item.CGST,
+                        IGST = item.IGST,
+                        UTGST = item.IGST,
                         productId = id,
                         SupplierId = supplierId
                     };
@@ -291,24 +362,33 @@ namespace Pharmacy.Controllers
                 var getLedgerDetails = BaseClass.dbEntities.getLedgerByDateRange(startDate, endDate, id).ToList();
                 return View(getLedgerDetails);
             }
-
-
         }
 
-        public ActionResult GetPurchaseBySupplierId(int id)
+        public ActionResult GetPurchaseBySupplierId(int id, DateTime? startDate, DateTime? endDate)
         {
-            var allPurchasesFromSupplier = (from invoices in BaseClass.dbEntities.PurchaseInvoices
-                                            where invoices.supplierId == id
-                                            select new ViewPurchases
-                                            {
-                                                Id = invoices.ID,
-                                                DateOfPurchase = invoices.DateOfPurchase,
-                                                PurchaseAmount = invoices.TotalPurchaseAmount,
-                                                InvoiceId = invoices.InvoiceId,
-                                                SupplierId = invoices.supplierId
-                                            }).ToList();
+            var getPurchaseBySupplier = BaseClass.dbEntities.getPurcaseByDateRangeAndSupplierId(startDate, endDate, id).ToList();
+            return View(getPurchaseBySupplier);
+        }
 
-            return View(allPurchasesFromSupplier);
+        public ActionResult DeletePurchaseAndInvoiceDetails(int? invoiceId)
+        {
+            var getPurchaseByInvoiceId = BaseClass.dbEntities.purchases.Where(x => x.InvoiceId == invoiceId).ToList();
+
+            foreach (var items in getPurchaseByInvoiceId)
+            {
+                BaseClass.dbEntities.purchases.Remove(items);
+                BaseClass.dbEntities.SaveChanges();
+            }
+
+            var getLedgerByInvoiceId = BaseClass.dbEntities.PurchaseLedgers.Where(x => x.InvoiceId == invoiceId).SingleOrDefault();
+            BaseClass.dbEntities.PurchaseLedgers.Remove(getLedgerByInvoiceId);
+            BaseClass.dbEntities.SaveChanges();
+
+            var invoiceByInvoiceId = BaseClass.dbEntities.PurchaseInvoices.Find(invoiceId);
+            BaseClass.dbEntities.PurchaseInvoices.Remove(invoiceByInvoiceId);
+            BaseClass.dbEntities.SaveChanges();
+
+            return RedirectToAction("DeletePurchaseAndInvoiceDetails");
         }
 
         public ActionResult GetInvoiceDetailsBySupplierId(int? invoiceId, int? supplierId)
@@ -335,7 +415,7 @@ namespace Pharmacy.Controllers
                                                       select new ListOfInvoice
                                                       {
                                                           ProductName = product.ProductName,
-                                                          GstPercent = purchase.GstPercent,
+                                                          GstPercent = purchase.CGST,
                                                           MRP = product.MRP,
                                                           Rate = product.Rate,
                                                           SellingPrice = product.SellingPrice,
@@ -349,33 +429,6 @@ namespace Pharmacy.Controllers
             return View(getInvoiceBySupplierIdAndInvoiceId);
         }
 
-        public ActionResult EditSupplier(int? id)
-        {
-            var getSupplier = BaseClass.dbEntities.Suppliers.Where(m => m.id == id).FirstOrDefault();
-            return View(getSupplier);
-        }
-
-        [HttpPost]
-        public ActionResult EditSupplier(int? id, Supplier supplier)
-        {
-            var getDetails = BaseClass.dbEntities.Suppliers.Where(m => m.id == id).SingleOrDefault();
-            if (getDetails != null)
-            {
-                getDetails.SupplierName = supplier.SupplierName;
-                getDetails.SupplierPanNumber = supplier.SupplierPanNumber;
-                getDetails.SupplierPhoneNo = supplier.SupplierPhoneNo;
-                getDetails.SupplierGSTNumber = supplier.SupplierGSTNumber;
-                getDetails.SupplierEmail = supplier.SupplierEmail;
-                getDetails.SupplierCINNumber = supplier.SupplierCINNumber;
-                getDetails.SupplierDLNumber = supplier.SupplierDLNumber;
-                getDetails.SupplierAddress = supplier.SupplierAddress;
-
-                BaseClass.dbEntities.Entry(getDetails).State = EntityState.Modified;
-                BaseClass.dbEntities.SaveChanges();
-            }
-
-            return RedirectToAction("ViewSuppliers");
-        }
 
         public ActionResult AddPaymentMethod()
         {
@@ -476,6 +529,17 @@ namespace Pharmacy.Controllers
             return View(distributorList);
         }
 
+        public ActionResult DeleteDistributors(int? id)
+        {
+            var getSupplier = BaseClass.dbEntities.Customers.Find(id);
+            if (getSupplier != null)
+            {
+                BaseClass.dbEntities.Customers.Remove(getSupplier);
+                BaseClass.dbEntities.SaveChanges();
+            }
+            return RedirectToAction("ViewDistributors");
+        }
+
         public ActionResult AddSale(int id)
         {
             var getDistributors = BaseClass.dbEntities.Customers.Where(x => x.id == id).Select(x => x.CustomerName).SingleOrDefault();
@@ -516,12 +580,12 @@ namespace Pharmacy.Controllers
             originalAmount = Math.Round(Convert.ToDouble(gstAmounts + sumOfAmounts), 2);
 
             // Discount Percentage
-            if (productSale!=null)
+            if (productSale != null)
             {
-                var discount = productSale.Find(x => x.Discount!=0);
-                if(discount!= null)
+                var discount = productSale.Find(x => x.Discount != 0);
+                if (discount != null)
                 {
-                    var discountPer  = (discount.Discount/100f);
+                    var discountPer = (discount.Discount / 100f);
                     amountAfterDiscount = Math.Round(Convert.ToDouble(originalAmount - (discountPer * originalAmount)), 2);
                     discountedAmount = Math.Round(Convert.ToDouble(originalAmount - amountAfterDiscount), 2);
                 }
@@ -585,8 +649,8 @@ namespace Pharmacy.Controllers
                         price = Math.Round(Convert.ToDouble(item.Amount), 2),
                         pack = item.Pack,
                         quantity = item.Quantity,
-                        CGstPercent = item.GST,
-                        discountpercentage =Convert.ToInt32(item.Discount),
+                        CGST = item.GST,
+                        discountpercentage = Convert.ToInt32(item.Discount),
                         CustomerId = distributorId,
                         productid = item.id,
                     };
@@ -619,19 +683,9 @@ namespace Pharmacy.Controllers
             return Json(getData, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetSaleByDistributorId(int id)
+        public ActionResult GetSaleByDistributorId(int id, DateTime? startDate, DateTime? endDate)
         {
-            var allsalesForCustomer = (from invoices in BaseClass.dbEntities.SalesInvoices
-                                       where invoices.CustomerId == id
-                                       select new ViewSales
-                                       {
-                                           Id = invoices.ID,
-                                           DateOfPurchase = invoices.DateOfPurchase,
-                                           PurchaseAmount = invoices.TotalPurchaseAmount,
-                                           InvoiceId = invoices.InvoiceId,
-                                           CustomerId = invoices.CustomerId
-                                       }).ToList();
-
+            var allsalesForCustomer = BaseClass.dbEntities.getSalesByDateRangeAndSupplierId(startDate, endDate, id).ToList();
             return View(allsalesForCustomer);
         }
 
@@ -698,7 +752,7 @@ namespace Pharmacy.Controllers
                                              select new ListOfInvoice
                                              {
                                                  ProductName = product.ProductName,
-                                                 GstPercent = sales.CGstPercent,
+                                                 GstPercent = sales.CGST,
                                                  MRP = product.MRP,
                                                  Rate = product.SellingPrice,
                                                  SellingPrice = product.SellingPrice,

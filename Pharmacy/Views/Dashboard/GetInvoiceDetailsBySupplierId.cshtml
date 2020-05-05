@@ -2,24 +2,27 @@
 @{
     ViewBag.Title = "GetInvoiceDetailsBySupplierId";
     var InvoiceId = TempData["InvoiceId"];
-    var TotalAmount = TempData["TotalAmount"];
-    var DateofPurchase = TempData["DateOfPurchase"];
+    double TotalAmount = Convert.ToDouble(TempData["TotalAmount"]);
+    var DateofPurchase = Convert.ToDateTime(TempData["DateOfPurchase"]);
     var supplierName = TempData["SupplierName"];
     var address = TempData["Address"];
     var phoneNumber = TempData["Phonenumber"];
     var Dlnumber = TempData["DlNumber"];
     var GstIn = TempData["GSTIN"];
+    double? totalAmount = 0;
+    int? totalItems = 0;
+    int? totalQty = 0;
 }
 <style>
     h4 {
         margin-left: 400px;
     }
 </style>
-<div class="row">
+<div class="container">
     <div class="col-xl-12">
         <div id="panel-4" class="panel">
             <div class="panel-hdr">
-                <h4><b>PROFORMA INVOICE</b></h4>
+                <h4><b>GST INVOICE</b></h4>
                 <div class="panel-toolbar">
                 </div>
             </div>
@@ -35,7 +38,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <a href="javascript:void(0);" class="card-title collapsed" data-toggle="collapse" data-target="#js_demo_accordion-5a" aria-expanded="false">
-                                        <span>Invoice Id:  @InvoiceId | </span> <span> &nbsp; Date Of Purchase: @DateofPurchase | </span><span> &nbsp; Total Bill Amount: @TotalAmount</span>
+                                        <span>Invoice Id:  @InvoiceId | </span> <span> &nbsp; Date Of Purchase: @DateofPurchase.ToShortDateString() | </span><span> &nbsp; Total Bill Amount: @TotalAmount</span>
                                         <span class="ml-auto">
                                             <span class="collapsed-reveal">
                                                 <i class="fal fa-minus-circle text-danger fs-xl" data-toggle="tooltip" data-placement="left" data-original-title="Collapse"></i>
@@ -60,7 +63,6 @@
                                                         <th>Quantity</th>
                                                         <th>M.R.P</th>
                                                         <th>Rate</th>
-                                                        <th>Selling Price</th>
                                                         <th>GST %</th>
                                                         <th>Amount</th>
                                                     </tr>
@@ -68,19 +70,20 @@
                                                 <tbody>
                                                     @foreach (var item in Model)
                                                     {
-                                                    <tr>
-                                                        <td>@item.ProductName</td>
-                                                        <td>@item.HSNNumber</td>
-                                                        <td>@item.Pack</td>
-                                                        <td>@item.Batch</td>
-                                                        <td>@item.ExpiryDate</td>
-                                                        <td>@item.Quantity</td>
-                                                        <td>@item.MRP</td>
-                                                        <td>@item.Rate</td>
-                                                        <td>@item.SellingPrice</td>
-                                                        <td>@item.GstPercent</td>
-                                                        <td>@item.TotalAmount</td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td>@item.ProductName</td>
+                                                            <td>@item.HSNNumber</td>
+                                                            <td>@item.Pack</td>
+                                                            <td>@item.Batch</td>
+                                                            <td>@item.ExpiryDate</td>
+                                                            <td>@item.Quantity</td>
+                                                            <td>@item.MRP</td>
+                                                            <td>@item.Rate</td>
+                                                            <td>@item.GstPercent</td>
+                                                            <td>@item.TotalAmount</td>
+                                                        </tr>
+                                                        totalAmount = item.TotalAmount + totalAmount;
+                                                        totalQty = item.Quantity + totalQty;
                                                     }
 
                                                 </tbody>
@@ -91,6 +94,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br />
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Total GST Amount</th>
+                                            <th>Grand Total Amount</th>
+                                            <th>Total Items</th>
+                                            <th>Total Qty.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var gstAmount = TotalAmount - totalAmount;
+                                            totalItems = Model.Count();
+                                          }
+                                    <td>@gstAmount</td>
+                                    <td>@totalAmount</td>
+                                    <td>@totalItems</td>
+                                    <td>@totalQty</td>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

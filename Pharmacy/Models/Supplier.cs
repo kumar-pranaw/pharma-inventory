@@ -18,7 +18,6 @@ namespace Pharmacy.Models
         public Supplier()
         {
             this.purchases = new HashSet<purchase>();
-            this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
             this.PurchaseLedgers = new HashSet<PurchaseLedger>();
         }
     
@@ -34,8 +33,6 @@ namespace Pharmacy.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<purchase> purchases { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseInvoice> PurchaseInvoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseLedger> PurchaseLedgers { get; set; }
     }

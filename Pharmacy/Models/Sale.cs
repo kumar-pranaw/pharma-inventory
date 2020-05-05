@@ -20,9 +20,9 @@ namespace Pharmacy.Models
         public Nullable<int> quantity { get; set; }
         public Nullable<double> price { get; set; }
         public Nullable<double> rate { get; set; }
-        public Nullable<int> CGstPercent { get; set; }
-        public Nullable<int> IGSTPercent { get; set; }
-        public Nullable<int> SGSTPercent { get; set; }
+        public Nullable<int> CGST { get; set; }
+        public Nullable<int> IGST { get; set; }
+        public Nullable<int> SGST { get; set; }
         public Nullable<int> CustomerId { get; set; }
         public Nullable<int> discountpercentage { get; set; }
         public Nullable<int> InvoiceId { get; set; }

@@ -11,7 +11,9 @@
         public double? MRP { get; set; }
         public float? Rate { get; set; }
         public int? CostPrice { get; set; }
-        public int GST { get; set; }
+        public int IGST { get; set; }
+        public int CGST { get; set; }
+        public int UTGST { get; set; }
         public double Amount { get; set; }
         public string Pack { get; set; }
         public double? SellingPrice { get; set; }
