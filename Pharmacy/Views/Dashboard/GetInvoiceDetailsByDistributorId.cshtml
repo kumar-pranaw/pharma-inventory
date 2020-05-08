@@ -2,17 +2,19 @@
 @{
 
     Layout = null;
-    var distributorName =  TempData["DistributorName"];
-    var distributorPhone =  TempData["Phonenumber"];
-    var distributorAddress =  TempData["Address"];
-    var distributorDl =  TempData["DlNumber"];
-    var distributorGST =  TempData["GSTIN"];
+    var distributorName = TempData["DistributorName"];
+    var distributorPhone = TempData["Phonenumber"];
+    var distributorAddress = TempData["Address"];
+    var distributorDl = TempData["DlNumber"];
+    var distributorGST = TempData["GSTIN"];
     var distributorResidenceNumber = TempData["ResidenceNumber"];
     var distributorCin = TempData["CIN"];
     var figureAmount = TempData["TotalConvertedAmount"];
     var totalAmount = TempData["TotalAmount"];
     var beforeGstAmount = TempData["AmountBeforeGst"];
-    var gstAmount = TempData["GstAmount"];
+    var cgstAmount = TempData["CGstAmount"];
+    var IgstAmount = TempData["IGSTAmount"];
+    var UtgstAmount = TempData["UTGSTAmount"];
     var invoiceId = TempData["InvoiceId"];
     var dateOfPurchase = TempData["DateOfPurchase"];
     var discount = TempData["discount"];
@@ -64,6 +66,9 @@
         p {
             margin: -30px 1px 10px;
         }
+            p.text-adjust {
+                margin-top: 5px;
+            }
     </style>
 </head>
 <body>
@@ -128,7 +133,9 @@
                                             <td><strong>MRP</strong></td>
                                             <td><strong>RATE</strong></td>
                                             <td><strong>DISCOUNT (%)</strong></td>
-                                            <td><strong>GST (%)</strong></td>
+                                            <td><strong>CGST (%)</strong></td>
+                                            <td><strong>UTGST (%)</strong></td>
+                                            <td><strong>IGST (%)</strong></td>
                                             <td><strong>Amount</strong></td>
                                             <td></td>
                                         </tr>
@@ -146,7 +153,9 @@
                                             <td class="text-left">@item.MRP</td>
                                             <td class="text-left">@item.Rate</td>
                                             <td class="text-left">@item.Discount</td>
-                                            <td class="text-left">@item.GstPercent</td>
+                                            <td class="text-left">@item.CGstPercent</td>
+                                            <td class="text-left">@item.UTGST</td>
+                                            <td class="text-left">@item.IGST</td>
                                             <td class="text-left">@item.TotalAmount</td>
                                         </tr>
                                         }
@@ -165,23 +174,32 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 text-left">
-                            THANKING YOU FOR GOOD SUPPORT
+                            <br /><br />
+                            <p style="font-size:small;"> <b>Bank Detail </b><br />Bank Name:HDFC Bank, Ph-VII, Mohali <br />A/c No: 50200033009320 <br /> IFSC CODE: HDFC0001307</p>
                         </div>
                         <div class="col-md-6 text-right">
-                            Total  : @beforeGstAmount <br />  GST 12% : @gstAmount<br />Discount : @discount  <br /> Invoice Amount: @(discountedAmount == 0 ? totalAmount: discountedAmount)
+                            Total  : @beforeGstAmount <br />  GST 12% : @gstAmount<br /> -----------------<br />Total Amount After GST: @{var totalGst =Convert.ToDouble(beforeGstAmount) + Convert.ToDouble(gstAmount);}
+                            @totalGst<br /> ------------<br />Discount : @discount  <br /> Invoice Amount: @(discountedAmount == 0 ? totalAmount: discountedAmount)
                         </div>
                         <div class="col-md-12" style="border-bottom:dotted 2px #000">
                             &nbsp;
                         </div>
-                        <div class="col-md-12 text-right">
+                        <div class="col-md-6 ">
+                            <p class="text-adjust">@figureAmount <br /> AMOUNT DUE ON  : @dateOfPurchase <br />Intrest 24% will be charged after Due Date. <br />Subject to @distributorAddress Jurisdiction</p>
+                        </div>
+                        <div class="col-md-6 text-right">
                             <h6>Payable Net Amount=  @(discountedAmount == 0 ? totalAmount: discountedAmount)/-</h6>
+                            <br />
+                            For NEELKANTH ENTERPRISES
+
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            Auth. Signatory
                         </div>
-                        <div class="col-md-12">
-                            <p>@figureAmount <br /> AMOUNT DUE ON  : @dateOfPurchase <br />Intrest 24% will be charged after Due Date. <br />Subject to @distributorAddress Jurisdiction</p>
-                        </div>
-                        <div class="col-md-12 text-right" style="text-align:center">
-                            <h4>For @distributorName</h4>
-                        </div>
+                        
+                        <hr />
                     </div>
                 </div>
             </div>

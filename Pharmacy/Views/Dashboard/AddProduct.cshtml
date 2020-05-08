@@ -1,0 +1,119 @@
+﻿@model Pharmacy.ViewModels.ProductViewModel
+@{
+    ViewBag.Title = "AddProduct";
+}
+
+<style>
+    .container.add-product {
+        margin: 100px 0px 0px 190px;
+    }
+    button.btn.btn-sm.btn-danger.waves-effect.waves-themed {
+        margin: 50px -6px 0px 56px;
+    }
+    span.field-validation-error {
+        color: red;
+    }
+</style>
+    <div class="container add-product" >
+        <div class="row">
+            <div class="col-xl-12">
+                <div id="panel-4" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Add <span class="fw-300"><i>Supplier</i></span>
+                        </h2>
+                        <div class="panel-toolbar">
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        @using (Html.BeginForm("AddProduct", "Dashboard", FormMethod.Post))
+                        {
+                         
+                            <div class="panel-content">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">'Product Name</label>
+                                            @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m=> m.ProductName)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">HSN Number</label>
+                                            @Html.TextBoxFor(m => m.HSNNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m => m.HSNNumber)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">Batch Number</label>
+                                            @Html.TextBoxFor(m => m.BatchNumber, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m => m.BatchNumber)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">Expiry Date</label>
+                                            @Html.TextBoxFor(m => m.ExpiryDate, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m => m.ExpiryDate)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">MRP</label>
+                                            @Html.TextBoxFor(m => m.MRP, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m => m.MRP)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">Rate</label>
+                                            @Html.TextBoxFor(m => m.Rate, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m => m.Rate)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" fo r="example-select">Selling Price</label>
+                                            @Html.TextBoxFor(m => m.SP, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                            @Html.ValidationMessageFor(m => m.SP)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">CGST</label>
+                                            @Html.TextBoxFor(m => m.CGST, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">IGST</label>
+                                            @Html.TextBoxFor(m => m.IGST, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",  })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="example-select">UTGST</label>
+                                            @Html.TextBoxFor(m => m.UTGST, new { @class = "form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0",})
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="">
+                                            <button type="submit" class="btn btn-sm btn-danger waves-effect waves-themed">Save Details</button>
+                                        </div>
+                                        <div class="panel-toolbar">
+                                            <button type="reset" class="btn btn-sm btn-danger waves-effect waves-themed">Reset Details</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

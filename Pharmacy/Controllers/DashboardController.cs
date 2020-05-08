@@ -242,7 +242,7 @@ namespace Pharmacy.Controllers
                         Quantity = item.Quantity,
                         CGST = item.CGST,
                         IGST = item.IGST,
-                        UTGST = item.IGST,
+                        UTGST = item.UTGST,
                         productId = id,
                         SupplierId = supplierId
                     };
@@ -261,9 +261,12 @@ namespace Pharmacy.Controllers
 
         public ActionResult ViewAllProducts()
         {
+
+            TempData["message"] = TempData["Delete"];
             var listProducts = (from listProduct in BaseClass.dbEntities.Products
                                 select new ListProductViewModel
                                 {
+                                    Id = listProduct.Id,
                                     ProductName = listProduct.ProductName,
                                     HSNNumber = listProduct.HSNNumber,
                                     BatchNumber = listProduct.BatchNumber,
@@ -388,7 +391,7 @@ namespace Pharmacy.Controllers
             BaseClass.dbEntities.PurchaseInvoices.Remove(invoiceByInvoiceId);
             BaseClass.dbEntities.SaveChanges();
 
-            return RedirectToAction("DeletePurchaseAndInvoiceDetails");
+            return RedirectToAction("ViewSuppliers");
         }
 
         public ActionResult GetInvoiceDetailsBySupplierId(int? invoiceId, int? supplierId)
@@ -415,7 +418,9 @@ namespace Pharmacy.Controllers
                                                       select new ListOfInvoice
                                                       {
                                                           ProductName = product.ProductName,
-                                                          GstPercent = purchase.CGST,
+                                                          CGstPercent = purchase.CGST,
+                                                          IGST = purchase.IGST,
+                                                          UTGST = purchase.UTGST,
                                                           MRP = product.MRP,
                                                           Rate = product.Rate,
                                                           SellingPrice = product.SellingPrice,
@@ -426,9 +431,9 @@ namespace Pharmacy.Controllers
                                                           Batch = product.BatchNumber,
                                                           TotalAmount = purchase.price
                                                       }).ToList();
+
             return View(getInvoiceBySupplierIdAndInvoiceId);
         }
-
 
         public ActionResult AddPaymentMethod()
         {
@@ -556,6 +561,12 @@ namespace Pharmacy.Controllers
         public JsonResult AddSale(List<ProductSaleViewModel> productSale)
         {
             double? sumOfAmounts = 0;
+            double? allgstAmounts = 0;
+
+            double? totalIgstAmounts = 0;
+            double? totalCgstAmounts = 0;
+            double? totalUtgstAmounts = 0;
+
             double? originalAmount = 0;
             double? discountedAmount = 0;
             double? amountAfterDiscount = 0;
@@ -571,13 +582,29 @@ namespace Pharmacy.Controllers
                 sumOfAmounts = productSale.Select(m => m.Amount).FirstOrDefault();
             }
 
+            foreach (var item in productSale)
+            {
+                if (item.CGST != 0)
+                {
+                    allgstAmounts = (item.CGST / 100f) * item.Amount;
+                    totalCgstAmounts = allgstAmounts + totalCgstAmounts;
+                }
+                if (item.UTGST != 0)
+                {
+                    allgstAmounts = (item.UTGST / 100f) * item.Amount;
+                    totalUtgstAmounts = allgstAmounts + totalUtgstAmounts;
+                }
+                if (item.IGST != 0)
+                {
+                    allgstAmounts = (item.IGST / 100f) * item.Amount;
+                    totalIgstAmounts = allgstAmounts + totalIgstAmounts;
+                }
+
+            }   
+
             // Finding Gst Based on Given GST Percent
-            var gstNumber = productSale.Select(m => m.GST).FirstOrDefault();
-            var gstAmounts = (gstNumber / 100f) * sumOfAmounts;
-            gstAmounts = Math.Round(Convert.ToDouble(gstAmounts), 2);
-
-
-            originalAmount = Math.Round(Convert.ToDouble(gstAmounts + sumOfAmounts), 2);
+            var sumOfAllGstAmounts = totalCgstAmounts + totalIgstAmounts + totalUtgstAmounts;
+            originalAmount = sumOfAllGstAmounts + sumOfAmounts;
 
             // Discount Percentage
             if (productSale != null)
@@ -631,7 +658,7 @@ namespace Pharmacy.Controllers
                     CustomerId = distributorId,
                     CreditAmount = 0,
                     DebitAmount = amountAfterDiscount == 0 ? originalAmount : amountAfterDiscount,
-                    BalanceAmount = getLastInvoiceAmount.BalanceAmount + amountAfterDiscount == 0 ? originalAmount : amountAfterDiscount,
+                    BalanceAmount = amountAfterDiscount == 0 ? getLastInvoiceAmount.BalanceAmount + originalAmount : getLastInvoiceAmount.BalanceAmount + amountAfterDiscount,
                     InvoiceId = invoiceId,
                     Particulars = "To Sales Invoice Number " + getInvoice.InvoiceId
                 };
@@ -649,7 +676,9 @@ namespace Pharmacy.Controllers
                         price = Math.Round(Convert.ToDouble(item.Amount), 2),
                         pack = item.Pack,
                         quantity = item.Quantity,
-                        CGST = item.GST,
+                        CGST = item.CGST,
+                        SGST = item.UTGST,
+                        IGST = item.IGST,
                         discountpercentage = Convert.ToInt32(item.Discount),
                         CustomerId = distributorId,
                         productid = item.id,
@@ -708,6 +737,11 @@ namespace Pharmacy.Controllers
         public ActionResult GetInvoiceDetailsByDistributorId(int? invoiceId, int? customerId)
         {
             double? sumOfAmounts = 0;
+            double? allgstAmounts = 0;
+
+            double? totalIgstAmounts = 0;
+            double? totalCgstAmounts = 0;
+            double? totalUtgstAmounts = 0;
             var getInvoiceDetails = BaseClass.dbEntities.SalesInvoices.Where(m => m.ID == invoiceId).SingleOrDefault();
             var customerDetails = BaseClass.dbEntities.Customers.Where(m => m.id == customerId).SingleOrDefault();
             var purchaseDetails = BaseClass.dbEntities.Sales.Where(m => m.CustomerId == customerId && m.InvoiceId == invoiceId).ToList();
@@ -721,9 +755,37 @@ namespace Pharmacy.Controllers
                 sumOfAmounts = purchaseDetails.Select(m => m.price).FirstOrDefault();
             }
 
+
+            foreach (var item in purchaseDetails)
+            {
+                if (item.CGST != 0)
+                {
+                    allgstAmounts = (item.CGST / 100f) * item.price;
+                    totalCgstAmounts = allgstAmounts + totalCgstAmounts;
+                }
+                if (item.SGST != 0)
+                {
+                    allgstAmounts = (item.SGST / 100f) * item.price;
+                    totalUtgstAmounts = allgstAmounts + totalUtgstAmounts;
+                }
+                if (item.IGST != 0)
+                {
+                    allgstAmounts = (item.IGST / 100f) * item.price;
+                    totalIgstAmounts = allgstAmounts + totalIgstAmounts;
+                }
+
+            }
+
+            var sumOfAllGstAmounts = totalCgstAmounts + totalIgstAmounts + totalUtgstAmounts;
+
+            //var gstAmounts = (12 / 100f) * sumOfAmounts;
+
+            //gstAmounts = Math.Round(Convert.ToDouble(gstAmounts), 2);
+
+
+
             var convertAmount = ConvertToFigure.ConvertAmount(Convert.ToDouble(getInvoiceDetails.TotalPurchaseAmount));
-            var gstAmounts = (12 / 100f) * sumOfAmounts;
-            gstAmounts = Math.Round(Convert.ToDouble(gstAmounts), 2);
+            
 
             TempData["DistributorName"] = customerDetails.CustomerName;
             TempData["Phonenumber"] = customerDetails.CustomerOfficePhoneNumber;
@@ -741,7 +803,9 @@ namespace Pharmacy.Controllers
             TempData["TotalConvertedAmount"] = convertAmount;
             TempData["AmountBeforeGst"] = sumOfAmounts;
             TempData["TotalAmount"] = getInvoiceDetails.TotalPurchaseAmount;
-            TempData["GstAmount"] = gstAmounts;
+            TempData["CGstAmount"] = totalCgstAmounts;
+            TempData["IGSTAmount"] = totalIgstAmounts;
+            TempData["UTGSTAmount"] = totalUtgstAmounts;
             TempData["discount"] = getInvoiceDetails.DiscountedAmount;
             TempData["discountedAmount"] = getInvoiceDetails.TotalDiscount;
 
@@ -752,7 +816,9 @@ namespace Pharmacy.Controllers
                                              select new ListOfInvoice
                                              {
                                                  ProductName = product.ProductName,
-                                                 GstPercent = sales.CGST,
+                                                 CGstPercent = sales.CGST,
+                                                 UTGST = sales.SGST,
+                                                 IGST = sales.IGST,
                                                  MRP = product.MRP,
                                                  Rate = product.SellingPrice,
                                                  SellingPrice = product.SellingPrice,
@@ -851,6 +917,107 @@ namespace Pharmacy.Controllers
         {
             var allSales = BaseClass.dbEntities.getAllSales().ToList();
             return View(allSales);
+        }
+
+        public ActionResult ProductProfilePage()
+        {
+            return View();
+        }
+
+        public ActionResult AddProduct()
+        {
+            return View(new ProductViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult AddProduct(ProductViewModel addProduct)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+                Product addNewProduct = new Product()
+                {
+                    ProductName = addProduct.ProductName,
+                    HSNNumber = addProduct.HSNNumber,
+                    BatchNumber = addProduct.BatchNumber,
+                    ExpiryDate = addProduct.ExpiryDate,
+                    MRP = addProduct.MRP,
+                    Rate = addProduct.Rate,
+                    SellingPrice = addProduct.SP,
+                    CGST = addProduct.CGST,
+                    IGST = addProduct.IGST,
+                    UTGST = addProduct.UTGST
+                };
+
+                BaseClass.dbEntities.Products.Add(addNewProduct);
+                BaseClass.dbEntities.SaveChanges();
+                return RedirectToAction("ViewAllProducts");
+            }
+
+        }
+        public ActionResult EditProduct(int id)
+        {
+            var getProductById = (from db in BaseClass.dbEntities.Products where db.Id == id select db).SingleOrDefault();
+            return View(getProductById);
+        }
+
+        [HttpPost]
+        public ActionResult EditProduct(int id, Product model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+
+                var getProductById = (from db in BaseClass.dbEntities.Products where db.Id == id select db).SingleOrDefault();
+
+                if (getProductById != null)
+                {
+                    getProductById.ProductName = model.ProductName;
+                    getProductById.HSNNumber = model.HSNNumber;
+                    getProductById.BatchNumber = model.BatchNumber;
+                    getProductById.SellingPrice = model.SellingPrice;
+                    getProductById.MRP = model.MRP;
+                    getProductById.Rate = model.Rate;
+                    getProductById.ExpiryDate = model.ExpiryDate;
+                    getProductById.CGST = model.CGST;
+                    getProductById.IGST = model.IGST;
+                    getProductById.UTGST = model.UTGST;
+
+                    BaseClass.dbEntities.Entry(getProductById).State = EntityState.Modified;
+                    BaseClass.dbEntities.SaveChanges();
+                }
+                return RedirectToAction("ViewAllProducts");
+            }
+        }
+
+        public ActionResult DeleteProduct(int id)
+        {
+
+            var getPurchaseById = BaseClass.dbEntities.purchases.Where(x => x.productId == id).ToList();
+            if (getPurchaseById.Count() > 0)
+            {
+                ViewBag["Delete"] = "You cant delete this product which have already made a purchase";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            var getSales = BaseClass.dbEntities.Sales.Where(x => x.productid == id).ToList();
+            if (getSales.Count() > 0)
+            {
+                TempData["Delete"] = "You cant delete this product which sales related to it";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            var productById = BaseClass.dbEntities.Products.Find(id);
+            BaseClass.dbEntities.Products.Remove(productById);
+            BaseClass.dbEntities.SaveChanges();
+            return RedirectToAction("ViewAllProducts");
         }
     }
 }

@@ -9,7 +9,9 @@ namespace Pharmacy.ViewModels
         public int? Quantity { get; set; }
         public double? TotalAmount { get; set; }
         public string ProductName { get; set; }
-        public int? GstPercent { get; set; }
+        public int? CGstPercent { get; set; }
+        public int? UTGST { get; set; }
+        public int? IGST { get; set; }
         public double? SellingPrice { get; set; }
         public double? MRP { get; set; }
         public double? Rate { get; set; }

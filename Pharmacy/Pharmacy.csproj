@@ -217,6 +217,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PaymentMode.cs" />
     <Compile Include="ViewModels\ProductSaleViewModel.cs" />
+    <Compile Include="ViewModels\ProductViewModel.cs" />
     <Compile Include="ViewModels\SalesLedgerViewModel.cs" />
     <Compile Include="ViewModels\SupplierLedgerViewModel.cs" />
     <Compile Include="ViewModels\SupplierProduct.cs" />
@@ -836,6 +837,9 @@
     <Content Include="Views\Dashboard\ViewAllSales.cshtml" />
     <Content Include="Views\Dashboard\ViewAllPaymentMethods.cshtml" />
     <Content Include="Views\Dashboard\EditDistributor.cshtml" />
+    <Content Include="Views\Dashboard\ProductProfilePage.cshtml" />
+    <Content Include="Views\Dashboard\AddProduct.cshtml" />
+    <Content Include="Views\Dashboard\EditProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

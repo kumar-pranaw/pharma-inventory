@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "ProductProfilePage";
+}
+
+<style>
+    .product-buttons {
+        margin: 0px 0px 0px 600px;
+    }
+</style>
+
+
+    <div class="container" style="margin:100px 0px 0px 0px">
+        <div class="product-buttons">
+            <a href="@Url.Action("AddProduct","Dashboard")" type="button" class="btn btn-primary btn-lg btn-block" style="height:100px; width:300px;">Create Product</a>
+            <a href="@Url.Action("ViewAllProducts","Dashboard")" type="button" class="btn btn-secondary btn-lg btn-block" style="height:100px; width:300px;">Edit Product</a>
+        </div>
+      
+    </div>

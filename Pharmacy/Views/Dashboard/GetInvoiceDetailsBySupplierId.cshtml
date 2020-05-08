@@ -38,7 +38,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <a href="javascript:void(0);" class="card-title collapsed" data-toggle="collapse" data-target="#js_demo_accordion-5a" aria-expanded="false">
-                                        <span>Invoice Id:  @InvoiceId | </span> <span> &nbsp; Date Of Purchase: @DateofPurchase.ToShortDateString() | </span><span> &nbsp; Total Bill Amount: @TotalAmount</span>
+                                        <span>Invoice Id:  @InvoiceId | </span> <span> &nbsp; Date Of Purchase: @DateofPurchase.ToShortDateString() | </span><span> &nbsp; Total Bill Amount: @Math.Round(Convert.ToDouble(@TotalAmount),2)</span>
                                         <span class="ml-auto">
                                             <span class="collapsed-reveal">
                                                 <i class="fal fa-minus-circle text-danger fs-xl" data-toggle="tooltip" data-placement="left" data-original-title="Collapse"></i>
@@ -63,25 +63,29 @@
                                                         <th>Quantity</th>
                                                         <th>M.R.P</th>
                                                         <th>Rate</th>
-                                                        <th>GST %</th>
+                                                        <th>CGST</th>
+                                                        <th>UTGST</th>
+                                                        <th>IGST</th>
                                                         <th>Amount</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach (var item in Model)
                                                     {
-                                                        <tr>
-                                                            <td>@item.ProductName</td>
-                                                            <td>@item.HSNNumber</td>
-                                                            <td>@item.Pack</td>
-                                                            <td>@item.Batch</td>
-                                                            <td>@item.ExpiryDate</td>
-                                                            <td>@item.Quantity</td>
-                                                            <td>@item.MRP</td>
-                                                            <td>@item.Rate</td>
-                                                            <td>@item.GstPercent</td>
-                                                            <td>@item.TotalAmount</td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td>@item.ProductName</td>
+                                                        <td>@item.HSNNumber</td>
+                                                        <td>@item.Pack</td>
+                                                        <td>@item.Batch</td>
+                                                        <td>@item.ExpiryDate</td>
+                                                        <td>@item.Quantity</td>
+                                                        <td>@item.MRP</td>
+                                                        <td>@Math.Round(Convert.ToDouble(@item.Rate),2)</td>
+                                                        <td>@item.CGstPercent</td>
+                                                        <td>@item.UTGST</td>
+                                                        <td>@item.IGST</td>
+                                                        <td>@item.TotalAmount</td>
+                                                    </tr>
                                                         totalAmount = item.TotalAmount + totalAmount;
                                                         totalQty = item.Quantity + totalQty;
                                                     }
@@ -99,14 +103,14 @@
                                     <thead>
                                         <tr>
                                             <th>Total GST Amount</th>
-                                            <th>Grand Total Amount</th>
+                                            <th>Total Amount</th>
                                             <th>Total Items</th>
                                             <th>Total Qty.</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @{
-                                            var gstAmount = TotalAmount - totalAmount;
+                                            var gstAmount = @Math.Round(Convert.ToDouble(TotalAmount - totalAmount),2);
                                             totalItems = Model.Count();
                                           }
                                     <td>@gstAmount</td>

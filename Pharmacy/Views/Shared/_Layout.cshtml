@@ -68,9 +68,8 @@
                         Payment Mode
                     </a>
                     <div class="dropdown-menu sm-menu">
-                        <a class="dropdown-item" href="#">service2</a>
-                        <a class="dropdown-item" href="#">service 2</a>
-                        <a class="dropdown-item" href="#">service 3</a>
+                        <a class="dropdown-item" href="@Url.Action("AddPaymentMethod","Dashboard")">Add Payment Methods</a>
+                        <a class="dropdown-item" href="@Url.Action("ViewAllPaymentMethods","Dashboard")">View Payment Method</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown dmenu">
@@ -81,7 +80,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Product Management</a>
+                    <a class="nav-link" href="@Url.Action("ProductProfilePage","Dashboard")">Product Management</a>
                 </li>
 
             </ul>

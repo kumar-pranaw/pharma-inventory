@@ -36,7 +36,6 @@
                                     <th>IGST</th>
                                     <th>Discount</th>
                                     <th>Amount</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,7 +125,9 @@
         var Quantity = $("#Quantity");
         var Mrp = $("#MRP");
         var SP = $("#SP");
-        var GST = $("#GST");
+        var CGST = $("#CGST");
+        var UTGST = $("#UTGST");
+        var IGST = $("#IGST");
         var Discount = $("#Discount");
         var Amount = $("#Amount");
         var productName = $("#itemDropDown option:selected");
@@ -163,9 +164,17 @@
         cell = $(row.insertCell(-1));
         cell.html(SP.val());
       
-        //Add GST cell.
+        //Add CGST cell.
         cell = $(row.insertCell(-1));
-        cell.html(GST.val());
+        cell.html(CGST.val());
+
+        //Add UTGST cell.
+        cell = $(row.insertCell(-1));
+        cell.html(UTGST.val());
+
+        //Add IGST cell.
+        cell = $(row.insertCell(-1));
+        cell.html(IGST.val());
 
         //Add Discount cell.
         cell = $(row.insertCell(-1));
@@ -192,7 +201,9 @@
         Quantity.val("");
         Mrp.val("");
         SP.val("");
-        GST.val("");
+        CGST.val("");
+        UTGST.val("");
+        IGST.val("");
         Discount.val("");
         Amount.val("");
     });
@@ -225,9 +236,11 @@
             purchaseProducts.Quantity = row.find("TD").eq(5).html();
             purchaseProducts.MRP = row.find("TD").eq(6).html();
             purchaseProducts.SP = row.find("TD").eq(7).html();
-            purchaseProducts.gst = row.find("TD").eq(8).html();
-            purchaseProducts.Discount = row.find("TD").eq(9).html();
-            purchaseProducts.Amount = row.find("TD").eq(10).html();
+            purchaseProducts.CGST = row.find("TD").eq(8).html();
+            purchaseProducts.UTGST = row.find("TD").eq(9).html();
+            purchaseProducts.IGST = row.find("TD").eq(10).html();
+            purchaseProducts.Discount = row.find("TD").eq(11).html();
+            purchaseProducts.Amount = row.find("TD").eq(12).html();
             products.push(purchaseProducts);
         });
         console.log(products);

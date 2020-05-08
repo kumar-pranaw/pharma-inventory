@@ -50,10 +50,10 @@
                 <tr>
                     <td><a href="@Url.Action("GetInvoiceDetailsBySupplierId", "Dashboard", new { invoiceId = item.id, supplierId = item.SupplierId })">@item.InvoiceId</a></td>
                     <td>@item.DateOfPurchase.Value.ToShortDateString()</td>
-                    <td>@item.TotalPurchaseAmount</td>
+                    <td>@Math.Round(Convert.ToDouble(@item.TotalPurchaseAmount),2)</td>
                     <td>
-                        <a href="@Url.Action("DeletePurchaseAndInvoiceDetails", "Dashboard", new { invoiceId = item.id })">
-                            <button type="submit" class="btn btn-sm btn-danger">Delete This Purchase</button>
+                        <a href="@Url.Action("DeletePurchaseAndInvoiceDetails", "Dashboard", new { invoiceId = item.id })" type="button" class="btn btn-sm btn-danger">
+                            Delete This Purchase
                         </a>
                         
                     </td>
