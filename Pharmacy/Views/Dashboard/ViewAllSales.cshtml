@@ -10,7 +10,7 @@
             <th>Product Name</th>
             <th>Date Of Purchase</th>
             <th>Batch Number</th>
-            <th>Selling Price</th>
+            <th>MRP</th>
             @*<th>Cost Price</th>*@
             <th>Expiry Date</th>
             <th>Quantity</th>
@@ -24,7 +24,7 @@
                 <td>@item.ProductName</td>
                 <td>@item.DateOfPurchase</td>
                 <td>@item.BatchNumber</td>
-                <td>@item.SellingPrice</td>
+                <td>@Math.Round(Convert.ToDouble(@item.Rate),2)</td>
                 @*<td>@item.CostPrice</td>*@
                 <td>@item.ExpiryDate</td>
                 <td>@item.Quantity</td>

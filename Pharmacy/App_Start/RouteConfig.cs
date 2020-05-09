@@ -17,6 +17,7 @@ namespace Pharmacy
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Admin", action = "Login", id = UrlParameter.Optional }
+                //defaults: new { controller = "Dashboard", action = "Home", id = UrlParameter.Optional }
             );
         }
     }

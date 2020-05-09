@@ -777,6 +777,7 @@ namespace Pharmacy.Controllers
             }
 
             var sumOfAllGstAmounts = totalCgstAmounts + totalIgstAmounts + totalUtgstAmounts;
+            var totalAmountAfterGst = sumOfAllGstAmounts + sumOfAmounts;
 
             //var gstAmounts = (12 / 100f) * sumOfAmounts;
 
@@ -808,6 +809,7 @@ namespace Pharmacy.Controllers
             TempData["UTGSTAmount"] = totalUtgstAmounts;
             TempData["discount"] = getInvoiceDetails.DiscountedAmount;
             TempData["discountedAmount"] = getInvoiceDetails.TotalDiscount;
+            TempData["totalAmountAfterGst"] = totalAmountAfterGst;
 
             var getInvoiceByDistributorId = (from invoice in BaseClass.dbEntities.SalesInvoices
                                              join sales in BaseClass.dbEntities.Sales on invoice.ID equals sales.InvoiceId
@@ -820,7 +822,7 @@ namespace Pharmacy.Controllers
                                                  UTGST = sales.SGST,
                                                  IGST = sales.IGST,
                                                  MRP = product.MRP,
-                                                 Rate = product.SellingPrice,
+                                                 Rate = product.Rate,
                                                  SellingPrice = product.SellingPrice,
                                                  ExpiryDate = product.ExpiryDate,
                                                  HSNNumber = product.HSNNumber,
@@ -1003,7 +1005,7 @@ namespace Pharmacy.Controllers
             var getPurchaseById = BaseClass.dbEntities.purchases.Where(x => x.productId == id).ToList();
             if (getPurchaseById.Count() > 0)
             {
-                ViewBag["Delete"] = "You cant delete this product which have already made a purchase";
+                TempData["Delete"] = "You cant delete this product which have already made a purchase";
                 return RedirectToAction("ViewAllProducts");
             }
 
@@ -1018,6 +1020,11 @@ namespace Pharmacy.Controllers
             BaseClass.dbEntities.Products.Remove(productById);
             BaseClass.dbEntities.SaveChanges();
             return RedirectToAction("ViewAllProducts");
+        }
+
+        public ActionResult DbBackup()
+        {
+            return View();
         }
     }
 }

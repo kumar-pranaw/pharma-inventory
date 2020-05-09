@@ -12,13 +12,15 @@
     var figureAmount = TempData["TotalConvertedAmount"];
     var totalAmount = TempData["TotalAmount"];
     var beforeGstAmount = TempData["AmountBeforeGst"];
-    var cgstAmount = TempData["CGstAmount"];
-    var IgstAmount = TempData["IGSTAmount"];
-    var UtgstAmount = TempData["UTGSTAmount"];
+    var cgstAmount = Convert.ToDouble(TempData["CGstAmount"]);
+    var IgstAmount = Convert.ToDouble(TempData["IGSTAmount"]);
+    var UtgstAmount = Convert.ToDouble(TempData["UTGSTAmount"]);
     var invoiceId = TempData["InvoiceId"];
     var dateOfPurchase = TempData["DateOfPurchase"];
     var discount = TempData["discount"];
     var discountedAmount = Convert.ToDouble(TempData["discountedAmount"]);
+    var totalAmountAfterGst = Convert.ToDouble(TempData["totalAmountAfterGst"]);
+    var attheRate = "@";
 }
 
 <!DOCTYPE HTML>
@@ -96,21 +98,24 @@
                 <table>
                     <tr>
                         <td>
-                            M/S Neelkanth Enterprises<br>
-                            SCO 622, FIRST FLOOR<br>
-                            CHANDIGARH (Punjab 160047 Dist: Chandigarh)<br>
+                          <b>  Neelkanth Enterprises<br>
+                            SCO 622, 1st FLOOR, Kesho Ram Complex<br>
+                            Sector 45-C, Chandigarh - 160047
+                            Mob.: 9877106362, 9914698080 <br /> Email : ramanjnj1@gmail.com</b><br>
                         </td>
                         <td class="address" style="padding: 0px 0px 0px 71px; text-align:left">
-                            D.L. No.: 7982-7983 <br />
-                            GST No. : 04ADSPS9111K1Z2 <br />
-                            P.S. No.: 0
-                            THROUGH: POST PARCEL
+                            <b>
+                                D.L. No.: 7982-2020/0BW <br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7983-2020/BW<br />
+                                GST No. : 04ADSPS9111K1Z2
+                            </b><br />
                         </td>
                         <td class="phone" style="padding: 0px 0px 0px 71px; text-align:left">
-                            INV NO.: @invoiceId <br />
-                            DATE: @dateOfPurchase <br />
-                            CASES: 0 <br />
-                            G.R. NO.:
+                            <b>
+                                INV NO.: @invoiceId <br />
+                                DATE: @dateOfPurchase
+                            </b><br />
                         </td>
                     </tr>
                 </table>
@@ -150,7 +155,7 @@
                                             <td class="text-left">@item.Batch</td>
                                             <td class="text-left">@item.ExpiryDate</td>
                                             <td class="text-left">@item.HSNNumber</td>
-                                            <td class="text-left">@item.MRP</td>
+                                            <td class="text-left"> @Math.Round(Convert.ToDouble(@item.MRP),2)</td>
                                             <td class="text-left">@item.Rate</td>
                                             <td class="text-left">@item.Discount</td>
                                             <td class="text-left">@item.CGstPercent</td>
@@ -175,20 +180,26 @@
                     <div class="row">
                         <div class="col-md-6 text-left">
                             <br /><br />
-                            <p style="font-size:small;"> <b>Bank Detail </b><br />Bank Name:HDFC Bank, Ph-VII, Mohali <br />A/c No: 50200033009320 <br /> IFSC CODE: HDFC0001307</p>
+                            <p style="font-size:small;"> <b>Bank Detail <br />Bank Name:HDFC Bank, Ph-VII, Mohali <br />A/c No: 50200033009320 <br /> IFSC CODE: HDFC0001307</b></p>
                         </div>
                         <div class="col-md-6 text-right">
-                            Total  : @beforeGstAmount <br />  GST 12% : @gstAmount<br /> -----------------<br />Total Amount After GST: @{var totalGst =Convert.ToDouble(beforeGstAmount) + Convert.ToDouble(gstAmount);}
-                            @totalGst<br /> ------------<br />Discount : @discount  <br /> Invoice Amount: @(discountedAmount == 0 ? totalAmount: discountedAmount)
+                            Total  : @Math.Round(Convert.ToDouble(@beforeGstAmount),2) <br /> CGST : @Math.Round(Convert.ToDouble(@cgstAmount), 2)<br /> UTGST: @Math.Round(Convert.ToDouble(@UtgstAmount), 2) <br /> IGST: @Math.Round(Convert.ToDouble(@IgstAmount), 2)<br />  -----------------<br />Total Amount After GST: @Math.Round(Convert.ToDouble(@totalAmountAfterGst), 2)
+                            <br /> ------------<br />Discount : @discount  <br /> Invoice Amount: @(discountedAmount == 0 ? @Math.Round(Convert.ToDouble(totalAmount), 2): @Math.Round(Convert.ToDouble(discountedAmount),2))
                         </div>
                         <div class="col-md-12" style="border-bottom:dotted 2px #000">
                             &nbsp;
                         </div>
                         <div class="col-md-6 ">
                             <p class="text-adjust">@figureAmount <br /> AMOUNT DUE ON  : @dateOfPurchase <br />Intrest 24% will be charged after Due Date. <br />Subject to @distributorAddress Jurisdiction</p>
+                            <h4>Terms & Conditions:</h4>
+                            <ol>
+                                <li>Our risk & responsibility ceases when the goods are delivered & dispatched</li>
+                                <li>Interest @attheRate 24% p.a. will be charges if bill is not paid within 15 days</li>
+                                <li>All disputes are subject to Chandigarh Jurisdiction</li>
+                            </ol>
                         </div>
                         <div class="col-md-6 text-right">
-                            <h6>Payable Net Amount=  @(discountedAmount == 0 ? totalAmount: discountedAmount)/-</h6>
+                            <h6>Payable Net Amount=  @(discountedAmount == 0 ? @Math.Round(Convert.ToDouble(totalAmount),2): @Math.Round(Convert.ToDouble(discountedAmount),2))/-</h6>
                             <br />
                             For NEELKANTH ENTERPRISES
 
