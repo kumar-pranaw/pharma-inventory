@@ -12,6 +12,7 @@ namespace Pharmacy.ViewModels
         public int? CGstPercent { get; set; }
         public int? UTGST { get; set; }
         public int? IGST { get; set; }
+        public int? Free { get; set; }
         public double? SellingPrice { get; set; }
         public double? MRP { get; set; }
         public double? Rate { get; set; }

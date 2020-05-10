@@ -14,14 +14,6 @@ namespace Pharmacy.Models
     
     public partial class SalesInvoice
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SalesInvoice()
-        {
-            this.Ledgers = new HashSet<Ledger>();
-            this.Sales = new HashSet<Sale>();
-            this.SalesLedgers = new HashSet<SalesLedger>();
-        }
-    
         public int ID { get; set; }
         public string InvoiceId { get; set; }
         public Nullable<int> CustomerId { get; set; }
@@ -31,11 +23,5 @@ namespace Pharmacy.Models
         public Nullable<double> DiscountedAmount { get; set; }
     
         public virtual Customer Customer { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ledger> Ledgers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesLedger> SalesLedgers { get; set; }
     }
 }

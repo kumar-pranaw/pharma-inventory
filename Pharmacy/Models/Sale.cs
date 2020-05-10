@@ -26,9 +26,9 @@ namespace Pharmacy.Models
         public Nullable<int> CustomerId { get; set; }
         public Nullable<int> discountpercentage { get; set; }
         public Nullable<int> InvoiceId { get; set; }
+        public Nullable<int> Free { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual Product Product { get; set; }
-        public virtual SalesInvoice SalesInvoice { get; set; }
     }
 }

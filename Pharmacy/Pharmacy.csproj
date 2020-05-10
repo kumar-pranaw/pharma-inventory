@@ -137,76 +137,76 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Auth.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Customer.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getAllPurchases_Result.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getAllSales_Result.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getLedgerByDateRange_Result.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getPurcaseByDateRangeAndSupplierId_Result.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getSalesByDateRangeAndSupplierId_Result.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getSalesLedgerByDateRange_Result.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Ledger.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment_Mode.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PharmaEntities.Context.cs">
+    <Compile Include="Models\Pharma.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>PharmaEntities.Context.tt</DependentUpon>
+      <DependentUpon>Pharma.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PharmaEntities.cs">
+    <Compile Include="Models\Pharma.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PharmaEntities.Designer.cs">
+    <Compile Include="Models\Pharma.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>PharmaEntities.edmx</DependentUpon>
+      <DependentUpon>Pharma.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Product.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\purchase.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseInvoice.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseLedger.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Sale.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SalesInvoice.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SalesLedger.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\YourTable.cs">
-      <DependentUpon>PharmaEntities.tt</DependentUpon>
+      <DependentUpon>Pharma.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AddProductViewModel.cs" />
@@ -683,15 +683,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\PharmaEntities.Context.tt">
+    <Content Include="Models\Pharma.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PharmaEntities.edmx</DependentUpon>
-      <LastGenOutput>PharmaEntities.Context.cs</LastGenOutput>
+      <DependentUpon>Pharma.edmx</DependentUpon>
+      <LastGenOutput>Pharma.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\PharmaEntities.tt">
+    <Content Include="Models\Pharma.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PharmaEntities.edmx</DependentUpon>
-      <LastGenOutput>PharmaEntities.cs</LastGenOutput>
+      <DependentUpon>Pharma.edmx</DependentUpon>
+      <LastGenOutput>Pharma.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -776,12 +776,12 @@
     <Content Include="Content\webfonts\summernote.eot" />
     <Content Include="Content\webfonts\summernote.ttf" />
     <Content Include="Content\webfonts\summernote.woff" />
-    <EntityDeploy Include="Models\PharmaEntities.edmx">
+    <EntityDeploy Include="Models\Pharma.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>PharmaEntities.Designer.cs</LastGenOutput>
+      <LastGenOutput>Pharma.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\PharmaEntities.edmx.diagram">
-      <DependentUpon>PharmaEntities.edmx</DependentUpon>
+    <Content Include="Models\Pharma.edmx.diagram">
+      <DependentUpon>Pharma.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

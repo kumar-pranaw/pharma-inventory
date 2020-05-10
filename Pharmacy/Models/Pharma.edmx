@@ -81,6 +81,7 @@
           <Property Name="InvoiceId" Type="int" />
           <Property Name="IGST" Type="int" />
           <Property Name="UTGST" Type="int" />
+          <Property Name="Free" Type="int" />
         </EntityType>
         <EntityType Name="PurchaseInvoice">
           <Key>
@@ -121,6 +122,7 @@
           <Property Name="CustomerId" Type="int" />
           <Property Name="discountpercentage" Type="int" />
           <Property Name="InvoiceId" Type="int" />
+          <Property Name="Free" Type="int" />
         </EntityType>
         <EntityType Name="SalesInvoice">
           <Key>
@@ -169,7 +171,9 @@
           <Property Name="CharID" Type="varchar" MaxLength="5" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Association Name="FK__SalesInvo__Custo__6FE99F9F">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -181,7 +185,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ledger_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -189,18 +195,6 @@
             </Principal>
             <Dependent Role="Ledger">
               <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ledger_SalesInvoice">
-          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
-          <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Ledger">
-              <PropertyRef Name="InvoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -261,7 +255,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PurchaseLedger_Supplier">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Supplier">
@@ -273,7 +269,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Sales_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -285,7 +283,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Sales_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -296,20 +296,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Sales_SalesInvoice">
-          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
-          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Sales">
-              <PropertyRef Name="InvoiceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SalesLedger_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -317,18 +307,6 @@
             </Principal>
             <Dependent Role="SalesLedger">
               <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalesLedger_SalesInvoice">
-          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
-          <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SalesLedger">
-              <PropertyRef Name="InvoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -376,10 +354,6 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Ledger" EntitySet="Ledger" />
           </AssociationSet>
-          <AssociationSet Name="FK_Ledger_SalesInvoice" Association="Self.FK_Ledger_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-            <End Role="Ledger" EntitySet="Ledger" />
-          </AssociationSet>
           <AssociationSet Name="FK_purchase_productid" Association="Self.FK_purchase_productid">
             <End Role="Product" EntitySet="Product" />
             <End Role="purchase" EntitySet="purchase" />
@@ -408,16 +382,8 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
-          <AssociationSet Name="FK_Sales_SalesInvoice" Association="Self.FK_Sales_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-            <End Role="Sales" EntitySet="Sales" />
-          </AssociationSet>
           <AssociationSet Name="FK_SalesLedger_Customer" Association="Self.FK_SalesLedger_Customer">
             <End Role="Customer" EntitySet="Customer" />
-            <End Role="SalesLedger" EntitySet="SalesLedger" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalesLedger_SalesInvoice" Association="Self.FK_SalesLedger_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoice" />
             <End Role="SalesLedger" EntitySet="SalesLedger" />
           </AssociationSet>
         </EntityContainer>
@@ -468,7 +434,6 @@
           <Property Name="Balance" Type="Int64" />
           <Property Name="CustomerId" Type="Int32" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_Ledger_Customer" FromRole="Ledger" ToRole="Customer" />
-          <NavigationProperty Name="SalesInvoice" Relationship="Self.FK_Ledger_SalesInvoice" FromRole="Ledger" ToRole="SalesInvoice" />
         </EntityType>
         <EntityType Name="Payment_Mode">
           <Key>
@@ -510,6 +475,7 @@
           <Property Name="InvoiceId" Type="Int32" />
           <Property Name="IGST" Type="Int32" />
           <Property Name="UTGST" Type="Int32" />
+          <Property Name="Free" Type="Int32" />
           <NavigationProperty Name="Product" Relationship="Self.FK_purchase_productid" FromRole="purchase" ToRole="Product" />
           <NavigationProperty Name="PurchaseInvoice" Relationship="Self.FK_purchase_PurchaseInvoice" FromRole="purchase" ToRole="PurchaseInvoice" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_purchase_Supplier" FromRole="purchase" ToRole="Supplier" />
@@ -557,9 +523,9 @@
           <Property Name="CustomerId" Type="Int32" />
           <Property Name="discountpercentage" Type="Int32" />
           <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="Free" Type="Int32" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_Sales_Customer" FromRole="Sales" ToRole="Customer" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Sales_Product" FromRole="Sales" ToRole="Product" />
-          <NavigationProperty Name="SalesInvoice" Relationship="Self.FK_Sales_SalesInvoice" FromRole="Sales" ToRole="SalesInvoice" />
         </EntityType>
         <EntityType Name="SalesInvoice">
           <Key>
@@ -573,9 +539,6 @@
           <Property Name="TotalDiscount" Type="Double" />
           <Property Name="DiscountedAmount" Type="Double" />
           <NavigationProperty Name="Customer" Relationship="Self.FK__SalesInvo__Custo__6FE99F9F" FromRole="SalesInvoice" ToRole="Customer" />
-          <NavigationProperty Name="Ledgers" Relationship="Self.FK_Ledger_SalesInvoice" FromRole="SalesInvoice" ToRole="Ledger" />
-          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_SalesInvoice" FromRole="SalesInvoice" ToRole="Sales" />
-          <NavigationProperty Name="SalesLedgers" Relationship="Self.FK_SalesLedger_SalesInvoice" FromRole="SalesInvoice" ToRole="SalesLedger" />
         </EntityType>
         <EntityType Name="SalesLedger">
           <Key>
@@ -590,7 +553,6 @@
           <Property Name="InvoiceId" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_SalesLedger_Customer" FromRole="SalesLedger" ToRole="Customer" />
-          <NavigationProperty Name="SalesInvoice" Relationship="Self.FK_SalesLedger_SalesInvoice" FromRole="SalesLedger" ToRole="SalesInvoice" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -616,7 +578,9 @@
           <Property Name="CharID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <Association Name="FK__SalesInvo__Custo__6FE99F9F">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -628,7 +592,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ledger_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -640,7 +606,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Sales_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -652,7 +620,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SalesLedger_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -660,18 +630,6 @@
             </Principal>
             <Dependent Role="SalesLedger">
               <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ledger_SalesInvoice">
-          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
-          <End Role="Ledger" Type="Self.Ledger" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Ledger">
-              <PropertyRef Name="InvoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -690,7 +648,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Sales_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -744,7 +704,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PurchaseLedger_Supplier">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="PurchaseLedger" Type="Self.PurchaseLedger" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Supplier">
@@ -752,30 +714,6 @@
             </Principal>
             <Dependent Role="PurchaseLedger">
               <PropertyRef Name="SupplierId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sales_SalesInvoice">
-          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
-          <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Sales">
-              <PropertyRef Name="InvoiceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalesLedger_SalesInvoice">
-          <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1" />
-          <End Role="SalesLedger" Type="Self.SalesLedger" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesInvoice">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SalesLedger">
-              <PropertyRef Name="InvoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -809,10 +747,6 @@
             <End Role="Customer" EntitySet="Customers" />
             <End Role="SalesLedger" EntitySet="SalesLedgers" />
           </AssociationSet>
-          <AssociationSet Name="FK_Ledger_SalesInvoice" Association="Self.FK_Ledger_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-            <End Role="Ledger" EntitySet="Ledgers" />
-          </AssociationSet>
           <AssociationSet Name="FK_purchase_productid" Association="Self.FK_purchase_productid">
             <End Role="Product" EntitySet="Products" />
             <End Role="purchase" EntitySet="purchases" />
@@ -836,14 +770,6 @@
           <AssociationSet Name="FK_PurchaseLedger_Supplier" Association="Self.FK_PurchaseLedger_Supplier">
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="PurchaseLedger" EntitySet="PurchaseLedgers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sales_SalesInvoice" Association="Self.FK_Sales_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-            <End Role="Sales" EntitySet="Sales" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalesLedger_SalesInvoice" Association="Self.FK_SalesLedger_SalesInvoice">
-            <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-            <End Role="SalesLedger" EntitySet="SalesLedgers" />
           </AssociationSet>
           <FunctionImport Name="getAllPurchases" ReturnType="Collection(dbPharmaModel.getAllPurchases_Result)" />
           <FunctionImport Name="getAllSales" ReturnType="Collection(dbPharmaModel.getAllSales_Result)" />
@@ -1006,6 +932,7 @@
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="IGST" ColumnName="IGST" />
                 <ScalarProperty Name="UTGST" ColumnName="UTGST" />
+                <ScalarProperty Name="Free" ColumnName="Free" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1049,6 +976,7 @@
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="discountpercentage" ColumnName="discountpercentage" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Free" ColumnName="Free" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

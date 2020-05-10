@@ -243,6 +243,7 @@ namespace Pharmacy.Controllers
                         CGST = item.CGST,
                         IGST = item.IGST,
                         UTGST = item.UTGST,
+                        Free = item.Free,
                         productId = id,
                         SupplierId = supplierId
                     };
@@ -423,6 +424,7 @@ namespace Pharmacy.Controllers
                                                           UTGST = purchase.UTGST,
                                                           MRP = product.MRP,
                                                           Rate = product.Rate,
+                                                          Free = purchase.Free,
                                                           SellingPrice = product.SellingPrice,
                                                           ExpiryDate = product.ExpiryDate,
                                                           HSNNumber = product.HSNNumber,
@@ -678,6 +680,7 @@ namespace Pharmacy.Controllers
                         quantity = item.Quantity,
                         CGST = item.CGST,
                         SGST = item.UTGST,
+                        Free = item.Free,
                         IGST = item.IGST,
                         discountpercentage = Convert.ToInt32(item.Discount),
                         CustomerId = distributorId,
@@ -826,6 +829,7 @@ namespace Pharmacy.Controllers
                                                  SellingPrice = product.SellingPrice,
                                                  ExpiryDate = product.ExpiryDate,
                                                  HSNNumber = product.HSNNumber,
+                                                 Free = sales.Free,
                                                  Quantity = sales.quantity,
                                                  Pack = sales.pack,
                                                  Batch = product.BatchNumber,

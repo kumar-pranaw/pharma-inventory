@@ -25,6 +25,7 @@ namespace Pharmacy.Models
         public Nullable<int> InvoiceId { get; set; }
         public Nullable<int> IGST { get; set; }
         public Nullable<int> UTGST { get; set; }
+        public Nullable<int> Free { get; set; }
     
         public virtual Product Product { get; set; }
         public virtual PurchaseInvoice PurchaseInvoice { get; set; }

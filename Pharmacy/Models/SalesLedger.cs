@@ -24,6 +24,5 @@ namespace Pharmacy.Models
         public Nullable<System.DateTime> Date { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual SalesInvoice SalesInvoice { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace Pharmacy.ViewModels
         public float Discount { get; set; }
         public double? SP { get; set; }
         public int? MRP { get; set; }
+        public int? Free { get; set; }
         public int CGST { get; set; }
         public int IGST { get; set; }
         public int UTGST { get; set; }

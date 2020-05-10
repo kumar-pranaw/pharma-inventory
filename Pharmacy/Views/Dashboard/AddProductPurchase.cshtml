@@ -76,6 +76,7 @@
                                 <th>Batch</th>
                                 <th>Expiry</th>
                                 <th>Qty.</th>
+                                <th>Free</th>
                                 <th>M.R.P</th>
                                 <th>Rate</th>
                                 <th>CGST</th>
@@ -95,6 +96,7 @@
                                 <td><input type="text" class="form-control" id="BatchNumber" /></td>
                                 <td><input type="text" class="form-control" id="ExpiryDate" /></td>
                                 <td><input type="text" class="form-control" id="Quantity" /></td>
+                                <td><input type="text" class="form-control" id="free" /></td>
                                 <td><input type="text" class="form-control" id="MRP" /></td>
                                 <td><input type="text" class="form-control" id="Rate" /></td>
                                 <td><input type="text" class="form-control" placeholder="%" id="CGST" /></td>
@@ -173,6 +175,7 @@
         var BatchNumber = $("#BatchNumber");
         var ExpiryDate = $("#ExpiryDate");
         var Quantity = $("#Quantity");
+        var free = $("#free");
         var MRP = $("#MRP");
         var Rate = $("#Rate");
         var CGST = $("#CGST");
@@ -262,6 +265,9 @@
         //Add Quantity cell.
         cell = $(row.insertCell(-1));
         cell.html(Quantity.val());
+        //Add free cell
+        cell = $(row.insertCell(-1));
+        cell.html(free.val());
         //Add MRP cell.
         cell = $(row.insertCell(-1));
         cell.html(MRP.val());
@@ -297,6 +303,7 @@
         BatchNumber.val("");
         ExpiryDate.val("");
         Quantity.val("");
+        free.val("");
         MRP.val("");
         Rate.val("");
         CGST.val("");
@@ -349,12 +356,13 @@
             purchaseProducts.BatchNumber = row.find("TD").eq(3).html();
             purchaseProducts.ExpiryDate = row.find("TD").eq(4).html();
             purchaseProducts.quantity = row.find("TD").eq(5).html();
-            purchaseProducts.MRP = row.find("TD").eq(6).html();
-            purchaseProducts.Rate = row.find("TD").eq(7).html();
-            purchaseProducts.CGST = row.find("TD").eq(8).html();
-            purchaseProducts.UTGST = row.find("TD").eq(9).html();
-            purchaseProducts.IGST = row.find("TD").eq(10).html();
-            purchaseProducts.amount = row.find("TD").eq(11).html();
+            purchaseProducts.free = row.find("TD").eq(6).html();
+            purchaseProducts.MRP = row.find("TD").eq(7).html();
+            purchaseProducts.Rate = row.find("TD").eq(8).html();
+            purchaseProducts.CGST = row.find("TD").eq(9).html();
+            purchaseProducts.UTGST = row.find("TD").eq(10).html();
+            purchaseProducts.IGST = row.find("TD").eq(11).html();
+            purchaseProducts.amount = row.find("TD").eq(12).html();
             products.push(purchaseProducts);
 
         });

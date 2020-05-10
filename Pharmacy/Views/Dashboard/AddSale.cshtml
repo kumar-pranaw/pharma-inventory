@@ -31,6 +31,7 @@
                                     <th>Quantity</th>
                                     <th>M.R.P</th>
                                     <th>Rate</th>
+                                    <th>Free</th>
                                     <th>CGST</th>
                                     <th>UTGST</th>
                                     <th>IGST</th>
@@ -52,6 +53,7 @@
                                     <td><input type="text" class="form-control" id="Quantity" /></td>
                                     <td><input type="text" disabled="disabled" class="form-control" id="MRP" /></td>
                                     <td><input type="text" class="form-control" id="SP" /></td>
+                                    <td><input type="text" class="form-control" id="free"/></td>
                                     <td><input type="text" class="form-control" placeholder="%" id="CGST" /></td>
                                     <td><input type="text" class="form-control" placeholder="%" id="UTGST" /></td>
                                     <td><input type="text" class="form-control" placeholder="%" id="IGST" /></td>
@@ -125,6 +127,7 @@
         var Quantity = $("#Quantity");
         var Mrp = $("#MRP");
         var SP = $("#SP");
+        var free = $("#free");
         var CGST = $("#CGST");
         var UTGST = $("#UTGST");
         var IGST = $("#IGST");
@@ -163,6 +166,10 @@
         //Add SP cell.
         cell = $(row.insertCell(-1));
         cell.html(SP.val());
+
+        //Add free cell
+        cell = $(row.insertCell(-1));
+        cell.html(free.val());
       
         //Add CGST cell.
         cell = $(row.insertCell(-1));
@@ -201,6 +208,7 @@
         Quantity.val("");
         Mrp.val("");
         SP.val("");
+        free.val("");
         CGST.val("");
         UTGST.val("");
         IGST.val("");
@@ -236,11 +244,12 @@
             purchaseProducts.Quantity = row.find("TD").eq(5).html();
             purchaseProducts.MRP = row.find("TD").eq(6).html();
             purchaseProducts.SP = row.find("TD").eq(7).html();
-            purchaseProducts.CGST = row.find("TD").eq(8).html();
-            purchaseProducts.UTGST = row.find("TD").eq(9).html();
-            purchaseProducts.IGST = row.find("TD").eq(10).html();
-            purchaseProducts.Discount = row.find("TD").eq(11).html();
-            purchaseProducts.Amount = row.find("TD").eq(12).html();
+            purchaseProducts.free = row.find("TD").eq(8).html();
+            purchaseProducts.CGST = row.find("TD").eq(9).html();
+            purchaseProducts.UTGST = row.find("TD").eq(10).html();
+            purchaseProducts.IGST = row.find("TD").eq(11).html();
+            purchaseProducts.Discount = row.find("TD").eq(12).html();
+            purchaseProducts.Amount = row.find("TD").eq(13).html();
             products.push(purchaseProducts);
         });
         console.log(products);

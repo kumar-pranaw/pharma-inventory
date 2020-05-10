@@ -9,6 +9,7 @@
         public string ExpiryDate { get; set; }
         public int Quantity { get; set; }
         public double? MRP { get; set; }
+        public int? Free { get; set; }
         public float? Rate { get; set; }
         public int? CostPrice { get; set; }
         public int IGST { get; set; }
